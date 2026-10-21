@@ -43,5 +43,5 @@ def test_real_repository_sources_are_valid() -> None:
 
     root = Path(__file__).resolve().parent.parent
     catalog = discover(root)
-    assert {"run"} <= catalog.agent_names()
+    assert {"run", "find", "diff", "git", "svn"} <= catalog.agent_names()
     check_agents(load_config(root / "models.toml", TARGETS), catalog.agent_names())
