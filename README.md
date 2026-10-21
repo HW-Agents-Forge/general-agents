@@ -1,41 +1,158 @@
 # general-agents
 
-Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (Claude Code and Copilot CLI today; VS Code and OpenCode later).
+[![CI](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+![Runtime dependencies: none](https://img.shields.io/badge/runtime%20dependencies-none-brightgreen)
+![Status: early development](https://img.shields.io/badge/status-early%20development-orange)
 
-## Goals
+**Small sub-agents that take the token-expensive chores off your primary coding agent.**
 
-- Atomize token-expensive tasks into small sub-agents that condense large outputs into short reports.
-- Use the smallest models possible for every agent.
-- Describe agents once in a neutral format; the `shuttle` Python package adapts them to each tool.
-- Let the primary agent know when and how to delegate, through the `atomic-tasks` skill.
+Reading a 20,000-line simulation log, sweeping a repository for every usage of a signal, digesting a long `svn log`: your primary agent only needs the *conclusion*. general-agents defines a handful of focused sub-agents that do the heavy reading on the **smallest model available** and hand back a short, structured report.
+
+You write each agent once, as plain Markdown. A small Python tool, `shuttle`, adapts it to every agentic tool you use.
+
+## Contents
+
+- [How it works](#how-it-works)
+- [Agents](#agents)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Supported tools](#supported-tools)
+- [Safety guarantees](#safety-guarantees)
+- [Development](#development)
+- [Repository layout](#repository-layout)
+- [Documentation](#documentation)
+- [Status](#status)
+
+## How it works
+
+```
+agents/*.md ─┐                           ┌─► ~/.claude/agents/…      (Claude Code)
+skills/*/    ├─► shuttle ─► per-tool ────┤
+agents.toml ─┤    (parse,   rendering    └─► ~/.copilot/agents/…     (Copilot CLI)
+models.toml ─┘    resolve)
+```
+
+- **Sources are plain Markdown.** No frontmatter: the file name is the agent name, the first paragraph is its description, and the whole file is its prompt.
+- **`agents.toml`** lists each agent's abstract tools (`read`, `search`, `shell`).
+- **`models.toml`** picks the model, agent by agent, per tool.
+- **`shuttle`** generates each tool's own format, frontmatter included, and installs it.
+- The **`atomic-tasks` skill** tells your primary agent when delegating is worth it, and how to phrase the request.
+
+Delegation has a fixed cost, so an agent earns its place only if it *condenses*. That is why this repository has no `read`, `write` or `list` agent: your primary agent already does those cheaply. See [ADR 0001](docs/decisions/0001-keep-only-condensing-agents.md).
 
 ## Agents
 
-| Agent | Role |
-|---|---|
-| `run` | Runs the exact command given by the parent (csh), with a mandatory timeout, and reports |
-| `find` | Searches the codebase and returns paths and relevant excerpts |
-| `diff` | Summarizes changes between two references or files |
-| `git` | Answers questions about git history and state |
-| `svn` | Answers questions about Subversion history and state |
+| Agent | What it does | Tools |
+|---|---|---|
+| [`run`](agents/run.md) | Runs the exact `csh` command you give it, with a mandatory timeout, watches it and reports status, exit code and key lines | `shell`, `read` |
+| [`find`](agents/find.md) | Searches the codebase and returns paths, lines and a short answer | `search`, `read` |
+| [`diff`](agents/diff.md) | Summarizes the changes between two files, directories or revisions | `shell`, `read` |
+| [`git`](agents/git.md) | Answers questions about git history and state, read-only | `shell` |
+| [`svn`](agents/svn.md) | Answers questions about Subversion history and state, read-only | `shell` |
 
-Agents that only add indirection (`read`, `write`, `list`, `glob`) or are deterministic (`backup`) are deliberately left out. See [docs/decisions/0001-keep-only-condensing-agents.md](docs/decisions/0001-keep-only-condensing-agents.md).
+Every agent replies in a fixed, short format (at most 40 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
 
-## Installation
+## Quick start
 
+Requirements: Python 3.11 or newer. No other dependency.
+
+```sh
+git clone https://github.com/chabrioche/general-agents.git
+cd general-agents
+
+# See exactly what would be written, without writing anything
+./install --target claude-code --dry-run
+
+# Install for real (asks for confirmation; use --yes to skip it)
+./install --target claude-code
 ```
-./install --target {claude-code,copilot-cli} [--model AGENT=MODEL]... [--dry-run]
+
+`--target` is required and takes one tool per run.
+
+Choose a model for one agent without touching any file:
+
+```sh
+./install --target claude-code --model run=claude-haiku-5-5 --model find=claude-haiku-5-5
 ```
 
-`install` never deletes files. To remove an agent, delete its file by hand.
+## Configuration
 
-## Documentation
+**`models.toml`** at the repository root:
 
-All design documents are in [docs/](docs/README.md). The engine, the `claude-code` target and a draft `copilot-cli` target are implemented; see the [roadmap](docs/roadmap.md) for what remains.
+```toml
+name = "general-agents"      # written in the origin mark of every generated file
+
+[defaults]
+small = "claude-haiku-5-5"   # model for every agent of tier "small"
+
+[claude-code]
+# run = "haiku"              # per-tool, per-agent override
+```
+
+For each agent and tool, the model is the first match of: `--model AGENT=MODEL`, then the tool's section, then `[defaults]`. If nothing matches, `install` fails and names the agent and the tool. It never falls back silently to a larger model.
+
+**Adding an agent** takes two steps:
+
+1. Create `agents/<name>.md`. Start with a paragraph saying what the agent does and when to use it.
+2. Add a table to `agents.toml`:
+
+   ```toml
+   [<name>]
+   tools = ["read", "search"]
+   ```
+
+Details: [agent format](docs/agent-format.md), [installer specification](docs/install-spec.md).
+
+## Supported tools
+
+| Tool | `--target` | Status |
+|---|---|---|
+| Claude Code | `claude-code` | Implemented |
+| GitHub Copilot CLI | `copilot-cli` | Draft, to be checked against a real CLI |
+| VS Code (Copilot) | `vscode` | Planned |
+| OpenCode | `opencode` | Planned |
+
+How the tools differ, with sources: [tool differences](docs/tool-differences.md).
+
+## Safety guarantees
+
+The installer is the only code that writes to disk, and it is deliberately conservative:
+
+- **It never deletes anything.** To remove an agent, delete its file by hand.
+- **It never overwrites a file it did not create.** Generated files carry a `managed-by: <name>` mark; a file without it, or marked by another repository, is refused.
+- **It writes only under the home directory**, rejecting `..` and symbolic links that escape it, and writes atomically.
+- **`--dry-run` decides exactly like a real run.**
+- **Re-running changes nothing** when the sources have not changed.
 
 ## Development
 
+```sh
+python -m pip install -e '.[dev]'
+pytest && ruff check . && ruff format --check . && mypy
 ```
-pip install -e '.[dev]'
-pytest && ruff check . && mypy
+
+CI runs the same checks on Python 3.11, 3.12 and 3.13, plus a dry-run install of the real sources. Conventions are in [docs/conventions.md](docs/conventions.md); structural decisions are recorded as [ADRs](docs/decisions/README.md).
+
+## Repository layout
+
 ```
+agents/          one Markdown prompt per agent
+skills/          the atomic-tasks skill
+agents.toml      tools and tier of each agent
+models.toml      repository name and models
+install          thin executable calling shuttle
+src/shuttle/     the Python package (parser, config, installer, targets, CLI)
+tests/           pytest suite with golden files per target
+docs/            design documents and decision records
+```
+
+## Documentation
+
+Start with the [documentation index](docs/README.md): [vision](docs/vision.md), [architecture](docs/architecture.md), [agent catalog](docs/agents-catalog.md), [evaluation protocol](docs/evaluation.md), [roadmap](docs/roadmap.md) and [open questions](docs/open-questions.md).
+
+## Status
+
+Early development. The engine, the Claude Code target and five agents exist and are tested. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
+
+No license has been chosen yet, so all rights are reserved until one is added.
