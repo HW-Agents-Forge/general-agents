@@ -9,7 +9,7 @@
 
 ## Décision
 
-Aucune dépendance d'exécution. Le frontmatter est lu par un parseur maison limité à un sous-ensemble de YAML (clés simples, listes courtes). Les dépendances de développement (`pytest`, `ruff`, `mypy`) restent autorisées.
+Aucune dépendance d'exécution (Python ≥ 3.11 : `tomllib` lit `models.toml`). Le frontmatter est lu par un parseur maison limité à un sous-ensemble de YAML (clés simples, listes courtes). Les dépendances de développement (`pytest`, `ruff`, `mypy`) restent autorisées.
 
 ## Conséquences
 

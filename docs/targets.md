@@ -29,7 +29,7 @@ Chaque cible exprime ces correspondances dans son module.
 
 ## Gestion de la marque d'origine
 
-Si l'outil tolère une clé libre dans le frontmatter, utiliser `managed-by: general-agents`. Sinon, ajouter un commentaire de première ligne dans le corps. La détection par `installer` doit fonctionner dans les deux cas (voir [install-spec.md](install-spec.md)).
+Si l'outil tolère une clé libre dans le frontmatter, utiliser `managed-by: <name>` (`name` lu dans `models.toml`). Sinon, ajouter un commentaire de première ligne dans le corps. La détection par `installer` doit fonctionner dans les deux cas (voir [install-spec.md](install-spec.md)).
 
 ## Ajouter un outil
 

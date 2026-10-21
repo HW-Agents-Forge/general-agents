@@ -8,7 +8,7 @@
 
 ## Python
 
-- Version minimale : 3.10.
+- Version minimale : 3.11 (`tomllib` pour lire `models.toml`).
 - Bibliothèque standard uniquement à l'exécution. Dépendances de développement autorisées : `pytest`, un outil de lint/format (`ruff`), un vérificateur de types (`mypy`).
 - Annotations de types partout dans `src/`.
 - Dataclasses figées (`frozen=True`) pour le modèle de données.

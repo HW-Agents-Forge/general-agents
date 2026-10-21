@@ -25,3 +25,4 @@ Chaque décision structurante est consignée dans un fichier numéroté `NNNN-ti
 | [0004](0004-pas-d-uninstall-separe.md) | Aucune suppression par le script | acceptée |
 | [0005](0005-stdlib-uniquement.md) | Bibliothèque standard uniquement à l'exécution | proposée |
 | [0006](0006-tres-petits-modeles-uniquement.md) | Uniquement de très petits modèles | acceptée |
+| [0007](0007-modeles-par-agent-dans-models-toml.md) | Modèles par agent dans models.toml, script copié | acceptée |

@@ -10,7 +10,7 @@ Fournir un ensemble de **petits sous-agents** qui condensent l'information, util
 
 ## Principes
 
-0. **Uniquement de tout petits modèles.** Aucun agent n'utilise un modèle plus grand que le plus petit disponible (ADR 0006). Les tâches qui demandent du raisonnement délicat restent à l'agent principal.
+0. **De tout petits modèles par défaut.** Le niveau `small` est le seul existant (ADR 0006) et pointe vers le plus petit modèle disponible ; l'utilisateur peut le remplacer agent par agent dans `models.toml` ou avec `--model` (ADR 0007). Les tâches qui demandent du raisonnement délicat restent à l'agent principal.
 
 1. **Condenser, pas seulement déléguer.** Un sous-agent n'a de valeur que s'il renvoie nettement moins que ce qu'il a consommé.
 2. **Un seul format source.** Les agents sont décrits de façon neutre dans `agents/`. Le package `shuttle` les adapte à chaque outil.
