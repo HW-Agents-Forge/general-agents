@@ -5,7 +5,7 @@
 | # | Question | Impact |
 |---|---|---|
 | 1 | Quel outil cible en premier (VS Code, Copilot CLI, OpenCode) ? | Détermine la première cible à écrire et à vérifier |
-| 2 | Quel est le plus petit modèle disponible (`small`) dans cet outil ? | Table de correspondance de la cible |
+| 2 | ~~Quel est le plus petit modèle (`small`) ?~~ **Réponse : Haiku 5.5** (`claude-haiku-5-5`). Reste à confirmer son identifiant exact dans chaque outil cible | Table de correspondance de la cible |
 | 3 | Valeur par défaut de `--target` : un outil, ou `all` ? | Comportement de `install` |
 
 ## À trancher pendant le développement
