@@ -11,7 +11,10 @@ from .conftest import AGENT
 
 
 def test_discover(repo: Path) -> None:
-    (repo / "agents" / "find.md").write_text(AGENT.replace('"run"', '"find"'), encoding="utf-8")
+    (repo / "agents" / "find.md").write_text(AGENT, encoding="utf-8")
+    (repo / "agents.toml").write_text(
+        '[run]\ntools = ["shell"]\n[find]\ntools = ["search"]\n', encoding="utf-8"
+    )
     catalog = discover(repo)
     assert [agent.name for agent in catalog.agents] == ["find", "run"]
     assert [skill.name for skill in catalog.skills] == ["atomic-tasks"]
@@ -28,6 +31,20 @@ def test_skills_are_optional(repo: Path) -> None:
 def test_missing_agents_directory(tmp_path: Path) -> None:
     with pytest.raises(SourceError, match="agents directory"):
         discover(tmp_path)
+
+
+def test_agent_without_manifest_entry(repo: Path) -> None:
+    (repo / "agents" / "find.md").write_text(AGENT, encoding="utf-8")
+    with pytest.raises(SourceError, match="no entry for agent.*find"):
+        discover(repo)
+
+
+def test_manifest_entry_without_agent_file(repo: Path) -> None:
+    (repo / "agents.toml").write_text(
+        '[run]\ntools = ["shell"]\n[ghost]\ntools = ["shell"]\n', encoding="utf-8"
+    )
+    with pytest.raises(SourceError, match="entry without an agent file.*ghost"):
+        discover(repo)
 
 
 def test_skill_folder_without_skill_file(repo: Path) -> None:

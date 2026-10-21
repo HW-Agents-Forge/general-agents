@@ -9,13 +9,15 @@ general-agents/
 │   └── atomic-tasks/SKILL.md
 ├── install                     # thin executable: calls shuttle.cli.main()
 ├── models.toml                 # repository name and models per tool and agent
+├── agents.toml                 # per-agent tools and tier
 ├── pyproject.toml
 ├── src/shuttle/
 │   ├── __init__.py
 │   ├── cli.py                  # arguments, dispatch, exit codes
 │   ├── model.py                # dataclasses: Agent, Skill, ModelTier, ToolSet
 │   ├── config.py               # reads models.toml, resolves the model per agent
-│   ├── parser.py               # reads TOML frontmatter + body
+│   ├── manifest.py             # reads agents.toml
+│   ├── parser.py               # reads the plain Markdown sources
 │   ├── mark.py                 # origin mark: key and detection
 │   ├── registry.py             # discovers agents and skills
 │   ├── targets/
@@ -37,9 +39,9 @@ agents/*.md ──► parser ──► model.Agent ──► Target.render ─�
 skills/*/    ──► parser ──► model.Skill ──┘
 ```
 
-0. `config` reads `models.toml` at the repository root.
+0. `config` reads `models.toml` and `manifest` reads `agents.toml`, both at the repository root.
 1. `registry` walks `agents/` and `skills/`.
-2. `parser` validates each source and produces typed objects (`Agent`, `Skill`). Every source error is caught here.
+2. `parser` validates each Markdown source (name from the file name, description from the first paragraph) and, with the manifest entry, produces typed objects (`Agent`, `Skill`). Every source error is caught here.
 3. Each `Target` turns a typed object and the resolved model into tool-specific file content and provides its install location.
 4. `installer` writes (or simulates writing). It is the only module that touches the disk.
 
@@ -47,6 +49,7 @@ skills/*/    ──► parser ──► model.Skill ──┘
 
 | Module | Responsibility | Does not |
 |---|---|---|
+| `manifest` | Read and validate `agents.toml` | Read the Markdown sources |
 | `parser` | Validate and type the sources | Know about target tools |
 | `config` | Read `models.toml`, resolve each agent's model for a tool | Write to disk |
 | `model` | Represent agents, skills, model tiers, tool sets | Do I/O |

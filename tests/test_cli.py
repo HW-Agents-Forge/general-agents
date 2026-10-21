@@ -49,7 +49,7 @@ def test_unknown_agent_in_model_option(repo: Path, home: Path) -> None:
 
 
 def test_invalid_source_exits_2(repo: Path, home: Path) -> None:
-    (repo / "agents" / "run.md").write_text("broken\n", encoding="utf-8")
+    (repo / "agents" / "run.md").write_text("---\nname: run\n---\nbody\n", encoding="utf-8")
     assert run(repo, home, "--target", "copilot-cli", "--yes") == 2
     assert list(home.iterdir()) == []
 

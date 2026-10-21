@@ -5,10 +5,13 @@ from pathlib import Path
 import pytest
 
 from shuttle.errors import SourceError
+from shuttle.manifest import AgentSpec
 from shuttle.model import Tier, Tool
 from shuttle.parser import parse_agent, parse_skill
 
 from .conftest import AGENT, SKILL
+
+SPEC = AgentSpec(tools=(Tool.SHELL, Tool.READ), tier=Tier.SMALL)
 
 
 def write(tmp_path: Path, name: str, text: str) -> Path:
@@ -18,52 +21,38 @@ def write(tmp_path: Path, name: str, text: str) -> Path:
 
 
 def test_valid_agent(tmp_path: Path) -> None:
-    agent = parse_agent(write(tmp_path, "run.md", AGENT))
+    agent = parse_agent(write(tmp_path, "run.md", AGENT), SPEC)
     assert agent.name == "run"
+    assert agent.description == "Runs a command."
     assert agent.tier is Tier.SMALL
     assert agent.tools == (Tool.SHELL, Tool.READ)
-    assert agent.max_output_lines == 40
-    assert agent.body == "Run the command and report."
+    assert agent.body == AGENT.strip()
 
 
-def test_max_output_lines_defaults(tmp_path: Path) -> None:
-    text = AGENT.replace("max_output_lines = 40\n", "")
-    assert parse_agent(write(tmp_path, "run.md", text)).max_output_lines == 40
+def test_description_is_the_first_paragraph_on_one_line(tmp_path: Path) -> None:
+    text = "# Title\n\nFirst line\nsecond line.\n\nOther paragraph.\n"
+    agent = parse_agent(write(tmp_path, "run.md", text), SPEC)
+    assert agent.description == "First line second line."
 
 
-@pytest.mark.parametrize(
-    ("old", "new", "message"),
-    [
-        ('name = "run"\n', "", "'name' is required"),
-        ('name = "run"', 'name = "other"', "must match"),
-        ('name = "run"', 'name = "Run_It"', "invalid name"),
-        ('description = "Runs a command."\n', "", "'description' is required"),
-        ('tier = "small"', 'tier = "medium"', "'tier' must be one of"),
-        ('tools = ["shell", "read"]', "tools = []", "non-empty list"),
-        ('tools = ["shell", "read"]', 'tools = ["write"]', "unknown tool"),
-        ('tools = ["shell", "read"]', 'tools = ["shell", "shell"]', "duplicate tool"),
-        ("max_output_lines = 40", "max_output_lines = 0", "positive integer"),
-        ("max_output_lines = 40", 'max_output_lines = "40"', "positive integer"),
-        ("tier = ", 'model = "x"\ntier = ', "unknown frontmatter key"),
-    ],
-)
-def test_invalid_agent(tmp_path: Path, old: str, new: str, message: str) -> None:
-    with pytest.raises(SourceError, match=message):
-        parse_agent(write(tmp_path, "run.md", AGENT.replace(old, new)))
+@pytest.mark.parametrize("text", ["+++\nname = 'run'\n+++\nbody\n", "---\nname: run\n---\nbody\n"])
+def test_frontmatter_is_rejected(tmp_path: Path, text: str) -> None:
+    with pytest.raises(SourceError, match="must not contain frontmatter"):
+        parse_agent(write(tmp_path, "run.md", text), SPEC)
 
 
 @pytest.mark.parametrize(
-    ("text", "message"),
+    ("name", "text", "message"),
     [
-        ("no frontmatter\n", "must start with"),
-        ("+++\nname = 'run'\n", "not closed"),
-        ("+++\nname = \n+++\nbody\n", "invalid TOML"),
-        (AGENT.split("+++\n\n")[0] + "+++\n", "body is empty"),
+        ("run.md", "", "file is empty"),
+        ("run.md", "   \n\n", "file is empty"),
+        ("run.md", "# Only a heading\n", "no description paragraph"),
+        ("Run_It.md", AGENT, "invalid name"),
     ],
 )
-def test_invalid_document(tmp_path: Path, text: str, message: str) -> None:
+def test_invalid_agent(tmp_path: Path, name: str, text: str, message: str) -> None:
     with pytest.raises(SourceError, match=message):
-        parse_agent(write(tmp_path, "run.md", text))
+        parse_agent(write(tmp_path, name, text), SPEC)
 
 
 def test_valid_skill(tmp_path: Path) -> None:
@@ -71,11 +60,12 @@ def test_valid_skill(tmp_path: Path) -> None:
     folder.mkdir()
     skill = parse_skill(write(folder, "SKILL.md", SKILL))
     assert skill.name == "atomic-tasks"
-    assert skill.body.startswith("# When to delegate")
+    assert skill.description == "When to delegate."
+    assert "# When to delegate" in skill.body
 
 
-def test_skill_name_must_match_folder(tmp_path: Path) -> None:
-    folder = tmp_path / "other"
+def test_skill_rejects_frontmatter(tmp_path: Path) -> None:
+    folder = tmp_path / "atomic-tasks"
     folder.mkdir()
-    with pytest.raises(SourceError, match="must match"):
-        parse_skill(write(folder, "SKILL.md", SKILL))
+    with pytest.raises(SourceError, match="frontmatter"):
+        parse_skill(write(folder, "SKILL.md", "---\nname: x\n---\nbody\n"))

@@ -1,10 +1,4 @@
-+++
-name = "git"
-description = "Answers a question about git history or repository state (who changed a line, when a change appeared, what changed in a commit, current status) with commits as evidence. Use it instead of reading long git output yourself."
-tier = "small"
-tools = ["shell"]
-max_output_lines = 40
-+++
+Answers a question about git history or repository state (who changed a line, when a change appeared, what changed in a commit, current status) with commits as evidence. Use it instead of reading long git output yourself.
 
 You answer ONE question about a git repository. You only read; you never change anything.
 

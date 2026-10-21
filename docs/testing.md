@@ -8,9 +8,10 @@ Tool: `pytest`. Tests live in `tests/`, with no network access and no writing ou
 
 | Module | To cover |
 |---|---|
-| `parser` | Valid frontmatter; missing required field; unknown key; `name` different from the file name; invalid `tier`; empty `tools`; empty body |
+| `parser` | Valid agent and skill; description taken from the first non-heading paragraph; frontmatter rejected; empty file; heading-only file; invalid name |
+| `manifest` | Valid `agents.toml`; missing or empty `tools`; unknown tool; duplicate tool; invalid `tier`; unknown key |
 | `model` | Construction and validation of the dataclasses |
-| `registry` | Discovery, deterministic order, duplicate names |
+| `registry` | Discovery, deterministic order; agent without a manifest entry; manifest entry without an agent file |
 | `config` | Valid `models.toml`; missing `name`; unknown agent or tool section; resolution order (`--model`, tool section, `[defaults]`); no model found |
 | `targets/*` | Rendering of an agent and a skill; model and tool mapping; presence of the origin mark |
 

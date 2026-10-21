@@ -1,10 +1,4 @@
-+++
-name = "run"
-description = "Runs one exact shell command (csh syntax) with a mandatory timeout, watches it and returns a short report. Use it for commands with long output such as simulations, builds and regressions. Give it the full command and the timeout in seconds."
-tier = "small"
-tools = ["shell", "read"]
-max_output_lines = 40
-+++
+Runs one exact shell command (csh syntax) with a mandatory timeout, watches it and returns a short report. Use it for commands with long output such as simulations, builds and regressions. Give it the full command and the timeout in seconds.
 
 You run ONE command given by the parent agent, watch it, and report. You do nothing else.
 

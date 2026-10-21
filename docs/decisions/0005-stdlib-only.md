@@ -9,10 +9,10 @@
 
 ## Decision
 
-No runtime dependency (Python ≥ 3.11: `tomllib` reads `models.toml`). Source frontmatter is TOML between `+++` lines, read with `tomllib`: no homemade YAML parser. Development dependencies (`pytest`, `ruff`, `mypy`) remain allowed.
+No runtime dependency (Python ≥ 3.11: `tomllib` reads `models.toml`). `models.toml` and `agents.toml` are read with `tomllib`; the sources have no frontmatter (ADR 0008), so no YAML parser is needed. Development dependencies (`pytest`, `ruff`, `mypy`) remain allowed.
 
 ## Consequences
 
 - Immediate start, no prior installation.
-- Sources use TOML frontmatter ([agent-format.md](../agent-format.md)); invalid TOML is rejected with a clear error.
+- Configuration is TOML ([agent-format.md](../agent-format.md)); invalid TOML is rejected with a clear error.
 - Generated files are plain strings rendered by each target, so no YAML library is needed to write them either.

@@ -39,11 +39,10 @@ For each delegation, the primary agent must:
 
 ## File structure
 
+Plain Markdown with no frontmatter (ADR 0008). The name is the folder name and the description is the first paragraph:
+
 ```markdown
----
-name: atomic-tasks
-description: When and how to delegate voluminous tasks (execution, search, diff, history) to small sub-agents. Consult before running a command with long output or a wide search.
----
+When and how to delegate voluminous tasks (execution, search, diff, history) to small sub-agents. Consult before running a command with long output or a wide search.
 
 # When to delegate
 ...

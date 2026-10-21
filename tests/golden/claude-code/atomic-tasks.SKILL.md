@@ -5,6 +5,8 @@ description: "When to delegate."
 
 <!-- managed-by: test-repo -->
 
+When to delegate.
+
 # When to delegate
 
 Delegate large outputs.

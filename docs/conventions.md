@@ -21,7 +21,7 @@ All writing goes through `installer`. No other module opens a file for writing.
 ## Agents and skills
 
 - Agent name: lowercase letters, digits, hyphens; identical to the file name.
-- Description: states **when** to use the agent.
+- The first paragraph states what the agent does and **when** to use it (it becomes the description).
 - Short body, explicit output contract (see [agent-format.md](agent-format.md)).
 - Any change of boundary between agents updates the catalog and the `atomic-tasks` skill.
 

@@ -7,4 +7,6 @@ metadata:
   managed-by: test-repo
 ---
 
+Runs a command.
+
 Run the command and report.

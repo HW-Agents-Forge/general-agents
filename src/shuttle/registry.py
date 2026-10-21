@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from .errors import SourceError
+from .manifest import MANIFEST_FILE, load_manifest
 from .model import Agent, Catalog, Skill
 from .parser import parse_agent, parse_skill
 
@@ -17,7 +18,15 @@ def _discover_agents(root: Path) -> tuple[Agent, ...]:
     agents_dir = root / AGENTS_DIR
     if not agents_dir.is_dir():
         raise SourceError(f"{agents_dir}: the agents directory does not exist")
-    return tuple(parse_agent(path) for path in sorted(agents_dir.glob("*.md")))
+    specs = load_manifest(root / MANIFEST_FILE)
+    paths = sorted(agents_dir.glob("*.md"))
+    missing = sorted(path.stem for path in paths if path.stem not in specs)
+    if missing:
+        raise SourceError(f"{MANIFEST_FILE}: no entry for agent(s): {', '.join(missing)}")
+    orphans = sorted(set(specs) - {path.stem for path in paths})
+    if orphans:
+        raise SourceError(f"{MANIFEST_FILE}: entry without an agent file: {', '.join(orphans)}")
+    return tuple(parse_agent(path, specs[path.stem]) for path in paths)
 
 
 def _discover_skills(root: Path) -> tuple[Skill, ...]:

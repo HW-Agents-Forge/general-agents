@@ -32,7 +32,7 @@ Tie-breaking rules:
 
 ## Output contracts
 
-Every answer fits in `max_output_lines` lines, with no preamble and no chatty conclusion. Contract keys are in English.
+Every answer fits in 40 lines, with no preamble and no chatty conclusion. Contract keys are in English.
 
 ### `run`
 

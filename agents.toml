@@ -1,0 +1,18 @@
+# Per-agent settings that cannot be deduced from the Markdown sources.
+# `tools`: abstract tools the agent may use (read, search, shell).
+# `tier`: model tier, defaults to "small".
+
+[run]
+tools = ["shell", "read"]
+
+[find]
+tools = ["search", "read"]
+
+[diff]
+tools = ["shell", "read"]
+
+[git]
+tools = ["shell"]
+
+[svn]
+tools = ["shell"]

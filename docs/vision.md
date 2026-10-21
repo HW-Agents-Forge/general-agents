@@ -36,5 +36,5 @@ Provide a set of **small sub-agents** that condense information, use the **small
 
 - On real cases, delegation reduces the primary agent's total token consumption without degrading answer quality.
 - Adding a target tool amounts to adding one file.
-- Adding an agent amounts to adding one Markdown file.
+- Adding an agent amounts to adding one Markdown file and one table in `agents.toml`.
 - `install --dry-run` describes exactly what will be written.

@@ -13,7 +13,7 @@ Principle: validate early, on a single agent and a single tool, before generaliz
 Goal: `agents/run.md` installed end to end for **one** tool.
 
 - [x] `model.py` and `errors.py`.
-- [x] `parser.py` with tests.
+- [x] `parser.py` and `manifest.py` with tests.
 - [x] `config.py` and `models.toml` with tests.
 - [x] `registry.py`.
 - [x] First target in `targets/` (Copilot CLI draft; format to be verified).

@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
-DEFAULT_MAX_OUTPUT_LINES = 40
 
 
 class Tier(StrEnum):
@@ -30,7 +29,6 @@ class Agent:
     description: str
     tier: Tier
     tools: tuple[Tool, ...]
-    max_output_lines: int
     body: str
 
 

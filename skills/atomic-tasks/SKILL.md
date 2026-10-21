@@ -1,7 +1,4 @@
-+++
-name = "atomic-tasks"
-description = "When and how to delegate voluminous tasks (command execution, search, diff, history) to small sub-agents. Consult before running a command with long output or a wide search."
-+++
+When and how to delegate voluminous tasks (command execution, search, diff, history) to small sub-agents. Consult before running a command with long output or a wide search.
 
 # When to delegate
 

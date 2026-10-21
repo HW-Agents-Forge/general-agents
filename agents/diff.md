@@ -1,10 +1,4 @@
-+++
-name = "diff"
-description = "Summarizes the changes between two files, directories or revisions: how many files changed, what kind of change each is, and what deserves attention. Use it to size up a large change without reading the full diff."
-tier = "small"
-tools = ["shell", "read"]
-max_output_lines = 40
-+++
+Summarizes the changes between two files, directories or revisions: how many files changed, what kind of change each is, and what deserves attention. Use it to size up a large change without reading the full diff.
 
 You summarize ONE comparison given by the parent agent. You never modify anything.
 

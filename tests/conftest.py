@@ -5,22 +5,13 @@ from pathlib import Path
 import pytest
 
 AGENT = """\
-+++
-name = "run"
-description = "Runs a command."
-tier = "small"
-tools = ["shell", "read"]
-max_output_lines = 40
-+++
+Runs a command.
 
 Run the command and report.
 """
 
 SKILL = """\
-+++
-name = "atomic-tasks"
-description = "When to delegate."
-+++
+When to delegate.
 
 # When to delegate
 
@@ -34,6 +25,11 @@ name = "test-repo"
 small = "tiny-model"
 """
 
+MANIFEST = """\
+[run]
+tools = ["shell", "read"]
+"""
+
 
 @pytest.fixture
 def repo(tmp_path: Path) -> Path:
@@ -44,6 +40,7 @@ def repo(tmp_path: Path) -> Path:
     (root / "agents" / "run.md").write_text(AGENT, encoding="utf-8")
     (root / "skills" / "atomic-tasks" / "SKILL.md").write_text(SKILL, encoding="utf-8")
     (root / "models.toml").write_text(MODELS, encoding="utf-8")
+    (root / "agents.toml").write_text(MANIFEST, encoding="utf-8")
     return root
 
 

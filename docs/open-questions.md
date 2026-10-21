@@ -7,7 +7,7 @@
 | 1 | Which target tool first? | All three, all through a GitHub Copilot subscription. Order of work to be set (see [roadmap.md](roadmap.md)). |
 | 2 | Which is the smallest model (`small`)? | Haiku 5.5 (`claude-haiku-5-5`). Announced as available in Copilot (VS Code, Copilot CLI) by the GitHub changelog of 2026-10-07; its exact identifier in each tool, notably OpenCode through its Copilot provider, remains to be confirmed. |
 | 3 | Default value of `--target`? | None. `--target` is required and names a single tool. |
-| 5 | Source frontmatter format? | TOML between `+++` lines, read with `tomllib` (ADR 0005). |
+| 5 | Source frontmatter format? | None: sources are plain Markdown and the script adds the frontmatter (ADR 0008). |
 | 6 | Deletion by the script? | None, ever (ADR 0004). |
 | 7 | `run`: allow-list or confirmation? | The parent agent supplies the exact command; `run` executes it as is and launches nothing else. Safety rests on the parent agent and the tool. |
 | 8 | Minimum Python? | 3.11 (`tomllib` without dependency). |
