@@ -28,6 +28,7 @@ Dans un faux home temporaire :
 ### Bout en bout (`cli`)
 
 - Codes de sortie pour chaque cas du tableau de [install-spec.md](install-spec.md).
+- `--target` absent ou inconnu : erreur d'usage, rien n'est écrit.
 - Sortie lisible pour `--dry-run`.
 
 ## Tests de référence (golden files)

@@ -5,12 +5,12 @@
 ## Usage
 
 ```
-install [--target {vscode,copilot-cli,opencode,all}] [--dry-run] [--remove] [--yes] [--home PATH]
+install --target {vscode,copilot-cli,opencode} [--dry-run] [--remove] [--yes] [--home PATH]
 ```
 
 | Option | Effet |
 |---|---|
-| `--target` | Outil(s) visé(s). Défaut : à définir (voir [open-questions.md](open-questions.md)). |
+| `--target` | **Obligatoire.** Un seul outil par exécution. Sans valeur par défaut ni `all` : l'absence de `--target` est une erreur d'usage (code 3). |
 | `--dry-run` | Affiche chaque fichier qui serait créé, mis à jour ou supprimé, sans rien écrire. |
 | `--remove` | Supprime uniquement les fichiers portant la marque d'origine. Demande confirmation. |
 | `--yes` | Ne pas demander de confirmation. |
