@@ -34,3 +34,14 @@ def test_skill_folder_without_skill_file(repo: Path) -> None:
     (repo / "skills" / "empty").mkdir()
     with pytest.raises(SourceError, match="missing SKILL.md"):
         discover(repo)
+
+
+def test_real_repository_sources_are_valid() -> None:
+    """Every real agent and skill must parse, and models.toml must match the catalog."""
+    from shuttle.config import check_agents, load_config
+    from shuttle.targets import TARGETS
+
+    root = Path(__file__).resolve().parent.parent
+    catalog = discover(root)
+    assert {"run"} <= catalog.agent_names()
+    check_agents(load_config(root / "models.toml", TARGETS), catalog.agent_names())
