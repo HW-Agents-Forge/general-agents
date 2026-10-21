@@ -10,6 +10,7 @@ Index of the design documents. Read them in this order for a first overview.
 | [agents-catalog.md](agents-catalog.md) | Agent catalog, responsibilities, output contracts |
 | [skill-atomic-tasks.md](skill-atomic-tasks.md) | Specification of the `atomic-tasks` skill |
 | [targets.md](targets.md) | Target tools (VS Code, Copilot CLI, OpenCode) and mappings |
+| [tool-differences.md](tool-differences.md) | Differences between the three tools, with sources |
 | [install-spec.md](install-spec.md) | `install` CLI, safety, origin mark |
 | [evaluation.md](evaluation.md) | Measuring token savings |
 | [testing.md](testing.md) | Test strategy |

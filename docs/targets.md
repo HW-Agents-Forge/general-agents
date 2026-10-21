@@ -2,6 +2,8 @@
 
 > **TO VERIFY.** The formats below are working hypotheses. Before writing each target, check this document against the tool's official documentation and record the verification date in the dedicated row. Rendering tests then serve as the reference.
 
+See [tool-differences.md](tool-differences.md) for what is already known, with sources and verification status.
+
 ## Information to establish for each tool
 
 | Information | VS Code | Copilot CLI | OpenCode |

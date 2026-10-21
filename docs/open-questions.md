@@ -24,6 +24,14 @@
 
 ## To verify in the official documentation
 
+Partial findings and conflicts are listed in [tool-differences.md](tool-differences.md). Highest priority:
+
+- Does Copilot CLI honor the `model` property? (Otherwise agents silently run on the primary model.)
+- Exact model identifier format of Haiku 5.5 in each tool, notably OpenCode through its Copilot provider.
+- Installed OpenCode version: `permission` map (stable) or `permissions` list (v2).
+- Agent file locations in VS Code, and whether the sub-agent settings are still required.
+
+
 - Agent formats, locations and tool names of each target (see [targets.md](targets.md)).
 - `SKILL.md` support and skill location in each tool.
 - Whether a free key is allowed in the frontmatter for the origin mark.
