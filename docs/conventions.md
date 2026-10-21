@@ -1,45 +1,43 @@
 # Conventions
 
-## Langue
+## Language
 
-- Documentation et prompts d'agents : français, sauf si un outil impose l'anglais pour un champ précis.
-- Code (identifiants, docstrings, messages d'erreur développeur) : anglais.
-- Messages affichés à l'utilisateur de `install` : français.
+- Everything in the repository is in English: documentation, code, agent prompts, skills, commit messages and messages displayed by `install`.
 
 ## Python
 
-- Version minimale : 3.11 (`tomllib` pour lire `models.toml`).
-- Bibliothèque standard uniquement à l'exécution. Dépendances de développement autorisées : `pytest`, un outil de lint/format (`ruff`), un vérificateur de types (`mypy`).
-- Annotations de types partout dans `src/`.
-- Dataclasses figées (`frozen=True`) pour le modèle de données.
-- Pas d'état global. Les chemins et le home sont passés en paramètre.
-- Les erreurs métier lèvent des exceptions de `errors.py`, jamais de `sys.exit` hors de `cli`.
-- Fonctions courtes ; un module, une responsabilité (voir [architecture.md](architecture.md)).
+- Minimum version: 3.11 (`tomllib` to read `models.toml`).
+- Standard library only at runtime. Allowed development dependencies: `pytest`, a lint/format tool (`ruff`), a type checker (`mypy`).
+- Type annotations everywhere in `src/`.
+- Frozen dataclasses (`frozen=True`) for the data model.
+- No global state. Paths and the home are passed as parameters.
+- Business errors raise exceptions from `errors.py`, never `sys.exit` outside `cli`.
+- Short functions; one module, one responsibility (see [architecture.md](architecture.md)).
 
-## Écriture disque
+## Disk writes
 
-Toute écriture passe par `installer`. Aucun autre module n'ouvre un fichier en écriture.
+All writing goes through `installer`. No other module opens a file for writing.
 
-## Agents et skills
+## Agents and skills
 
-- Nom d'agent : minuscules, chiffres, tirets ; identique au nom de fichier.
-- Description : indique **quand** utiliser l'agent.
-- Corps court, contrat de sortie explicite (voir [agent-format.md](agent-format.md)).
-- Tout changement de frontière entre agents met à jour le catalogue et le skill `atomic-tasks`.
+- Agent name: lowercase letters, digits, hyphens; identical to the file name.
+- Description: states **when** to use the agent.
+- Short body, explicit output contract (see [agent-format.md](agent-format.md)).
+- Any change of boundary between agents updates the catalog and the `atomic-tasks` skill.
 
 ## Git
 
-- Branches : `feature/<sujet>`, `fix/<sujet>`, `docs/<sujet>`.
-- Commits à l'impératif, une idée par commit, message court en première ligne.
-- Un changement de format de sortie d'une cible inclut la mise à jour des fichiers de référence de test.
+- Branches: `feature/<topic>`, `fix/<topic>`, `docs/<topic>`.
+- Imperative commit messages, one idea per commit, short first line.
+- A change to a target's output format includes updating the test reference files.
 
-## Revue
+## Review
 
-Une modification est prête à être fusionnée si :
-- les tests, le lint et le typage passent ;
-- la documentation concernée est à jour ;
-- aucune règle de sécurité de [install-spec.md](install-spec.md) n'est affaiblie sans ADR.
+A change is ready to merge if:
+- tests, lint and typing pass;
+- the relevant documentation is up to date;
+- no safety rule of [install-spec.md](install-spec.md) is weakened without an ADR.
 
-## Décisions
+## Decisions
 
-Toute décision structurante (format, sécurité, dépendance, périmètre) est consignée dans `docs/decisions/` selon le modèle de [decisions/README.md](decisions/README.md).
+Every structural decision (format, safety, dependency, scope) is recorded in `docs/decisions/` following the template in [decisions/README.md](decisions/README.md).

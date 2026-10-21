@@ -1,61 +1,62 @@
-# Skill `atomic-tasks`
+# `atomic-tasks` skill
 
-Fichier cible : `skills/atomic-tasks/SKILL.md`.
+Target file: `skills/atomic-tasks/SKILL.md`.
 
-## Rôle
+## Role
 
-Indiquer à l'agent principal **quand** déléguer à un sous-agent du catalogue et **comment** le faire, pour que la délégation reste rentable.
+Tell the primary agent **when** to delegate to a sub-agent of the catalog and **how** to do it, so that delegation stays worthwhile.
 
-## Principe de décision
+## Decision principle
 
-Déléguer si la sortie brute attendue est volumineuse **et** que seule une conclusion est utile. Ne pas déléguer si l'agent principal a besoin du contenu exact pour la suite, ou si l'opération est triviale.
+Delegate if the expected raw output is large **and** only a conclusion is useful. Do not delegate if the primary agent needs the exact content for what follows, or if the operation is trivial.
 
-## Table de décision (contenu à reprendre dans le skill)
+## Decision table (content to carry into the skill)
 
-| Situation | Décision |
+| Situation | Decision |
 |---|---|
-| Lancer une commande à sortie longue ou durable (simulation, build, régression) | Déléguer à `run`, en lui donnant la commande exacte en `csh` |
-| Chercher où une notion apparaît dans un gros dépôt | Déléguer à `find` |
-| Lire un petit fichier, ou quelques lignes précises | Ne pas déléguer, lire directement |
-| Écrire ou modifier un fichier | Ne pas déléguer |
-| Comprendre l'ampleur d'un changement entre deux révisions | Déléguer à `diff` |
-| Retrouver l'auteur ou l'origine d'un changement | Déléguer à `git` ou `svn` |
-| Commande courte dont la sortie tient en quelques lignes | Ne pas déléguer |
+| Running a command with long or lengthy output (simulation, build, regression) | Delegate to `run`, giving it the exact `csh` command |
+| Finding where a notion appears in a large repository | Delegate to `find` |
+| Reading a small file, or a few precise lines | Do not delegate, read directly |
+| Writing or modifying a file | Do not delegate |
+| Understanding the extent of a change between two revisions | Delegate to `diff` |
+| Finding who or what introduced a change | Delegate to `git` or `svn` |
+| Short command whose output fits in a few lines | Do not delegate |
+| Task requiring delicate reasoning | Do not delegate: the sub-agents run on tiny models |
 
-## Consignes d'invocation
+## Invocation instructions
 
-Pour chaque délégation, l'agent principal doit :
-1. Formuler une **question précise** (« quels tests échouent et pourquoi ? »), pas une instruction vague.
-2. Fournir le **contexte minimal** : chemin, commande, références. Pour `run`, la commande exacte, écrite pour `csh`, **et un timeout en secondes** choisi selon la durée attendue du job ; `run` ne l'interprète pas et refuse de lancer sans timeout.
-3. Préciser le **format attendu** si différent du contrat par défaut.
-4. Ne **pas** recopier de gros contenus dans le prompt.
+For each delegation, the primary agent must:
+1. Ask a **precise question** ("which tests fail and why?"), not a vague instruction.
+2. Provide the **minimal context**: path, command, references. For `run`, the exact command, written for `csh`, **and a timeout in seconds** chosen from the expected duration of the job; `run` does not interpret it and refuses to run without a timeout.
+3. State the **expected format** if it differs from the default contract.
+4. **Not** copy large contents into the prompt.
 
-## Après la réponse
+## After the answer
 
-- Faire confiance au verdict, mais vérifier avant toute action irréversible.
-- Si la réponse signale `tronqué: oui` ou des incertitudes, relancer avec une question plus ciblée plutôt que de relire le contenu brut.
-- Ne pas relancer un sous-agent sur la même question sans nouvelle information.
+- Trust the verdict, but verify before any irreversible action.
+- If the answer reports `truncated: yes` or uncertainties, relaunch with a more targeted question rather than rereading the raw content.
+- Do not relaunch a sub-agent on the same question without new information.
 
-## Structure du fichier
+## File structure
 
 ```markdown
 ---
 name: atomic-tasks
-description: Quand et comment déléguer des tâches volumineuses (exécution, recherche, diff, historique) à de petits sous-agents. À consulter avant de lancer une commande à sortie longue ou une recherche large.
+description: When and how to delegate voluminous tasks (execution, search, diff, history) to small sub-agents. Consult before running a command with long output or a wide search.
 ---
 
-# Quand déléguer
+# When to delegate
 ...
-# Table de décision
+# Decision table
 ...
-# Comment formuler la demande
+# How to phrase the request
 ...
-# Après la réponse
+# After the answer
 ...
 ```
 
-## Contraintes
+## Constraints
 
-- Rester court : le skill est chargé dans le contexte de l'agent principal ; chaque ligne a un coût.
-- Citer les agents par leur nom du catalogue, jamais par un nom d'outil de plateforme.
-- À mettre à jour à chaque ajout ou changement de frontière d'agent (voir [agents-catalog.md](agents-catalog.md)).
+- Stay short: the skill is loaded into the primary agent's context; every line has a cost.
+- Refer to agents by their catalog name, never by a platform tool name.
+- Update it whenever an agent is added or a boundary changes (see [agents-catalog.md](agents-catalog.md)).

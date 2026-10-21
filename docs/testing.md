@@ -1,50 +1,51 @@
-# Stratégie de tests
+# Test strategy
 
-Outil : `pytest`. Tests dans `tests/`, sans accès réseau ni écriture hors des répertoires temporaires (`tmp_path`).
+Tool: `pytest`. Tests live in `tests/`, with no network access and no writing outside temporary directories (`tmp_path`).
 
-## Niveaux
+## Levels
 
-### Unitaires
+### Unit
 
-| Module | À couvrir |
+| Module | To cover |
 |---|---|
-| `parser` | Frontmatter valide ; champ obligatoire manquant ; clé inconnue ; `name` différent du nom de fichier ; `tier` invalide ; `tools` vide ; corps vide |
-| `model` | Construction et validation des dataclasses |
-| `registry` | Découverte, ordre déterministe, doublons de noms |
-| `targets/*` | Rendu d'un agent et d'un skill ; correspondance modèle et outils ; présence de la marque d'origine |
+| `parser` | Valid frontmatter; missing required field; unknown key; `name` different from the file name; invalid `tier`; empty `tools`; empty body |
+| `model` | Construction and validation of the dataclasses |
+| `registry` | Discovery, deterministic order, duplicate names |
+| `config` | Valid `models.toml`; missing `name`; unknown agent or tool section; resolution order (`--model`, tool section, `[defaults]`); no model found |
+| `targets/*` | Rendering of an agent and a skill; model and tool mapping; presence of the origin mark |
 
-### Intégration (`installer`)
+### Integration (`installer`)
 
-Dans un faux home temporaire :
-- création des fichiers attendus ;
-- idempotence (deuxième exécution sans changement) ;
-- mise à jour d'un fichier marqué dont la source a changé ;
-- **refus d'écraser** un fichier sans marque ;
-- `install` ne supprime jamais aucun fichier (aucune suppression, même pour un agent retiré des sources) ;
-- `--dry-run` n'écrit rien et annonce les mêmes actions que l'exécution réelle ;
-- refus d'un chemin qui sort du home (y compris via lien symbolique) ;
-- écriture atomique (pas de fichier partiel en cas d'erreur simulée).
+In a temporary fake home:
+- creation of the expected files;
+- idempotence (second run without change);
+- update of a marked file whose source changed;
+- **refusal to overwrite** an unmarked file;
+- `install` never deletes any file (no deletion, even for an agent removed from the sources);
+- `--dry-run` writes nothing and announces the same actions as the real run;
+- rejection of a path that escapes the home (including through a symbolic link);
+- atomic write (no partial file on a simulated error).
 
-### Bout en bout (`cli`)
+### End to end (`cli`)
 
-- Codes de sortie pour chaque cas du tableau de [install-spec.md](install-spec.md).
-- `--target` absent ou inconnu : erreur d'usage, rien n'est écrit.
-- Sortie lisible pour `--dry-run`.
+- Exit codes for each case of the table in [install-spec.md](install-spec.md).
+- `--target` missing or unknown: usage error, nothing is written.
+- Readable output for `--dry-run`.
 
-## Tests de référence (golden files)
+## Reference tests (golden files)
 
-Pour chaque cible, un fichier attendu par agent du catalogue est stocké dans `tests/golden/<outil>/`. Le test compare le rendu à ce fichier. Un changement volontaire de format se traduit par une mise à jour explicite du fichier de référence, revue en même temps que le code.
+For each target, one expected file per catalog agent is stored in `tests/golden/<tool>/`. The test compares the rendering to that file. A deliberate format change is made by explicitly updating the reference file, reviewed together with the code.
 
-## Validation des sources du dépôt
+## Validation of the repository's sources
 
-Un test parcourt les vrais fichiers de `agents/` et `skills/` et vérifie qu'ils sont valides pour toutes les cibles. Cela empêche de livrer un agent mal formé.
+A test walks the real files in `agents/` and `skills/` and checks that they are valid for all targets. This prevents shipping a malformed agent.
 
-## Qualité
+## Quality
 
-- Couverture visée : ≥ 90 % sur `parser`, `installer` et `targets`.
-- Les tests d'`installer` sont prioritaires : c'est là que se concentre le risque.
-- Vérifications automatiques locales : tests, lint et typage (voir [conventions.md](conventions.md)).
+- Target coverage: ≥ 90 % on `parser`, `installer` and `targets`.
+- `installer` tests come first: that is where the risk is concentrated.
+- Local automatic checks: tests, lint and typing (see [conventions.md](conventions.md)).
 
-## Non couvert par ces tests
+## Not covered by these tests
 
-La qualité réelle des réponses des sous-agents (dépend des modèles) relève de l'évaluation, pas des tests automatiques : voir [evaluation.md](evaluation.md).
+The real quality of sub-agent answers (it depends on the models) belongs to evaluation, not to automated tests: see [evaluation.md](evaluation.md).

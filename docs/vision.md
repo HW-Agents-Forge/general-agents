@@ -1,41 +1,40 @@
 # Vision
 
-## Problème
+## Problem
 
-Les agents de code principaux consomment beaucoup de tokens sur des tâches dont ils n'ont besoin que de la conclusion : lire des logs de build, parcourir un dépôt, résumer un historique git. Ces tâches pourraient être confiées à un modèle plus petit et moins coûteux.
+Primary coding agents spend many tokens on tasks where they only need the conclusion: reading build logs, browsing a repository, summarizing a git history. These tasks could be handed to a smaller, cheaper model.
 
-## Objectif
+## Goal
 
-Fournir un ensemble de **petits sous-agents** qui condensent l'information, utilisent les **plus petits modèles possibles**, et sont **définis une seule fois** puis adaptés à plusieurs outils agentiques.
+Provide a set of **small sub-agents** that condense information, use the **smallest models possible**, and are **defined once** then adapted to several agentic tools.
 
-## Principes
+## Principles
 
-0. **De tout petits modèles par défaut.** Le niveau `small` est le seul existant (ADR 0006) et pointe vers le plus petit modèle disponible ; l'utilisateur peut le remplacer agent par agent dans `models.toml` ou avec `--model` (ADR 0007). Les tâches qui demandent du raisonnement délicat restent à l'agent principal.
+0. **Tiny models by default.** The `small` tier is the only one that exists (ADR 0006) and points to the smallest available model; the user can replace it agent by agent in `models.toml` or with `--model` (ADR 0007). Tasks that require delicate reasoning stay with the primary agent.
+1. **Condense, don't just delegate.** A sub-agent is only worth it if it returns far less than it consumed.
+2. **One source format.** Agents are described neutrally in `agents/`. The `shuttle` package adapts them to each tool.
+3. **Safe by default.** Read-only unless necessary. The installer never overwrites a file that does not belong to the project.
+4. **Measurable.** Each agent must be evaluable by comparing tokens with and without delegation (see [evaluation.md](evaluation.md)).
+5. **No runtime dependency.** Python standard library only.
 
-1. **Condenser, pas seulement déléguer.** Un sous-agent n'a de valeur que s'il renvoie nettement moins que ce qu'il a consommé.
-2. **Un seul format source.** Les agents sont décrits de façon neutre dans `agents/`. Le package `shuttle` les adapte à chaque outil.
-3. **Sûr par défaut.** Lecture seule sauf nécessité. L'installation n'écrase jamais un fichier qui n'appartient pas au projet.
-4. **Mesurable.** Chaque agent doit pouvoir être évalué par une comparaison de tokens avec et sans délégation (voir [evaluation.md](evaluation.md)).
-5. **Sans dépendance à l'exécution.** Bibliothèque standard Python uniquement.
+## Scope
 
-## Périmètre
+- Agents: `run`, `find`, `diff`, `git`, `svn` (see [agents-catalog.md](agents-catalog.md)).
+- `atomic-tasks` skill telling the primary agent when and how to delegate.
+- Python package `shuttle` and `install` executable.
+- Target tools: VS Code, Copilot CLI, OpenCode.
 
-- Agents : `run`, `find`, `diff`, `git`, `svn` (voir [agents-catalog.md](agents-catalog.md)).
-- Skill `atomic-tasks` indiquant à l'agent principal quand et comment déléguer.
-- Package Python `shuttle` et exécutable `install`.
-- Outils cibles : VS Code, Copilot CLI, OpenCode.
+## Out of scope
 
-## Hors périmètre
+- `read`, `list`, `glob` agents: redundant with the primary agent's native tools.
+- `write` agent: the primary agent must already supply the whole content, which doubles the cost.
+- `backup`: deterministic operation, a job for a script rather than an LLM.
+- Any file deletion by the script (`uninstall`, `--remove`): judged too risky, removal is done by hand (see [install-spec.md](install-spec.md) and ADR 0004).
+- Complex multi-agent orchestration, memory shared between sub-agents.
 
-- Agents `read`, `list`, `glob` : redondants avec les outils natifs de l'agent principal.
-- Agent `write` : l'agent principal doit déjà fournir tout le contenu, ce qui double le coût.
-- `backup` : opération déterministe, relève d'un script et non d'un LLM.
-- Toute suppression de fichiers par le script (`uninstall`, `--remove`) : jugée risquée, le retrait se fait à la main (voir [install-spec.md](install-spec.md) et ADR 0004).
-- Orchestration multi-agents complexe, mémoire partagée entre sous-agents.
+## Success criteria
 
-## Critères de succès
-
-- Sur des cas réels, la délégation réduit la consommation totale de tokens de l'agent principal sans dégrader la qualité de la réponse.
-- Ajouter un outil cible revient à ajouter un fichier.
-- Ajouter un agent revient à ajouter un fichier Markdown.
-- `install --dry-run` décrit exactement ce qui sera écrit.
+- On real cases, delegation reduces the primary agent's total token consumption without degrading answer quality.
+- Adding a target tool amounts to adding one file.
+- Adding an agent amounts to adding one Markdown file.
+- `install --dry-run` describes exactly what will be written.

@@ -1,58 +1,58 @@
 # Architecture
 
-## Arborescence cible
+## Target layout
 
 ```
 general-agents/
-├── agents/                     # descriptions neutres, un .md par agent
+├── agents/                     # neutral descriptions, one .md per agent
 ├── skills/
 │   └── atomic-tasks/SKILL.md
-├── install                     # exécutable mince : appelle shuttle.cli.main()
-├── models.toml                 # nom du dépôt et modèles par outil et par agent
+├── install                     # thin executable: calls shuttle.cli.main()
+├── models.toml                 # repository name and models per tool and agent
 ├── pyproject.toml
 ├── src/shuttle/
 │   ├── __init__.py
-│   ├── cli.py                  # arguments, dispatch, codes de sortie
-│   ├── model.py                # dataclasses : Agent, Skill, ModelTier, ToolSet
-│   ├── config.py               # lecture de models.toml, résolution du modèle par agent
-│   ├── parser.py               # lecture du frontmatter + corps
-│   ├── registry.py             # découverte des agents et skills
+│   ├── cli.py                  # arguments, dispatch, exit codes
+│   ├── model.py                # dataclasses: Agent, Skill, ModelTier, ToolSet
+│   ├── config.py               # reads models.toml, resolves the model per agent
+│   ├── parser.py               # reads frontmatter + body
+│   ├── registry.py             # discovers agents and skills
 │   ├── targets/
-│   │   ├── base.py             # interface Target
+│   │   ├── base.py             # Target interface
 │   │   ├── vscode.py
 │   │   ├── copilot_cli.py
 │   │   └── opencode.py
-│   ├── installer.py            # seul module qui écrit sur disque
+│   ├── installer.py            # the only module that writes to disk
 │   └── errors.py
 ├── tests/
 └── docs/
 ```
 
-## Flux de données
+## Data flow
 
 ```
-agents/*.md ──► parser ──► model.Agent ──► Target.render ──► installer ──► fichiers du home
+agents/*.md ──► parser ──► model.Agent ──► Target.render ──► installer ──► files in the home
 skills/*/    ──► parser ──► model.Skill ──┘
 ```
 
-0. `config` lit `models.toml` à la racine du dépôt.
-1. `registry` parcourt `agents/` et `skills/`.
-2. `parser` valide chaque source et produit des objets typés (`Agent`, `Skill`). Toute erreur de source est détectée ici.
-3. Chaque `Target` transforme un objet typé et le modèle résolu en contenu de fichier propre à l'outil et indique son emplacement d'installation.
-4. `installer` écrit (ou simule l'écriture). C'est le seul module qui touche au disque.
+0. `config` reads `models.toml` at the repository root.
+1. `registry` walks `agents/` and `skills/`.
+2. `parser` validates each source and produces typed objects (`Agent`, `Skill`). Every source error is caught here.
+3. Each `Target` turns a typed object and the resolved model into tool-specific file content and provides its install location.
+4. `installer` writes (or simulates writing). It is the only module that touches the disk.
 
-## Responsabilités
+## Responsibilities
 
-| Module | Responsabilité | Ne fait pas |
+| Module | Responsibility | Does not |
 |---|---|---|
-| `parser` | Valider et typer les sources | Connaître les outils cibles |
-| `config` | Lire `models.toml`, résoudre le modèle de chaque agent pour un outil | Écrire sur disque |
-| `model` | Représenter agents, skills, niveaux de modèle, jeux d'outils | Faire des entrées/sorties |
-| `targets/*` | Rendu et chemins propres à un outil, tables de correspondance | Écrire sur disque |
-| `installer` | Écriture, dry-run, marque d'origine (aucune suppression) | Connaître le format d'un outil |
-| `cli` | Interface utilisateur, codes de sortie | Logique métier |
+| `parser` | Validate and type the sources | Know about target tools |
+| `config` | Read `models.toml`, resolve each agent's model for a tool | Write to disk |
+| `model` | Represent agents, skills, model tiers, tool sets | Do I/O |
+| `targets/*` | Tool-specific rendering and paths, mapping tables | Write to disk |
+| `installer` | Writing, dry-run, origin mark (no deletion) | Know any tool's format |
+| `cli` | User interface, exit codes | Business logic |
 
-## Interface `Target`
+## `Target` interface
 
 ```python
 class Target(Protocol):
@@ -63,11 +63,11 @@ class Target(Protocol):
     def render_skill(self, skill: Skill) -> str: ...
 ```
 
-Chaque cible porte sa table de correspondance des outils abstraits vers les noms d'outils de la plateforme. Les identifiants de modèles ne sont plus dans les cibles : ils viennent de `models.toml` (voir [install-spec.md](install-spec.md)).
+Each target holds its own mapping table from abstract tools to the platform's tool names. Model identifiers are no longer in the targets: they come from `models.toml` (see [install-spec.md](install-spec.md)).
 
-## Contraintes
+## Constraints
 
-- Python ≥ 3.11 (pour `tomllib`), bibliothèque standard uniquement à l'exécution.
-- Sorties déterministes : à entrée identique, contenu généré identique (utile aux tests et aux mises à jour).
-- Aucune écriture hors des chemins fournis par les cibles.
-- Les erreurs sont typées (`errors.py`) et transformées en messages clairs et codes de sortie par `cli`.
+- Python ≥ 3.11 (for `tomllib`), standard library only at runtime.
+- Deterministic output: same input, same generated content (useful for tests and updates).
+- No write outside the paths provided by the targets.
+- Errors are typed (`errors.py`) and turned into clear messages and exit codes by `cli`.

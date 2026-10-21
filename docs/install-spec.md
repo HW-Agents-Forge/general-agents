@@ -1,83 +1,83 @@
-# Spécification de `install`
+# `install` specification
 
-`install` est un exécutable mince qui appelle `shuttle.cli.main()`. Le package s'utilise aussi avec `pip install -e .` (commande `shuttle`).
+`install` is a thin executable that calls `shuttle.cli.main()`. The package can also be used with `pip install -e .` (command `shuttle`).
 
 ## Usage
 
 ```
-install --target {vscode,copilot-cli,opencode} [--model AGENT=MODÈLE]... [--dry-run] [--yes] [--home PATH]
+install --target {vscode,copilot-cli,opencode} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
 ```
 
-| Option | Effet |
+| Option | Effect |
 |---|---|
-| `--target` | **Obligatoire.** Un seul outil par exécution. Sans valeur par défaut ni `all` : l'absence de `--target` est une erreur d'usage (code 3). |
-| `--model AGENT=MODÈLE` | Répétable. Fixe le modèle d'**un** agent pour cette exécution. Ne s'applique jamais à tous les agents. Un nom d'agent inconnu est une erreur d'usage. |
-| `--dry-run` | Affiche chaque fichier qui serait créé ou mis à jour, sans rien écrire. |
-| `--yes` | Ne pas demander de confirmation. |
-| `--home PATH` | Racine de substitution du home (tests et essais). |
+| `--target` | **Required.** One tool per run. No default and no `all`: a missing `--target` is a usage error (code 3). |
+| `--model AGENT=MODEL` | Repeatable. Sets the model of **one** agent for this run. Never applies to all agents. An unknown agent name is a usage error. |
+| `--dry-run` | Shows every file that would be created or updated, without writing anything. |
+| `--yes` | Do not ask for confirmation. |
+| `--home PATH` | Substitute home root (tests and trials). |
 
-## Modèles et `models.toml`
+## Models and `models.toml`
 
-`models.toml` est à la racine du dépôt, à côté de `agents/` et `skills/`. Il est copié avec le script d'un dépôt à l'autre.
+`models.toml` sits at the repository root, next to `agents/` and `skills/`. It is copied with the script from one repository to another.
 
 ```toml
-name = "general-agents"     # identifie le dépôt dans la marque d'origine
+name = "general-agents"     # identifies the repository in the origin mark
 
 [defaults]
-small = "claude-haiku-5-5"  # modèle pour tier = small
+small = "claude-haiku-5-5"  # model for tier = small
 
 [copilot-cli]
-run = "claude-haiku-5-5"    # modèle d'un agent précis pour cet outil
+run = "claude-haiku-5-5"    # model of one specific agent for this tool
 
 [vscode]
 [opencode]
 ```
 
-Pour un agent et un outil donnés, le modèle est le premier trouvé parmi :
-1. l'option `--model AGENT=MODÈLE` ;
-2. la clé `AGENT` de la section de l'outil dans `models.toml` ;
-3. la clé du `tier` de l'agent dans `[defaults]`.
+For a given agent and tool, the model is the first one found among:
+1. the `--model AGENT=MODEL` option;
+2. the `AGENT` key in the tool's section of `models.toml`;
+3. the key of the agent's `tier` in `[defaults]`.
 
-Si aucun ne correspond, `install` échoue avec un message qui nomme l'agent et l'outil ; il ne choisit jamais un modèle au hasard. Un agent inconnu dans `models.toml` ou une section d'outil inconnue est signalé comme erreur de configuration (code 2).
+If none matches, `install` fails with a message naming the agent and the tool; it never picks a model at random. An unknown agent in `models.toml` or an unknown tool section is reported as a configuration error (code 2).
 
-`install` ne peut pas vérifier qu'un identifiant existe dans l'outil. Il contrôle seulement sa forme (caractères autorisés, non vide) ; le reste relève de l'utilisateur. `--dry-run` affiche le modèle retenu pour chaque agent.
+`install` cannot check that an identifier exists in the tool. It only checks its form (allowed characters, non-empty); the rest is up to the user. `--dry-run` shows the model chosen for each agent.
 
-## Marque d'origine
+## Origin mark
 
-Tout fichier généré contient `managed-by: <name>`, où `<name>` est le champ `name` de `models.toml` (voir [targets.md](targets.md) pour la forme selon l'outil). C'est le **seul** critère par lequel `installer` considère qu'un fichier lui appartient.
+Every generated file contains `managed-by: <name>`, where `<name>` is the `name` field of `models.toml` (see [targets.md](targets.md) for the form per tool). It is the **only** criterion by which `installer` considers a file as its own.
 
-## Règles de sécurité
+## Safety rules
 
-1. **Ne jamais écraser un fichier sans marque.** Si la destination existe sans marque, l'opération échoue pour ce fichier avec un message explicite.
-2. **Ne jamais supprimer aucun fichier.** `installer` n'expose aucune opération de suppression. Un agent retiré des sources reste installé jusqu'à ce que l'utilisateur le supprime à la main.
-3. **Écrire uniquement dans les chemins retournés par les cibles**, résolus sous la racine du home. Refuser tout chemin qui en sortirait (y compris via lien symbolique).
-4. **Dry-run fidèle** : mêmes chemins et mêmes décisions que l'exécution réelle, sans effet de bord.
-5. **Écriture atomique** : écrire dans un fichier temporaire du même dossier, puis renommer.
-6. **Idempotence** : relancer `install` sans changement de source ne modifie rien.
+1. **Never overwrite an unmarked file.** If the destination exists without the mark, the operation fails for that file with an explicit message.
+2. **Never delete any file.** `installer` exposes no deletion operation. An agent removed from the sources stays installed until the user deletes it by hand.
+3. **Write only to paths returned by the targets**, resolved under the home root. Reject any path that would escape it (including through a symbolic link).
+4. **Faithful dry-run**: same paths and same decisions as the real run, with no side effects.
+5. **Atomic write**: write to a temporary file in the same folder, then rename.
+6. **Idempotence**: rerunning `install` without any source change modifies nothing.
 
-## Actions possibles par fichier
+## Possible actions per file
 
-| État de la destination | Action |
+| Destination state | Action |
 |---|---|
-| Absente | Créer |
-| Présente, marquée, contenu identique | Aucune |
-| Présente, marquée, contenu différent | Mettre à jour |
-| Présente, sans marque | Refuser, signaler |
+| Absent | Create |
+| Present, marked, identical content | None |
+| Present, marked, different content | Update |
+| Present, unmarked | Refuse, report |
 
-## Sortie
+## Output
 
-Un résumé par fichier (`créé`, `mis à jour`, `inchangé`, `refusé`), puis un total.
+One summary per file (`created`, `updated`, `unchanged`, `refused`), then a total. User-facing messages are in English.
 
-## Codes de sortie
+## Exit codes
 
-| Code | Signification |
+| Code | Meaning |
 |---|---|
-| 0 | Succès |
-| 1 | Au moins un fichier refusé |
-| 2 | Source ou configuration invalide (agent, `models.toml`) |
-| 3 | Erreur d'entrée/sortie ou d'usage |
+| 0 | Success |
+| 1 | At least one file refused |
+| 2 | Invalid source or configuration (agent, `models.toml`) |
+| 3 | I/O or usage error |
 
-## Choix retenus
+## Chosen design
 
-- Aucune suppression par le script : ni `uninstall`, ni `--remove` (ADR 0004). L'utilisateur supprime à la main.
-- Installation par **copie** transformée, pas par lien symbolique, car le contenu dépend de l'outil (ADR 0003).
+- No deletion by the script: neither `uninstall` nor `--remove` (ADR 0004). The user deletes by hand.
+- Installation by transformed **copy**, not by symbolic link, because the content depends on the tool (ADR 0003).

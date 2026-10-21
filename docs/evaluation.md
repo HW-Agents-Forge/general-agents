@@ -1,54 +1,54 @@
-# Évaluation : mesurer les économies de tokens
+# Evaluation: measuring token savings
 
-Sans mesure, déléguer peut coûter plus cher qu'agir directement. Chaque agent doit donc justifier son existence par des chiffres.
+Without measurement, delegating can cost more than acting directly. Each agent must therefore justify its existence with numbers.
 
-## Question posée
+## Question
 
-Pour une tâche donnée, la consommation totale (agent principal **plus** sous-agent) est-elle inférieure avec délégation, à qualité de réponse égale ?
+For a given task, is the total consumption (primary agent **plus** sub-agent) lower with delegation, at equal answer quality?
 
-## Protocole
+## Protocol
 
-1. Choisir un **scénario réel** (exemple : lancer la suite de tests d'un projet qui échoue et identifier la cause).
-2. Exécuter deux fois, depuis le même état :
-   - **Base** : l'agent principal fait tout lui-même.
-   - **Délégation** : l'agent principal a accès à l'agent évalué et au skill `atomic-tasks`.
-3. Relever, pour chaque exécution :
-   - tokens d'entrée et de sortie de l'agent principal ;
-   - tokens d'entrée et de sortie du ou des sous-agents ;
-   - coût pondéré selon les tarifs des modèles utilisés ;
-   - durée ;
-   - qualité : la réponse est-elle correcte et suffisante ? (oui / partielle / non).
-4. Répéter au moins 3 fois par scénario pour lisser la variance.
+1. Choose a **real scenario** (example: run a project's failing test suite and identify the cause).
+2. Run it twice, from the same state:
+   - **Baseline**: the primary agent does everything itself.
+   - **Delegation**: the primary agent has access to the evaluated agent and to the `atomic-tasks` skill.
+3. Record, for each run:
+   - input and output tokens of the primary agent;
+   - input and output tokens of the sub-agent(s);
+   - weighted cost according to the prices of the models used;
+   - duration;
+   - quality: is the answer correct and sufficient? (yes / partial / no).
+4. Repeat at least 3 times per scenario to smooth out variance.
 
-## Métriques
+## Metrics
 
-| Métrique | Calcul |
+| Metric | Computation |
 |---|---|
-| Tokens totaux | principal + sous-agents |
-| Coût pondéré | somme (tokens × tarif du modèle) |
-| Gain de coût | 1 − coût délégation / coût base |
-| Taux de qualité | part des exécutions jugées correctes |
+| Total tokens | primary + sub-agents |
+| Weighted cost | sum (tokens × model price) |
+| Cost gain | 1 − delegation cost / baseline cost |
+| Quality rate | share of runs judged correct |
 
-## Seuils d'acceptation (proposés, à confirmer)
+## Acceptance thresholds (proposed, to be confirmed)
 
-- Gain de coût médian ≥ 30 % sur les scénarios cibles de l'agent.
-- Taux de qualité en délégation ≥ taux de la base.
-- Aucun scénario cible où la délégation coûte plus cher.
+- Median cost gain ≥ 30 % on the agent's target scenarios.
+- Quality rate with delegation ≥ baseline quality rate.
+- No target scenario where delegation costs more.
 
-Un agent sous le seuil est retravaillé (contrat de sortie, prompt) ou retiré du catalogue.
+An agent below the threshold is reworked (output contract, prompt) or removed from the catalog.
 
-## Scénarios de départ
+## Starting scenarios
 
-| Agent | Scénario |
+| Agent | Scenario |
 |---|---|
-| `run` | Tests ou build à sortie longue avec quelques erreurs réelles |
-| `find` | Trouver tous les usages d'une API dans un dépôt de taille moyenne |
-| `diff` | Résumer un changement de plusieurs dizaines de fichiers |
-| `git` | Retrouver le commit introducteur d'une régression |
-| `svn` | Équivalent sur un dépôt Subversion |
+| `run` | Tests or build with long output and a few real errors |
+| `find` | Find all usages of an API in a medium-sized repository |
+| `diff` | Summarize a change spanning several dozen files |
+| `git` | Find the commit that introduced a regression |
+| `svn` | Same on a Subversion repository |
 
-## Organisation
+## Organization
 
-- Les scénarios, relevés et conclusions sont stockés dans `docs/evaluations/` (un fichier par agent et par date).
-- La méthode de relevé des tokens dépend de l'outil ; elle est notée dans chaque fichier de résultats.
-- Cette évaluation est manuelle au départ. Une automatisation n'est envisagée que si elle devient un frein.
+- Scenarios, measurements and conclusions are stored in `docs/evaluations/` (one file per agent and date).
+- The way tokens are measured depends on the tool; it is noted in each results file.
+- This evaluation is manual to begin with. Automation is considered only if it becomes a bottleneck.

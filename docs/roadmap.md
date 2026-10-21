@@ -1,53 +1,54 @@
-# Feuille de route
+# Roadmap
 
-Principe : valider tôt, sur un seul agent et un seul outil, avant de généraliser.
+Principle: validate early, on a single agent and a single tool, before generalizing.
 
-## Jalon 0 : préparation
+## Milestone 0: preparation
 
-- [ ] Répondre aux points bloquants de [open-questions.md](open-questions.md) (outil prioritaire, modèles `small`).
-- [ ] Vérifier le format de l'outil prioritaire dans sa documentation officielle et remplir [targets.md](targets.md).
-- [ ] `pyproject.toml`, squelette `src/shuttle/`, `tests/`, outils de lint et de typage.
+- [ ] Answer the blocking points of [open-questions.md](open-questions.md) (exact model identifiers per tool).
+- [ ] Check each target tool's format in its official documentation and fill in [targets.md](targets.md).
+- [ ] `pyproject.toml`, `src/shuttle/` skeleton, `tests/`, lint and typing tools.
 
-## Jalon 1 : tranche verticale minimale
+## Milestone 1: minimal vertical slice
 
-Objectif : `agents/run.md` installé de bout en bout pour **un** outil.
+Goal: `agents/run.md` installed end to end for **one** tool.
 
-- [ ] `model.py` et `errors.py`.
-- [ ] `parser.py` avec tests.
+- [ ] `model.py` and `errors.py`.
+- [ ] `parser.py` with tests.
+- [ ] `config.py` and `models.toml` with tests.
 - [ ] `registry.py`.
-- [ ] Première cible dans `targets/`.
-- [ ] `installer.py` avec toutes les règles de sécurité et leurs tests.
-- [ ] `cli.py` et exécutable `install` (`--dry-run` inclus).
-- [ ] Agent `run` rédigé.
+- [ ] First target in `targets/`.
+- [ ] `installer.py` with all the safety rules and their tests.
+- [ ] `cli.py` and `install` executable (`--dry-run` included).
+- [ ] `run` agent written.
 
-Critère de sortie : `install --dry-run` puis `install` produisent le bon fichier dans un home de test ; l'agent est utilisable dans l'outil.
+Exit criterion: `install --dry-run` then `install` produce the right file in a test home; the agent is usable in the tool.
 
-## Jalon 2 : première évaluation
+## Milestone 2: first evaluation
 
-- [ ] Évaluer `run` selon [evaluation.md](evaluation.md) sur au moins un scénario réel.
-- [ ] Décider : on poursuit, on ajuste le prompt, ou on revoit l'approche.
+- [ ] Evaluate `run` as described in [evaluation.md](evaluation.md) on at least one real scenario.
+- [ ] Decide: continue, adjust the prompt, or rethink the approach.
 
-Ce jalon conditionne la suite : si le gain n'est pas démontré, on revoit le catalogue avant d'investir davantage.
+This milestone conditions what follows: if the gain is not demonstrated, review the catalog before investing further.
 
-## Jalon 3 : catalogue complet
+## Milestone 3: full catalog
 
-- [ ] Agents `find`, `diff`, `git`, `svn` (ou `vcs`, selon décision).
-- [ ] Skill `atomic-tasks`.
-- [ ] Évaluation de chaque agent.
+- [ ] `find`, `diff`, `git`, `svn` agents (or `vcs`, depending on the decision).
+- [ ] `atomic-tasks` skill.
+- [ ] Evaluation of each agent.
 
-## Jalon 4 : multi-outils
+## Milestone 4: multi-tool
 
-- [ ] Cibles restantes (VS Code, Copilot CLI, OpenCode), une à la fois, chacune précédée de la vérification de son format.
-- [ ] Tests de référence par cible.
-- [ ] Installation des skills selon les emplacements de chaque outil.
+- [ ] Remaining targets (VS Code, Copilot CLI, OpenCode), one at a time, each preceded by checking its format.
+- [ ] Reference tests per target.
+- [ ] Skill installation at each tool's locations.
 
-## Jalon 5 : finition
+## Milestone 5: finishing
 
-- [ ] README du dépôt mis à jour (usage, installation).
-- [ ] Revue de sécurité de `installer`.
+- [ ] Repository README updated (usage, installation).
+- [ ] Security review of `installer`.
 
-## Hors feuille de route (à reconsidérer plus tard)
+## Out of the roadmap (to reconsider later)
 
-- Agents supplémentaires, selon besoin mesuré.
-- Automatisation de l'évaluation.
-- Publication du package.
+- Additional agents, based on measured need.
+- Automating the evaluation.
+- Publishing the package.

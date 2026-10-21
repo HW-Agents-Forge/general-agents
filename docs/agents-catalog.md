@@ -1,106 +1,106 @@
-# Catalogue des agents
+# Agent catalog
 
-Critère d'entrée : l'agent **condense** une sortie volumineuse en une réponse courte. Les agents qui n'apportent que de l'indirection sont exclus (voir [vision.md](vision.md)).
+Entry criterion: the agent **condenses** a large output into a short answer. Agents that only add indirection are excluded (see [vision.md](vision.md)).
 
-Tous les agents sont en `tier: small` au départ. Aucun n'écrit de fichier de lui-même ; les effets de `run` sont uniquement ceux de la commande fournie par l'agent parent.
+All agents are `tier: small` to start with. None writes a file by itself; the side effects of `run` are only those of the command supplied by the parent agent.
 
-## Vue d'ensemble
+## Overview
 
-| Agent | Outils | Entrée type | Sortie |
+| Agent | Tools | Typical input | Output |
 |---|---|---|---|
-| `run` | `shell` | La commande exacte à lancer (syntaxe csh) et son timeout | Rapport : verdict, code de sortie, points clés |
-| `find` | `search`, `read` | Une question sur le dépôt | Chemins et extraits pertinents |
-| `diff` | `shell`, `read` | Deux références ou fichiers à comparer | Résumé structuré des changements |
-| `git` | `shell` | Une question sur l'historique ou l'état | Réponse digérée |
-| `svn` | `shell` | Une question sur l'historique ou l'état | Réponse digérée |
+| `run` | `shell` | The exact command to run (csh syntax) and its timeout | Report: status, exit code, key points |
+| `find` | `search`, `read` | A question about the repository | Relevant paths and excerpts |
+| `diff` | `shell`, `read` | Two references or files to compare | Structured summary of the changes |
+| `git` | `shell` | A question about history or state | Digested answer |
+| `svn` | `shell` | A question about history or state | Digested answer |
 
-## Frontières (anti-recouvrement)
+## Boundaries (no overlap)
 
 | Question | Agent |
 |---|---|
-| « Où est défini X ? Quels fichiers parlent de Y ? » | `find` |
-| « Que dit ce gros fichier à propos de Z ? » | `find` |
-| « Qu'est-ce qui a changé entre A et B ? » | `diff` |
-| « Qui a modifié cette ligne ? Quand ce bug est-il apparu ? » | `git` / `svn` |
-| « Quel est l'état de la copie de travail ? » | `git` / `svn` |
-| « Lance exactement cette commande, surveille-la et dis-moi ce qui échoue » | `run` |
+| "Where is X defined? Which files mention Y?" | `find` |
+| "What does this big file say about Z?" | `find` |
+| "What changed between A and B?" | `diff` |
+| "Who changed this line? When did this bug appear?" | `git` / `svn` |
+| "What is the state of the working copy?" | `git` / `svn` |
+| "Run exactly this command, watch it and tell me what fails" | `run` |
 
-Règles de départage :
-- `diff` compare du contenu. `git` et `svn` interrogent l'historique et l'état d'un dépôt. Si une comparaison porte sur deux révisions, `diff` la fait ; si elle cherche **qui** ou **pourquoi**, c'est `git` ou `svn`.
-- `find` n'exécute pas de commande, `run` n'exécute que la commande reçue et ne cherche pas dans le code.
-- Question ouverte : fusionner `git` et `svn` en un agent `vcs` (voir [open-questions.md](open-questions.md)).
+Tie-breaking rules:
+- `diff` compares content. `git` and `svn` query a repository's history and state. If a comparison concerns two revisions, `diff` does it; if it asks **who** or **why**, it is `git` or `svn`.
+- `find` runs no command; `run` only runs the command it receives and does not search the code.
+- Open question: merge `git` and `svn` into one `vcs` agent (see [open-questions.md](open-questions.md)).
 
-## Contrats de sortie
+## Output contracts
 
-Chaque réponse tient dans `max_output_lines` lignes, sans préambule ni conclusion bavarde.
+Every answer fits in `max_output_lines` lines, with no preamble and no chatty conclusion. Contract keys are in English.
 
 ### `run`
 
-Rôle : exécuter dans le terminal la commande **exacte** fournie par l'agent parent, la surveiller pendant son exécution et rendre un rapport. Le shell est `csh`.
+Role: run in the terminal the **exact** command supplied by the parent agent, watch it while it runs and return a report. The shell is `csh`.
 
-Responsabilités :
-- L'agent parent fournit la commande complète, déjà écrite pour `csh`, **et un timeout en secondes**. `run` ne réécrit pas la commande, ne la complète pas, n'ajoute ni option ni redirection de sa propre initiative.
-- Le **timeout est impératif** et décidé par l'agent parent. `run` l'applique toujours (voir « Timeout » ci-dessous) ; il n'existe pas de durée par défaut.
-- `run` ne lance **aucune autre commande** que celle reçue (pas de commande d'investigation, pas de relance). Il peut en revanche lire la sortie du terminal et le fichier de log désigné par l'agent parent.
-- Il surveille la progression (sortie produite, fin du processus, code de sortie) et rend son rapport à la fin, ou en cas de blocage.
-- Il ne diagnostique pas au-delà de ce que la sortie montre : l'analyse et la décision suivante reviennent à l'agent parent.
+Responsibilities:
+- The parent agent supplies the full command, already written for `csh`, **and a timeout in seconds**. `run` does not rewrite the command, complete it, or add options or redirections on its own initiative.
+- The **timeout is mandatory** and decided by the parent agent. `run` always applies it (see "Timeout" below); there is no default duration.
+- `run` launches **no command other than the one received** (no investigation command, no retry). It may read the terminal output and the log file designated by the parent agent.
+- It monitors progress (output produced, process end, exit code) and returns its report at the end, or when blocked.
+- It does not diagnose beyond what the output shows: analysis and the next decision belong to the parent agent.
 
 ```
-commande: <commande reçue, recopiée telle quelle>
-statut: terminé | échec | bloqué | timeout
-code_sortie: <entier, ou « inconnu » si non terminé>
-durée: <approximative>
-points_clés:
-- <erreur ou avertissement utile, une ligne>
-extrait: |
-  <au plus quelques lignes de sortie brute décisives>
-tronqué: oui | non
+command: <command received, copied verbatim>
+status: finished | failed | blocked | timeout
+exit_code: <integer, or "unknown" if not finished>
+duration: <approximate>
+key_points:
+- <useful error or warning, one line>
+excerpt: |
+  <at most a few decisive lines of raw output>
+truncated: yes | no
 ```
 
-Consignes : ne jamais renvoyer le journal complet ; dédupliquer les erreurs répétées ; `bloqué` si le processus attend une entrée (invite interactive, mot de passe, confirmation) : `run` ne répond jamais, il signale et rapporte la dernière ligne vue ; `timeout` si la durée attribuée est dépassée : le processus est arrêté et le rapport indique ce qui avait été produit ; indiquer `tronqué: oui` si l'analyse a été limitée.
-Limites : exécuter la commande telle quelle (la responsabilité de son contenu est à l'agent parent) ; si la commande exacte **ou le timeout** manque, ne rien lancer et le dire.
+Instructions: never return the full log; deduplicate repeated errors; `blocked` if the process waits for input (interactive prompt, password, confirmation): `run` never answers, it reports and gives the last line seen; `timeout` if the allotted time is exceeded: the process is stopped and the report states what had been produced; set `truncated: yes` if the analysis was limited.
+Limits: run the command as is (responsibility for its content lies with the parent agent); if the exact command **or the timeout** is missing, run nothing and say so.
 
-Timeout :
-- Il est exprimé en secondes et fourni par l'agent parent, qui connaît la durée raisonnable du job (simulation courte, régression longue).
-- `run` utilise le mécanisme d'expiration du terminal de l'outil s'il existe ; sinon il fait précéder la commande de `timeout <secondes>`. C'est la seule modification de la commande qu'il est autorisé à faire.
-- À l'expiration, `run` arrête le processus lancé (et lui seul), signale `statut: timeout` et ne relance rien. C'est à l'agent parent de décider d'une nouvelle tentative avec un autre délai.
+Timeout:
+- It is expressed in seconds and supplied by the parent agent, which knows the reasonable duration of the job (short simulation, long regression).
+- `run` uses the tool terminal's expiry mechanism if there is one; otherwise it prefixes the command with `timeout <seconds>`. This is the only modification of the command it is allowed to make.
+- On expiry, `run` stops the process it launched (and only that one), reports `status: timeout` and relaunches nothing. The parent agent decides whether to retry with another duration.
 
 ### `find`
 
 ```
-résultats:
-- chemin:ligne — <pourquoi pertinent, une ligne>
-réponse: <réponse directe à la question, 1 à 3 phrases>
-incertitudes: <ce qui n'a pas pu être confirmé>
+results:
+- path:line — <why relevant, one line>
+answer: <direct answer to the question, 1 to 3 sentences>
+uncertainties: <what could not be confirmed>
 ```
 
-Consignes : classer par pertinence, plafonner le nombre de résultats, citer des lignes vérifiées et non supposées.
+Instructions: rank by relevance, cap the number of results, quote verified lines rather than assumed ones.
 
 ### `diff`
 
 ```
-fichiers_modifiés: <nombre>
-résumé: <2 à 4 phrases sur l'intention des changements>
-détail:
-- chemin — <nature du changement>
-risques: <points d'attention, ou « aucun repéré »>
+files_changed: <number>
+summary: <2 to 4 sentences on the intent of the changes>
+details:
+- path — <nature of the change>
+risks: <points of attention, or "none spotted">
 ```
 
-### `git` et `svn`
+### `git` and `svn`
 
 ```
-réponse: <réponse directe>
-preuves:
-- <révision ou commit> — <auteur>, <date> — <pourquoi pertinent>
-état: <propre | modifié | conflit> (si demandé)
+answer: <direct answer>
+evidence:
+- <revision or commit> — <author>, <date> — <why relevant>
+state: <clean | modified | conflict> (if requested)
 ```
 
-Consignes : commandes en lecture seule uniquement (`log`, `blame`/`annotate`, `status`, `show`, `diff`) ; jamais de commit, reset, checkout ou merge.
+Instructions: read-only commands only (`log`, `blame`/`annotate`, `status`, `show`, `diff`); never commit, reset, checkout or merge.
 
-## Ajouter un agent
+## Adding an agent
 
-Un nouvel agent est accepté s'il :
-1. condense réellement une sortie (le gain doit être mesuré selon [evaluation.md](evaluation.md)) ;
-2. a une frontière claire avec les agents existants ;
-3. a un contrat de sortie court et vérifiable ;
-4. demande le minimum d'outils.
+A new agent is accepted if it:
+1. really condenses an output (the gain must be measured as in [evaluation.md](evaluation.md));
+2. has a clear boundary with the existing agents;
+3. has a short, verifiable output contract;
+4. requires the minimum number of tools.

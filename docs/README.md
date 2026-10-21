@@ -1,23 +1,23 @@
-# Documentation de general-agents
+# general-agents documentation
 
-Index des documents de conception. À lire dans cet ordre pour une première prise en main.
+Index of the design documents. Read them in this order for a first overview.
 
-| Document | Contenu |
+| Document | Content |
 |---|---|
-| [vision.md](vision.md) | Objectifs, périmètre, non-objectifs, principes |
-| [architecture.md](architecture.md) | Structure du dépôt et du package `shuttle`, flux de données |
-| [agent-format.md](agent-format.md) | Format source neutre des agents (frontmatter + corps) |
-| [agents-catalog.md](agents-catalog.md) | Catalogue des agents, responsabilités, contrats de sortie |
-| [skill-atomic-tasks.md](skill-atomic-tasks.md) | Spécification du skill `atomic-tasks` |
-| [targets.md](targets.md) | Outils cibles (VS Code, Copilot CLI, OpenCode) et correspondances |
-| [install-spec.md](install-spec.md) | CLI `install`, sécurité, marque d'origine |
-| [evaluation.md](evaluation.md) | Mesure des économies de tokens |
-| [testing.md](testing.md) | Stratégie de tests |
-| [conventions.md](conventions.md) | Conventions de code, de commit et de contribution |
-| [roadmap.md](roadmap.md) | Jalons et ordre de réalisation |
-| [open-questions.md](open-questions.md) | Points ouverts et éléments à vérifier |
-| [decisions/](decisions/) | Décisions d'architecture (ADR) |
+| [vision.md](vision.md) | Goals, scope, non-goals, principles |
+| [architecture.md](architecture.md) | Repository and `shuttle` package structure, data flow |
+| [agent-format.md](agent-format.md) | Neutral source format for agents (frontmatter + body) |
+| [agents-catalog.md](agents-catalog.md) | Agent catalog, responsibilities, output contracts |
+| [skill-atomic-tasks.md](skill-atomic-tasks.md) | Specification of the `atomic-tasks` skill |
+| [targets.md](targets.md) | Target tools (VS Code, Copilot CLI, OpenCode) and mappings |
+| [install-spec.md](install-spec.md) | `install` CLI, safety, origin mark |
+| [evaluation.md](evaluation.md) | Measuring token savings |
+| [testing.md](testing.md) | Test strategy |
+| [conventions.md](conventions.md) | Code, commit and contribution conventions |
+| [roadmap.md](roadmap.md) | Milestones and order of work |
+| [open-questions.md](open-questions.md) | Open points and items to verify |
+| [decisions/](decisions/) | Architecture decision records (ADR) |
 
-## Statut
+## Status
 
-Les documents décrivent l'état **cible**. Rien n'est encore implémenté. Les formats propres à chaque outil sont marqués **À VÉRIFIER** tant qu'ils n'ont pas été confrontés à la documentation officielle.
+The documents describe the **target** state. Nothing is implemented yet. Tool-specific formats are marked **TO VERIFY** until they have been checked against the official documentation.

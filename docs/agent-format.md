@@ -1,72 +1,72 @@
-# Format source neutre des agents
+# Neutral source format for agents
 
-Chaque agent est un fichier Markdown dans `agents/`, composé d'un **frontmatter** et d'un **corps** (le prompt système).
+Each agent is a Markdown file in `agents/`, made of a **frontmatter** and a **body** (the system prompt).
 
-## Exemple
+## Example
 
 ```markdown
 ---
 name: run
-description: Exécute une commande longue (build, tests, scripts) et renvoie un verdict court avec les erreurs utiles. À utiliser quand la sortie brute serait volumineuse.
+description: Runs the exact command given (build, tests, scripts), watches it and returns a short report with the useful errors. Use it when the raw output would be large.
 tier: small
 tools: [shell]
 max_output_lines: 40
 ---
 
-Tu exécutes la commande demandée et tu résumes le résultat.
+You run the requested command and summarize the result.
 ...
 ```
 
-## Champs du frontmatter
+## Frontmatter fields
 
-| Champ | Obligatoire | Type | Description |
+| Field | Required | Type | Description |
 |---|---|---|---|
-| `name` | oui | chaîne | Identifiant, minuscules, chiffres et tirets. Unique. Doit correspondre au nom du fichier. |
-| `description` | oui | chaîne | Une à trois phrases. Indique **quand** l'agent principal doit l'invoquer. C'est ce texte que l'outil montre au modèle principal. |
-| `tier` | oui | `small` | Niveau de modèle souhaité. Seule valeur admise : `small` (voir ADR 0006). Jamais un identifiant de modèle. |
-| `tools` | oui | liste | Outils abstraits autorisés (voir ci-dessous). Liste vide interdite. |
-| `max_output_lines` | non | entier | Taille maximale de la réponse, répétée dans le corps comme consigne. Défaut : 40. |
+| `name` | yes | string | Identifier, lowercase letters, digits and hyphens. Unique. Must match the file name. |
+| `description` | yes | string | One to three sentences. States **when** the primary agent should invoke it. This is the text the tool shows to the primary model. |
+| `tier` | yes | `small` | Desired model tier. The only accepted value is `small` (see ADR 0006). Never a model identifier. |
+| `tools` | yes | list | Allowed abstract tools (see below). Empty list not allowed. |
+| `max_output_lines` | no | integer | Maximum response size, repeated in the body as an instruction. Default: 40. |
 
-Toute clé inconnue est une erreur de validation.
+Any unknown key is a validation error.
 
-## Outils abstraits
+## Abstract tools
 
-| Outil abstrait | Signification | Risque |
+| Abstract tool | Meaning | Risk |
 |---|---|---|
-| `read` | Lire des fichiers | Faible |
-| `search` | Rechercher par motif ou nom dans l'arborescence | Faible |
-| `shell` | Exécuter des commandes | Élevé |
+| `read` | Read files | Low |
+| `search` | Search by pattern or name in the tree | Low |
+| `shell` | Run commands | High |
 
-L'écriture de fichiers n'existe pas côté source : aucun agent du catalogue n'en a besoin (voir [vision.md](vision.md)). Chaque cible convertit ces outils en noms propres à la plateforme.
+File writing does not exist on the source side: no agent in the catalog needs it (see [vision.md](vision.md)). Each target converts these tools into platform-specific names.
 
-## Niveaux de modèle
+## Model tiers
 
-| `tier` | Intention |
+| `tier` | Intent |
 |---|---|
-| `small` | Le plus petit modèle disponible dans l'outil cible. Seul niveau existant : aucun agent n'utilise de modèle plus grand. |
+| `small` | The smallest model available in the target tool. The only tier that exists: no agent uses a larger model by default. |
 
-Conséquence pour la rédaction : les prompts doivent rester très courts et très directifs, avec un contrat de sortie rigide et au besoin un exemple de réponse. Une tâche qui exige du raisonnement délicat ne doit pas être confiée à un agent ; elle reste à l'agent principal.
+Consequence for writing: prompts must stay very short and very directive, with a rigid output contract and, if needed, an example answer. A task requiring delicate reasoning must not be given to an agent; it stays with the primary agent.
 
-La correspondance vers des identifiants réels est définie **dans chaque cible**, jamais dans les sources.
+The identifier actually used is not in the sources. It comes from `models.toml` or from `--model` at install time (see [install-spec.md](install-spec.md)).
 
-## Corps
+## Body
 
-Le corps est le prompt système. Structure recommandée :
+The body is the system prompt. Recommended structure:
 
-1. **Rôle** en une phrase.
-2. **Procédure** courte et ordonnée.
-3. **Contrat de sortie** : format exact et taille maximale.
-4. **Limites** : ce que l'agent ne doit pas faire.
+1. **Role** in one sentence.
+2. **Procedure**, short and ordered.
+3. **Output contract**: exact format and maximum size.
+4. **Limits**: what the agent must not do.
 
-Règles :
-- Pas de références à un outil particulier (pas de noms d'outils de plateforme dans le corps).
-- Le contrat de sortie est impératif et testable.
-- Rester sous environ 60 lignes : le prompt système est payé à chaque appel.
+Rules:
+- No reference to a particular tool (no platform tool names in the body).
+- The output contract is imperative and testable.
+- Stay under about 60 lines: the system prompt is paid for on every call.
 
-## Marque d'origine
+## Origin mark
 
-Les fichiers **générés** reçoivent dans leur frontmatter la marque `managed-by: <name>` (ou un commentaire équivalent si l'outil n'accepte pas de clé libre), où `<name>` est le champ `name` de `models.toml`. Elle n'apparaît pas dans les sources. Voir [install-spec.md](install-spec.md).
+**Generated** files receive, in their frontmatter, the mark `managed-by: <name>` (or an equivalent comment if the tool does not accept free keys), where `<name>` is the `name` field of `models.toml`. It does not appear in the sources. See [install-spec.md](install-spec.md).
 
 ## Skills
 
-Un skill est un dossier `skills/<nom>/SKILL.md` avec un frontmatter `name` et `description`, suivi d'un corps Markdown. Spécification du skill de ce projet : [skill-atomic-tasks.md](skill-atomic-tasks.md).
+A skill is a folder `skills/<name>/SKILL.md` with a `name` and `description` frontmatter, followed by a Markdown body. Specification of this project's skill: [skill-atomic-tasks.md](skill-atomic-tasks.md).

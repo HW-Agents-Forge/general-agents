@@ -1,40 +1,41 @@
-# Outils cibles
+# Target tools
 
-> **À VÉRIFIER.** Les formats ci-dessous sont des hypothèses de travail. Avant d'écrire chaque cible, confronter ce document à la documentation officielle de l'outil et noter la date de vérification dans la colonne prévue. Les tests de rendu servent ensuite de référence.
+> **TO VERIFY.** The formats below are working hypotheses. Before writing each target, check this document against the tool's official documentation and record the verification date in the dedicated row. Rendering tests then serve as the reference.
 
-## Informations à établir pour chaque outil
+## Information to establish for each tool
 
 | Information | VS Code | Copilot CLI | OpenCode |
 |---|---|---|---|
-| Emplacement des agents (niveau utilisateur) | À vérifier | À vérifier | À vérifier |
-| Extension et nom de fichier | À vérifier | À vérifier | À vérifier |
-| Clés du frontmatter (nom, description, outils, modèle) | À vérifier | À vérifier | À vérifier |
-| Identifiant du plus petit modèle (`small`) | À vérifier | À vérifier | À vérifier |
-| Noms des outils pour `read`, `search`, `shell` | À vérifier | À vérifier | À vérifier |
-| Mode sous-agent (invocable par l'agent principal) | À vérifier | À vérifier | À vérifier |
-| Emplacement des skills et support de `SKILL.md` | À vérifier | À vérifier | À vérifier |
-| Accepte une clé libre pour la marque d'origine | À vérifier | À vérifier | À vérifier |
-| Date de vérification | — | — | — |
+| Agent location (user level) | To verify | To verify | To verify |
+| File extension and name | To verify | To verify | To verify |
+| Frontmatter keys (name, description, tools, model) | To verify | To verify | To verify |
+| Identifier of the smallest model (`small`) | To verify | To verify | To verify |
+| Tool names for `read`, `search`, `shell` | To verify | To verify | To verify |
+| Sub-agent mode (invocable by the primary agent) | To verify | To verify | To verify |
+| Skill location and `SKILL.md` support | To verify | To verify | To verify |
+| Accepts a free key for the origin mark | To verify | To verify | To verify |
+| Terminal timeout mechanism (for `run`) | To verify | To verify | To verify |
+| Verification date | — | — | — |
 
-## Table de correspondance attendue
+## Expected mapping table
 
-Chaque cible exprime ces correspondances dans son module.
+Each target expresses these mappings in its module.
 
-| Abstrait | Cible concrète |
+| Abstract | Concrete target |
 |---|---|
-| `tier: small` | Identifiant du plus petit modèle de l'outil (jamais dans les sources) |
-| `tools: [read]` | Nom(s) d'outil de lecture de la plateforme |
-| `tools: [search]` | Nom(s) d'outil de recherche |
-| `tools: [shell]` | Nom(s) d'outil d'exécution |
+| `tier: small` | Identifier of the tool's smallest model (never in the sources) |
+| `tools: [read]` | Platform read tool name(s) |
+| `tools: [search]` | Search tool name(s) |
+| `tools: [shell]` | Execution tool name(s) |
 
-## Gestion de la marque d'origine
+## Origin mark handling
 
-Si l'outil tolère une clé libre dans le frontmatter, utiliser `managed-by: <name>` (`name` lu dans `models.toml`). Sinon, ajouter un commentaire de première ligne dans le corps. La détection par `installer` doit fonctionner dans les deux cas (voir [install-spec.md](install-spec.md)).
+If the tool tolerates a free key in the frontmatter, use `managed-by: <name>` (`name` read from `models.toml`). Otherwise add a first-line comment in the body. Detection by `installer` must work in both cases (see [install-spec.md](install-spec.md)).
 
-## Ajouter un outil
+## Adding a tool
 
-1. Remplir la colonne correspondante ci-dessus à partir de la documentation officielle.
-2. Créer `src/shuttle/targets/<outil>.py` implémentant `Target`.
-3. Enregistrer la cible dans le registre des cibles.
-4. Ajouter les tests de rendu (voir [testing.md](testing.md)).
-5. Mettre à jour ce document avec la date de vérification.
+1. Fill in the corresponding column above from the official documentation.
+2. Create `src/shuttle/targets/<tool>.py` implementing `Target`.
+3. Register the target in the target registry.
+4. Add the rendering tests (see [testing.md](testing.md)).
+5. Update this document with the verification date.

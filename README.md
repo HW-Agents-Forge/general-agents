@@ -1,42 +1,34 @@
 # general-agents
 
-## Objectifs
+Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (VS Code, Copilot CLI, OpenCode).
 
-Créer des petits sous-agents, pour atomiser
-des taches coûteuses en tokens. 
-Ces sous-agents devront utiliser les plus
-petits modèles possibles. 
+## Goals
 
-J'ai pensé aux agents suivants :
+- Atomize token-expensive tasks into small sub-agents that condense large outputs into short reports.
+- Use the smallest models possible for every agent.
+- Describe agents once in a neutral format; the `shuttle` Python package adapts them to each tool.
+- Let the primary agent know when and how to delegate, through the `atomic-tasks` skill.
 
-- run
-- read
-- write
-- list
-- diff
-- backup
-- glob
-- find
-- git
-- svn
+## Agents
 
-> [!NOTE]
-> Verifier qu'il n'y a pas de recouvrement. 
+| Agent | Role |
+|---|---|
+| `run` | Runs the exact command given by the parent (csh), with a mandatory timeout, and reports |
+| `find` | Searches the codebase and returns paths and relevant excerpts |
+| `diff` | Summarizes changes between two references or files |
+| `git` | Answers questions about git history and state |
+| `svn` | Answers questions about Subversion history and state |
 
-Pour que l'agent primaire sache comment et dans
-quelles circonstances invoquer un sous agent,
-il faut completer le skill atomic-tasks
+Agents that only add indirection (`read`, `write`, `list`, `glob`) or are deterministic (`backup`) are deliberately left out. See [docs/decisions/0001-keep-only-condensing-agents.md](docs/decisions/0001-keep-only-condensing-agents.md).
 
-pour gerer l'installation, deux scripts:
+## Installation
 
-- install : permet d'ajouter les agents dans le home
-- uninstall : permet de retirer les agents du home
+```
+./install --target {vscode,copilot-cli,opencode} [--model AGENT=MODEL]... [--dry-run]
+```
 
-Etant donné que j'utilise plusieurs outils agentiques,
-au lieu de developper des agents pour un seul outil,
-ajouter uniquement la description dans les fichiers sources 
-et utilise un script shuttle pour adapter a l'outil 
+`install` never deletes files. To remove an agent, delete its file by hand.
 
-- VS Code
-- Copilot CLI 
-- OpenCode
+## Documentation
+
+All design documents are in [docs/](docs/README.md). Nothing is implemented yet: start with the [roadmap](docs/roadmap.md).
