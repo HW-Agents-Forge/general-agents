@@ -30,7 +30,7 @@ Fournir un ensemble de **petits sous-agents** qui condensent l'information, util
 - Agents `read`, `list`, `glob` : redondants avec les outils natifs de l'agent principal.
 - Agent `write` : l'agent principal doit déjà fournir tout le contenu, ce qui double le coût.
 - `backup` : opération déterministe, relève d'un script et non d'un LLM.
-- Script `uninstall` séparé : jugé risqué (voir [install-spec.md](install-spec.md) et ADR 0004).
+- Toute suppression de fichiers par le script (`uninstall`, `--remove`) : jugée risquée, le retrait se fait à la main (voir [install-spec.md](install-spec.md) et ADR 0004).
 - Orchestration multi-agents complexe, mémoire partagée entre sous-agents.
 
 ## Critères de succès

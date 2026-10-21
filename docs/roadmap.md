@@ -43,7 +43,6 @@ Ce jalon conditionne la suite : si le gain n'est pas démontré, on revoit le ca
 
 ## Jalon 5 : finition
 
-- [ ] `--remove` avec confirmation, limité aux fichiers marqués.
 - [ ] README du dépôt mis à jour (usage, installation).
 - [ ] Revue de sécurité de `installer`.
 

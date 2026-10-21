@@ -14,7 +14,6 @@
 |---|---|---|
 | 4 | Fusionner `git` et `svn` en un agent `vcs` ? | Un seul agent détecte le dépôt (moins de recouvrement, un seul prompt) contre deux agents spécialisés (prompts plus ciblés) |
 | 5 | Parseur de frontmatter maison (sous-ensemble YAML) ou PyYAML ? | Maison : zéro dépendance mais périmètre à borner. PyYAML : simple mais dépendance |
-| 6 | Rendre `--remove` disponible ou s'en passer ? | Voir [install-spec.md](install-spec.md) ; reste désactivable sans conséquence sur le reste |
 | 7 | `run` : liste blanche de commandes ou confirmation de l'agent principal ? | Sécurité contre souplesse |
 | 8 | Python minimal : 3.10 convient-il à tous vos environnements ? | Syntaxe et typage utilisables |
 | 9 | Seuils d'acceptation de l'évaluation (30 % de gain) | À ajuster après les premières mesures |

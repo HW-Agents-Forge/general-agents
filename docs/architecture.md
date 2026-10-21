@@ -45,7 +45,7 @@ skills/*/    ──► parser ──► model.Skill ──┘
 | `parser` | Valider et typer les sources | Connaître les outils cibles |
 | `model` | Représenter agents, skills, niveaux de modèle, jeux d'outils | Faire des entrées/sorties |
 | `targets/*` | Rendu et chemins propres à un outil, tables de correspondance | Écrire sur disque |
-| `installer` | Écriture, dry-run, marque d'origine, retrait limité | Connaître le format d'un outil |
+| `installer` | Écriture, dry-run, marque d'origine (aucune suppression) | Connaître le format d'un outil |
 | `cli` | Interface utilisateur, codes de sortie | Logique métier |
 
 ## Interface `Target`

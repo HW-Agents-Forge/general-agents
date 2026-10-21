@@ -5,14 +5,13 @@
 ## Usage
 
 ```
-install --target {vscode,copilot-cli,opencode} [--dry-run] [--remove] [--yes] [--home PATH]
+install --target {vscode,copilot-cli,opencode} [--dry-run] [--yes] [--home PATH]
 ```
 
 | Option | Effet |
 |---|---|
 | `--target` | **Obligatoire.** Un seul outil par exécution. Sans valeur par défaut ni `all` : l'absence de `--target` est une erreur d'usage (code 3). |
-| `--dry-run` | Affiche chaque fichier qui serait créé, mis à jour ou supprimé, sans rien écrire. |
-| `--remove` | Supprime uniquement les fichiers portant la marque d'origine. Demande confirmation. |
+| `--dry-run` | Affiche chaque fichier qui serait créé ou mis à jour, sans rien écrire. |
 | `--yes` | Ne pas demander de confirmation. |
 | `--home PATH` | Racine de substitution du home (tests et essais). |
 
@@ -23,12 +22,11 @@ Tout fichier généré contient `managed-by: general-agents` (voir [targets.md](
 ## Règles de sécurité
 
 1. **Ne jamais écraser un fichier sans marque.** Si la destination existe sans marque, l'opération échoue pour ce fichier avec un message explicite.
-2. **Ne jamais supprimer un fichier sans marque.** `--remove` ne touche que les fichiers marqués, et uniquement ceux dont le nom correspond à un agent ou skill connu du dépôt.
+2. **Ne jamais supprimer aucun fichier.** `installer` n'expose aucune opération de suppression. Un agent retiré des sources reste installé jusqu'à ce que l'utilisateur le supprime à la main.
 3. **Écrire uniquement dans les chemins retournés par les cibles**, résolus sous la racine du home. Refuser tout chemin qui en sortirait (y compris via lien symbolique).
 4. **Dry-run fidèle** : mêmes chemins et mêmes décisions que l'exécution réelle, sans effet de bord.
 5. **Écriture atomique** : écrire dans un fichier temporaire du même dossier, puis renommer.
 6. **Idempotence** : relancer `install` sans changement de source ne modifie rien.
-7. **Pas de suppression de dossiers non vides** : seuls les dossiers vides créés par l'outil peuvent être retirés.
 
 ## Actions possibles par fichier
 
@@ -41,7 +39,7 @@ Tout fichier généré contient `managed-by: general-agents` (voir [targets.md](
 
 ## Sortie
 
-Un résumé par fichier (`créé`, `mis à jour`, `inchangé`, `refusé`, `supprimé`), puis un total.
+Un résumé par fichier (`créé`, `mis à jour`, `inchangé`, `refusé`), puis un total.
 
 ## Codes de sortie
 
@@ -54,5 +52,5 @@ Un résumé par fichier (`créé`, `mis à jour`, `inchangé`, `refusé`, `suppr
 
 ## Choix retenus
 
-- Pas de script `uninstall` séparé : `--remove` limité aux fichiers marqués remplit ce rôle (ADR 0004).
+- Aucune suppression par le script : ni `uninstall`, ni `--remove` (ADR 0004). L'utilisateur supprime à la main.
 - Installation par **copie** transformée, pas par lien symbolique, car le contenu dépend de l'outil (ADR 0003).

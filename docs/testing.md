@@ -20,7 +20,7 @@ Dans un faux home temporaire :
 - idempotence (deuxième exécution sans changement) ;
 - mise à jour d'un fichier marqué dont la source a changé ;
 - **refus d'écraser** un fichier sans marque ;
-- `--remove` ne supprime que les fichiers marqués et connus ;
+- `install` ne supprime jamais aucun fichier (aucune suppression, même pour un agent retiré des sources) ;
 - `--dry-run` n'écrit rien et annonce les mêmes actions que l'exécution réelle ;
 - refus d'un chemin qui sort du home (y compris via lien symbolique) ;
 - écriture atomique (pas de fichier partiel en cas d'erreur simulée).

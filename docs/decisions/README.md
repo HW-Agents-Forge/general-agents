@@ -22,6 +22,6 @@ Chaque décision structurante est consignée dans un fichier numéroté `NNNN-ti
 | [0001](0001-agents-qui-condensent.md) | Ne garder que les agents qui condensent | acceptée |
 | [0002](0002-format-source-neutre-et-shuttle.md) | Format source neutre et package shuttle | acceptée |
 | [0003](0003-installation-par-copie.md) | Installation par copie transformée | acceptée |
-| [0004](0004-pas-d-uninstall-separe.md) | Pas de script uninstall séparé | acceptée |
+| [0004](0004-pas-d-uninstall-separe.md) | Aucune suppression par le script | acceptée |
 | [0005](0005-stdlib-uniquement.md) | Bibliothèque standard uniquement à l'exécution | proposée |
 | [0006](0006-tres-petits-modeles-uniquement.md) | Uniquement de très petits modèles | acceptée |

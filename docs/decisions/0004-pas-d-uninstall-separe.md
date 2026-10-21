@@ -1,22 +1,18 @@
-# 0004. Pas de script uninstall séparé
+# 0004. Aucune suppression par le script
 
-- Statut : acceptée
+- Statut : acceptée (remplace la version initiale, qui prévoyait `--remove`)
 - Date : 2026-10-21
 
 ## Contexte
 
-Un script qui supprime des fichiers dans le home est risqué : une erreur de chemin ou de filtre peut détruire des fichiers n'appartenant pas au projet.
+Un script qui supprime des fichiers dans le home est risqué : une erreur de chemin ou de filtre peut détruire des fichiers n'appartenant pas au projet. Une première version de cette décision acceptait un `--remove` limité aux fichiers marqués.
 
 ## Décision
 
-Pas de script `uninstall`. Le retrait est une option de `install` (`--remove`), qui :
-- ne supprime que les fichiers portant la marque d'origine **et** correspondant à un agent ou skill connu du dépôt ;
-- demande confirmation (sauf `--yes`) ;
-- dispose d'un `--dry-run`.
-
-La disponibilité de `--remove` reste révisable (voir [open-questions.md](../open-questions.md)) : l'écarter ne remet pas en cause le reste.
+Le script ne supprime **aucun** fichier : pas de `uninstall`, pas de `--remove`, et `installer` n'expose aucune opération de suppression. Pour retirer un agent, l'utilisateur supprime le fichier à la main.
 
 ## Conséquences
 
-- Surface de risque réduite et concentrée dans `installer`, testée en priorité ([testing.md](../testing.md)).
-- Pas de second point d'entrée à maintenir.
+- Risque de destruction supprimé à la source ; la marque d'origine ne sert plus qu'à décider si un fichier peut être mis à jour (voir [install-spec.md](../install-spec.md)).
+- Un agent retiré des sources reste installé jusqu'à suppression manuelle ; `install` ne le signale pas.
+- Moins de code et de tests dans `installer` ([testing.md](../testing.md)).
