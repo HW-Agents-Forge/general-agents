@@ -26,7 +26,7 @@ Déléguer si la sortie brute attendue est volumineuse **et** que seule une conc
 
 Pour chaque délégation, l'agent principal doit :
 1. Formuler une **question précise** (« quels tests échouent et pourquoi ? »), pas une instruction vague.
-2. Fournir le **contexte minimal** : chemin, commande, références. Pour `run`, la commande exacte, écrite pour `csh` ; `run` ne l'interprète pas.
+2. Fournir le **contexte minimal** : chemin, commande, références. Pour `run`, la commande exacte, écrite pour `csh`, **et un timeout en secondes** choisi selon la durée attendue du job ; `run` ne l'interprète pas et refuse de lancer sans timeout.
 3. Préciser le **format attendu** si différent du contrat par défaut.
 4. Ne **pas** recopier de gros contenus dans le prompt.
 

@@ -15,8 +15,8 @@
 | 4 | Fusionner `git` et `svn` en un agent `vcs` ? | Un seul agent détecte le dépôt (moins de recouvrement, un seul prompt) contre deux agents spécialisés (prompts plus ciblés) |
 | 5 | Parseur de frontmatter maison (sous-ensemble YAML) ou PyYAML ? | Maison : zéro dépendance mais périmètre à borner. PyYAML : simple mais dépendance |
 | 7 | ~~`run` : liste blanche ou confirmation ?~~ **Réponse : l'agent parent fournit la commande exacte** ; `run` l'exécute telle quelle et ne lance rien d'autre | La sécurité repose sur l'agent parent et sur l'outil |
-| 10 | `run` : comment surveiller un job long (lecture périodique de la sortie, d'un fichier de log) et quel délai sans sortie avant « bloqué » ? | Dépend de ce que le terminal de chaque outil permet |
-| 11 | `run` : doit-il pouvoir répondre à une invite interactive (mot de passe, confirmation) ou seulement signaler « bloqué » ? | Recommandation : seulement signaler |
+| 10 | ~~Timeout de `run`~~ **Réponse : impératif, fixé par l'agent parent, sans valeur par défaut.** Reste à vérifier le mécanisme d'expiration de chaque outil et la façon de surveiller un job long (lecture de la sortie ou d'un fichier de log) | Dépend de ce que le terminal de chaque outil permet |
+| 11 | ~~Invite interactive~~ **Réponse : `run` signale `bloqué`, ne répond jamais** | Sécurité, simplicité |
 | 8 | ~~Python minimal~~ **Réponse : 3.11** | `tomllib` disponible sans dépendance |
 | 9 | Seuils d'acceptation de l'évaluation (30 % de gain) | À ajuster après les premières mesures |
 

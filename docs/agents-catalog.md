@@ -8,7 +8,7 @@ Tous les agents sont en `tier: small` au départ. Aucun n'écrit de fichier de l
 
 | Agent | Outils | Entrée type | Sortie |
 |---|---|---|---|
-| `run` | `shell` | La commande exacte à lancer (syntaxe csh) et ce qu'on veut savoir | Rapport : verdict, code de sortie, points clés |
+| `run` | `shell` | La commande exacte à lancer (syntaxe csh) et son timeout | Rapport : verdict, code de sortie, points clés |
 | `find` | `search`, `read` | Une question sur le dépôt | Chemins et extraits pertinents |
 | `diff` | `shell`, `read` | Deux références ou fichiers à comparer | Résumé structuré des changements |
 | `git` | `shell` | Une question sur l'historique ou l'état | Réponse digérée |
@@ -39,14 +39,15 @@ Chaque réponse tient dans `max_output_lines` lignes, sans préambule ni conclus
 Rôle : exécuter dans le terminal la commande **exacte** fournie par l'agent parent, la surveiller pendant son exécution et rendre un rapport. Le shell est `csh`.
 
 Responsabilités :
-- L'agent parent fournit la commande complète, déjà écrite pour `csh`. `run` ne la réécrit pas, ne la complète pas, n'ajoute ni option ni redirection de sa propre initiative.
+- L'agent parent fournit la commande complète, déjà écrite pour `csh`, **et un timeout en secondes**. `run` ne réécrit pas la commande, ne la complète pas, n'ajoute ni option ni redirection de sa propre initiative.
+- Le **timeout est impératif** et décidé par l'agent parent. `run` l'applique toujours (voir « Timeout » ci-dessous) ; il n'existe pas de durée par défaut.
 - `run` ne lance **aucune autre commande** que celle reçue (pas de commande d'investigation, pas de relance). Il peut en revanche lire la sortie du terminal et le fichier de log désigné par l'agent parent.
 - Il surveille la progression (sortie produite, fin du processus, code de sortie) et rend son rapport à la fin, ou en cas de blocage.
 - Il ne diagnostique pas au-delà de ce que la sortie montre : l'analyse et la décision suivante reviennent à l'agent parent.
 
 ```
 commande: <commande reçue, recopiée telle quelle>
-statut: terminé | échec | bloqué | interrompu
+statut: terminé | échec | bloqué | timeout
 code_sortie: <entier, ou « inconnu » si non terminé>
 durée: <approximative>
 points_clés:
@@ -56,8 +57,13 @@ extrait: |
 tronqué: oui | non
 ```
 
-Consignes : ne jamais renvoyer le journal complet ; dédupliquer les erreurs répétées ; `bloqué` si le processus attend une entrée ou ne produit plus rien au-delà du délai prévu, avec la dernière ligne vue ; indiquer `tronqué: oui` si l'analyse a été limitée.
-Limites : exécuter la commande telle quelle (la responsabilité de son contenu est à l'agent parent) ; si aucune commande exacte n'est fournie, ne rien lancer et le dire.
+Consignes : ne jamais renvoyer le journal complet ; dédupliquer les erreurs répétées ; `bloqué` si le processus attend une entrée (invite interactive, mot de passe, confirmation) : `run` ne répond jamais, il signale et rapporte la dernière ligne vue ; `timeout` si la durée attribuée est dépassée : le processus est arrêté et le rapport indique ce qui avait été produit ; indiquer `tronqué: oui` si l'analyse a été limitée.
+Limites : exécuter la commande telle quelle (la responsabilité de son contenu est à l'agent parent) ; si la commande exacte **ou le timeout** manque, ne rien lancer et le dire.
+
+Timeout :
+- Il est exprimé en secondes et fourni par l'agent parent, qui connaît la durée raisonnable du job (simulation courte, régression longue).
+- `run` utilise le mécanisme d'expiration du terminal de l'outil s'il existe ; sinon il fait précéder la commande de `timeout <secondes>`. C'est la seule modification de la commande qu'il est autorisé à faire.
+- À l'expiration, `run` arrête le processus lancé (et lui seul), signale `statut: timeout` et ne relance rien. C'est à l'agent parent de décider d'une nouvelle tentative avec un autre délai.
 
 ### `find`
 
