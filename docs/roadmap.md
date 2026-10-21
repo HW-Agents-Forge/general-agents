@@ -32,7 +32,7 @@ This milestone conditions what follows: if the gain is not demonstrated, review 
 
 ## Milestone 3: full catalog
 
-- [ ] `find`, `diff`, `git`, `svn` agents (or `vcs`, depending on the decision).
+- [x] `find`, `diff`, `git`, `svn` written as first drafts (kept separate, no `vcs` merge); evaluation pending.
 - [x] `atomic-tasks` skill.
 - [ ] Evaluation of each agent.
 
