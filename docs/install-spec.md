@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-install --target {vscode,copilot-cli,opencode} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
+install --target {claude-code,copilot-cli,vscode,opencode} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
 ```
 
 | Option | Effect |

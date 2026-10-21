@@ -8,6 +8,7 @@ See [tool-differences.md](tool-differences.md) for what is already known, with s
 
 | Target | Status |
 |---|---|
+| `claude-code` | Implemented (`src/shuttle/targets/claude_code.py`), format confirmed by the official docs excerpts; install location `~/.claude/` |
 | `copilot-cli` | Draft implemented (`src/shuttle/targets/copilot_cli.py`), unverified against a running CLI |
 | `vscode` | Not started |
 | `opencode` | Not started |

@@ -4,10 +4,13 @@ from __future__ import annotations
 
 from ..errors import UsageError
 from .base import Target
+from .claude_code import ClaudeCodeTarget
 from .copilot_cli import CopilotCliTarget
 
 # VS Code and OpenCode targets are added once their formats are verified (docs/targets.md).
-TARGETS: dict[str, Target] = {target.name: target for target in (CopilotCliTarget(),)}
+TARGETS: dict[str, Target] = {
+    target.name: target for target in (ClaudeCodeTarget(), CopilotCliTarget())
+}
 
 
 def get_target(name: str) -> Target:

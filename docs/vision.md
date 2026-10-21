@@ -22,7 +22,7 @@ Provide a set of **small sub-agents** that condense information, use the **small
 - Agents: `run`, `find`, `diff`, `git`, `svn` (see [agents-catalog.md](agents-catalog.md)).
 - `atomic-tasks` skill telling the primary agent when and how to delegate.
 - Python package `shuttle` and `install` executable.
-- Target tools: VS Code, Copilot CLI, OpenCode.
+- Target tools: Claude Code and Copilot CLI first; VS Code and OpenCode later.
 
 ## Out of scope
 

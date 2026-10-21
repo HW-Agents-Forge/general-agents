@@ -71,3 +71,11 @@ def test_refused_file_exits_1(repo: Path, home: Path) -> None:
 def test_confirmation_required_without_a_terminal(repo: Path, home: Path) -> None:
     assert run(repo, home, "--target", "copilot-cli") == 3
     assert list(home.iterdir()) == []
+
+
+def test_claude_code_install(repo: Path, home: Path) -> None:
+    assert run(repo, home, "--target", "claude-code", "--yes") == 0
+    agent = home / ".claude" / "agents" / "run.md"
+    assert "managed-by: test-repo" in agent.read_text()
+    assert (home / ".claude" / "skills" / "atomic-tasks" / "SKILL.md").is_file()
+    assert run(repo, home, "--target", "claude-code", "--yes") == 0

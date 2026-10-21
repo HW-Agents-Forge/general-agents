@@ -1,6 +1,6 @@
 # general-agents
 
-Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (VS Code, Copilot CLI, OpenCode).
+Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (Claude Code, Copilot CLI, VS Code, OpenCode).
 
 ## Goals
 
@@ -24,7 +24,7 @@ Agents that only add indirection (`read`, `write`, `list`, `glob`) or are determ
 ## Installation
 
 ```
-./install --target {vscode,copilot-cli,opencode} [--model AGENT=MODEL]... [--dry-run]
+./install --target {claude-code,copilot-cli,vscode,opencode} [--model AGENT=MODEL]... [--dry-run]
 ```
 
 `install` never deletes files. To remove an agent, delete its file by hand.

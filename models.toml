@@ -7,4 +7,6 @@ small = "claude-haiku-5-5"
 
 # Per-tool overrides, one line per agent: `agent = "model identifier"`.
 # Identifier formats differ per tool; see docs/tool-differences.md.
+[claude-code]
+
 [copilot-cli]

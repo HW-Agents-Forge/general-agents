@@ -20,9 +20,10 @@ general-agents/
 │   ├── registry.py             # discovers agents and skills
 │   ├── targets/
 │   │   ├── base.py             # Target interface
-│   │   ├── vscode.py
+│   │   ├── claude_code.py
 │   │   ├── copilot_cli.py
-│   │   └── opencode.py
+│   │   ├── vscode.py       # later
+│   │   └── opencode.py     # later
 │   ├── installer.py            # the only module that writes to disk
 │   └── errors.py
 ├── tests/

@@ -21,6 +21,17 @@ Reference for the `targets/*` modules: how VS Code, Copilot CLI and OpenCode dif
 | Token usage reporting | Unverified | `/usage` (per-model breakdown; sub-agent split unverified) | Unverified |
 | Free key for the origin mark | Unverified (`metadata` is ignored per GitHub docs) | `metadata` property exists | Unverified |
 
+## Claude Code
+
+Implemented as the `claude-code` target.
+
+- **Agents:** Markdown with YAML frontmatter in `~/.claude/agents/` (personal) or `.claude/agents/` (project). Only `name` and `description` are required; unknown frontmatter fields are ignored without error, so the origin mark is a plain `managed-by` key.
+- **Tools:** optional comma-separated list of Claude Code tool names (`Read`, `Grep`, `Glob`, `Bash`); omitted means every tool available to sub-agents. The target maps `read` to `Read`, `search` to `Grep, Glob` and `shell` to `Bash`.
+- **Model:** an alias (`sonnet`, `opus`, `haiku`), a full model identifier, or `inherit`. When omitted, Claude Code picks the model by its sub-agent model order, so the target always writes one explicitly. `models.toml` may hold an alias such as `haiku` or a full identifier such as `claude-haiku-5-5`.
+- **Skills:** `~/.claude/skills/<name>/SKILL.md` or `.claude/skills/<name>/SKILL.md`; the `name` field is optional, `description` recommended. A skill can also be preloaded by a sub-agent through its `skills` field (not used yet).
+- **Precedence:** the excerpts found do not say what happens when a project and a personal file share a name; check before relying on it.
+- **Sources:** [Create custom subagents](https://code.claude.com/docs/en/sub-agents), [Extend Claude with skills](https://code.claude.com/docs/en/skills), [Explore the .claude directory](https://code.claude.com/docs/en/claude-directory).
+
 ## VS Code
 
 - **Format:** `.agent.md` files with an optional YAML header between `---` delimiters and a Markdown body of instructions.
