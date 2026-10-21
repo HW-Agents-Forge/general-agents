@@ -4,9 +4,9 @@
 
 | # | Question | Impact |
 |---|---|---|
-| 1 | Quel outil cible en premier (VS Code, Copilot CLI, OpenCode) ? | Détermine la première cible à écrire et à vérifier |
-| 2 | ~~Quel est le plus petit modèle (`small`) ?~~ **Réponse : Haiku 5.5** (`claude-haiku-5-5`). Reste à confirmer son identifiant exact dans chaque outil cible | Table de correspondance de la cible |
-| 3 | Valeur par défaut de `--target` : un outil, ou `all` ? | Comportement de `install` |
+| 1 | ~~Quel outil cible en premier ?~~ **Réponse : les trois**, tous via un abonnement GitHub Copilot. Ordre de réalisation à fixer (voir [roadmap.md](roadmap.md)) | Les modèles disponibles sont ceux du catalogue Copilot |
+| 2 | ~~Quel est le plus petit modèle (`small`) ?~~ **Réponse : Haiku 5.5** (`claude-haiku-5-5`). Annoncé disponible dans Copilot (VS Code, Copilot CLI) par le changelog GitHub du 2026-10-07 ; reste à confirmer son identifiant exact dans chaque outil, notamment OpenCode via son fournisseur Copilot cible | Table de correspondance de la cible |
+| 3 | ~~Valeur par défaut de `--target`~~ **Réponse : `all`** | Comportement de `install` |
 
 ## À trancher pendant le développement
 
