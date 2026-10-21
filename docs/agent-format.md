@@ -65,7 +65,7 @@ Règles :
 
 ## Marque d'origine
 
-Les fichiers **générés** reçoivent la marque `managed-by: <name>`, où `<name>` est le champ `name` de `models.toml` dans leur frontmatter (ou un commentaire équivalent si l'outil n'accepte pas de clé libre). Elle n'apparaît pas dans les sources. Voir [install-spec.md](install-spec.md).
+Les fichiers **générés** reçoivent dans leur frontmatter la marque `managed-by: <name>` (ou un commentaire équivalent si l'outil n'accepte pas de clé libre), où `<name>` est le champ `name` de `models.toml`. Elle n'apparaît pas dans les sources. Voir [install-spec.md](install-spec.md).
 
 ## Skills
 
