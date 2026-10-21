@@ -14,7 +14,7 @@ Déléguer si la sortie brute attendue est volumineuse **et** que seule une conc
 
 | Situation | Décision |
 |---|---|
-| Lancer des tests ou un build dont la sortie est longue | Déléguer à `run` |
+| Lancer une commande à sortie longue ou durable (simulation, build, régression) | Déléguer à `run`, en lui donnant la commande exacte en `csh` |
 | Chercher où une notion apparaît dans un gros dépôt | Déléguer à `find` |
 | Lire un petit fichier, ou quelques lignes précises | Ne pas déléguer, lire directement |
 | Écrire ou modifier un fichier | Ne pas déléguer |
@@ -26,7 +26,7 @@ Déléguer si la sortie brute attendue est volumineuse **et** que seule une conc
 
 Pour chaque délégation, l'agent principal doit :
 1. Formuler une **question précise** (« quels tests échouent et pourquoi ? »), pas une instruction vague.
-2. Fournir le **contexte minimal** : chemin, commande, références.
+2. Fournir le **contexte minimal** : chemin, commande, références. Pour `run`, la commande exacte, écrite pour `csh` ; `run` ne l'interprète pas.
 3. Préciser le **format attendu** si différent du contrat par défaut.
 4. Ne **pas** recopier de gros contenus dans le prompt.
 
