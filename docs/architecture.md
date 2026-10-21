@@ -15,7 +15,8 @@ general-agents/
 │   ├── cli.py                  # arguments, dispatch, exit codes
 │   ├── model.py                # dataclasses: Agent, Skill, ModelTier, ToolSet
 │   ├── config.py               # reads models.toml, resolves the model per agent
-│   ├── parser.py               # reads frontmatter + body
+│   ├── parser.py               # reads TOML frontmatter + body
+│   ├── mark.py                 # origin mark: key and detection
 │   ├── registry.py             # discovers agents and skills
 │   ├── targets/
 │   │   ├── base.py             # Target interface
@@ -57,10 +58,11 @@ skills/*/    ──► parser ──► model.Skill ──┘
 ```python
 class Target(Protocol):
     name: str
-    def agent_path(self, agent: Agent) -> Path: ...
-    def skill_path(self, skill: Skill) -> Path: ...
-    def render_agent(self, agent: Agent, model: str) -> str: ...
-    def render_skill(self, skill: Skill) -> str: ...
+
+    def agent_path(self, agent: Agent) -> PurePath: ...  # relative to the home
+    def skill_path(self, skill: Skill) -> PurePath: ...
+    def render_agent(self, agent: Agent, model: str, mark_name: str) -> str: ...
+    def render_skill(self, skill: Skill, mark_name: str) -> str: ...
 ```
 
 Each target holds its own mapping table from abstract tools to the platform's tool names. Model identifiers are no longer in the targets: they come from `models.toml` (see [install-spec.md](install-spec.md)).

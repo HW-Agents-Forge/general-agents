@@ -1,0 +1,10 @@
+# Repository name, written in the origin mark of every generated file.
+name = "general-agents"
+
+# Model per tier. Every agent is `small` (ADR 0006).
+[defaults]
+small = "claude-haiku-5-5"
+
+# Per-tool overrides, one line per agent: `agent = "model identifier"`.
+# Identifier formats differ per tool; see docs/tool-differences.md.
+[copilot-cli]

@@ -13,7 +13,7 @@ install --target {vscode,copilot-cli,opencode} [--model AGENT=MODEL]... [--dry-r
 | `--target` | **Required.** One tool per run. No default and no `all`: a missing `--target` is a usage error (code 3). |
 | `--model AGENT=MODEL` | Repeatable. Sets the model of **one** agent for this run. Never applies to all agents. An unknown agent name is a usage error. |
 | `--dry-run` | Shows every file that would be created or updated, without writing anything. |
-| `--yes` | Do not ask for confirmation. |
+| `--yes` | Do not ask for confirmation. Without it, `install` lists what it will write and asks `[y/N]`; without an interactive terminal it refuses to write (usage error, code 3). |
 | `--home PATH` | Substitute home root (tests and trials). |
 
 ## Models and `models.toml`
@@ -48,7 +48,7 @@ Every generated file contains `managed-by: <name>`, where `<name>` is the `name`
 
 ## Safety rules
 
-1. **Never overwrite an unmarked file.** If the destination exists without the mark, the operation fails for that file with an explicit message.
+1. **Never overwrite a file that is not ours.** If the destination exists without the mark, or marked by another repository name, the operation is refused for that file with an explicit message.
 2. **Never delete any file.** `installer` exposes no deletion operation. An agent removed from the sources stays installed until the user deletes it by hand.
 3. **Write only to paths returned by the targets**, resolved under the home root. Reject any path that would escape it (including through a symbolic link).
 4. **Faithful dry-run**: same paths and same decisions as the real run, with no side effects.
@@ -60,9 +60,10 @@ Every generated file contains `managed-by: <name>`, where `<name>` is the `name`
 | Destination state | Action |
 |---|---|
 | Absent | Create |
-| Present, marked, identical content | None |
-| Present, marked, different content | Update |
-| Present, unmarked | Refuse, report |
+| Present, marked by this repository, identical content | None |
+| Present, marked by this repository, different content | Update |
+| Present, unmarked or marked by another name | Refuse, report |
+| Present, not a regular file | Refuse, report |
 
 ## Output
 

@@ -6,20 +6,20 @@ Principle: validate early, on a single agent and a single tool, before generaliz
 
 - [ ] Answer the blocking points of [open-questions.md](open-questions.md) (exact model identifiers per tool).
 - [ ] Check each target tool's format in its official documentation and fill in [targets.md](targets.md).
-- [ ] `pyproject.toml`, `src/shuttle/` skeleton, `tests/`, lint and typing tools.
+- [x] `pyproject.toml`, `src/shuttle/` skeleton, `tests/`, lint and typing tools.
 
 ## Milestone 1: minimal vertical slice
 
 Goal: `agents/run.md` installed end to end for **one** tool.
 
-- [ ] `model.py` and `errors.py`.
-- [ ] `parser.py` with tests.
-- [ ] `config.py` and `models.toml` with tests.
-- [ ] `registry.py`.
-- [ ] First target in `targets/`.
-- [ ] `installer.py` with all the safety rules and their tests.
-- [ ] `cli.py` and `install` executable (`--dry-run` included).
-- [ ] `run` agent written.
+- [x] `model.py` and `errors.py`.
+- [x] `parser.py` with tests.
+- [x] `config.py` and `models.toml` with tests.
+- [x] `registry.py`.
+- [x] First target in `targets/` (Copilot CLI draft; format to be verified).
+- [x] `installer.py` with all the safety rules and their tests.
+- [x] `cli.py` and `install` executable (`--dry-run` included).
+- [x] `run` agent written.
 
 Exit criterion: `install --dry-run` then `install` produce the right file in a test home; the agent is usable in the tool.
 

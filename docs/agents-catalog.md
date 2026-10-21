@@ -8,7 +8,7 @@ All agents are `tier: small` to start with. None writes a file by itself; the si
 
 | Agent | Tools | Typical input | Output |
 |---|---|---|---|
-| `run` | `shell` | The exact command to run (csh syntax) and its timeout | Report: status, exit code, key points |
+| `run` | `shell`, `read` | The exact command to run (csh syntax) and its timeout | Report: status, exit code, key points |
 | `find` | `search`, `read` | A question about the repository | Relevant paths and excerpts |
 | `diff` | `shell`, `read` | Two references or files to compare | Structured summary of the changes |
 | `git` | `shell` | A question about history or state | Digested answer |
@@ -47,7 +47,7 @@ Responsibilities:
 
 ```
 command: <command received, copied verbatim>
-status: finished | failed | blocked | timeout
+status: finished | failed | blocked | timeout | refused
 exit_code: <integer, or "unknown" if not finished>
 duration: <approximate>
 key_points:
@@ -58,7 +58,7 @@ truncated: yes | no
 ```
 
 Instructions: never return the full log; deduplicate repeated errors; `blocked` if the process waits for input (interactive prompt, password, confirmation): `run` never answers, it reports and gives the last line seen; `timeout` if the allotted time is exceeded: the process is stopped and the report states what had been produced; set `truncated: yes` if the analysis was limited.
-Limits: run the command as is (responsibility for its content lies with the parent agent); if the exact command **or the timeout** is missing, run nothing and say so.
+Limits: run the command as is (responsibility for its content lies with the parent agent); if the exact command **or the timeout** is missing, run nothing and answer `status: refused` with the reason.
 
 Timeout:
 - It is expressed in seconds and supplied by the parent agent, which knows the reasonable duration of the job (short simulation, long regression).

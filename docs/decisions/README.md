@@ -23,6 +23,6 @@ Each structural decision is recorded in a numbered file `NNNN-title.md`.
 | [0002](0002-neutral-source-format-and-shuttle.md) | Neutral source format and shuttle package | accepted |
 | [0003](0003-install-by-transformed-copy.md) | Installation by transformed copy | accepted |
 | [0004](0004-no-deletion-by-the-script.md) | No deletion by the script | accepted |
-| [0005](0005-stdlib-only.md) | Standard library only at runtime | proposed |
+| [0005](0005-stdlib-only.md) | Standard library only at runtime (TOML frontmatter) | accepted |
 | [0006](0006-smallest-models-only.md) | Tiny models only by default | accepted |
 | [0007](0007-per-agent-models-in-models-toml.md) | Per-agent models in models.toml, copied script | accepted |

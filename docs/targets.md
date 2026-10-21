@@ -4,6 +4,14 @@
 
 See [tool-differences.md](tool-differences.md) for what is already known, with sources and verification status.
 
+## Implementation status
+
+| Target | Status |
+|---|---|
+| `copilot-cli` | Draft implemented (`src/shuttle/targets/copilot_cli.py`), unverified against a running CLI |
+| `vscode` | Not started |
+| `opencode` | Not started |
+
 ## Information to establish for each tool
 
 | Information | VS Code | Copilot CLI | OpenCode |

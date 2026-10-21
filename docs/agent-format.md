@@ -1,17 +1,17 @@
 # Neutral source format for agents
 
-Each agent is a Markdown file in `agents/`, made of a **frontmatter** and a **body** (the system prompt).
+Each agent is a Markdown file in `agents/`, made of a **TOML frontmatter** between two `+++` lines and a **body** (the system prompt). TOML is read with `tomllib`, so no custom parser is needed (ADR 0005). Generated files use whatever format each tool expects (usually YAML frontmatter).
 
 ## Example
 
 ```markdown
----
-name: run
-description: Runs the exact command given (build, tests, scripts), watches it and returns a short report with the useful errors. Use it when the raw output would be large.
-tier: small
-tools: [shell]
-max_output_lines: 40
----
++++
+name = "run"
+description = "Runs one exact shell command with a mandatory timeout, watches it and returns a short report. Use it when the raw output would be large."
+tier = "small"
+tools = ["shell", "read"]
+max_output_lines = 40
++++
 
 You run the requested command and summarize the result.
 ...
@@ -69,4 +69,4 @@ Rules:
 
 ## Skills
 
-A skill is a folder `skills/<name>/SKILL.md` with a `name` and `description` frontmatter, followed by a Markdown body. Specification of this project's skill: [skill-atomic-tasks.md](skill-atomic-tasks.md).
+A skill is a folder `skills/<name>/SKILL.md` with a `name` and `description` frontmatter, followed by a Markdown body. Skill sources also use the TOML frontmatter (`name`, `description`), and the target converts it to the tool's format. Specification of this project's skill: [skill-atomic-tasks.md](skill-atomic-tasks.md).
