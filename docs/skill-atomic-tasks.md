@@ -37,6 +37,17 @@ For each delegation, the primary agent must:
 - If the answer reports `truncated: yes` or uncertainties, relaunch with a more targeted question rather than rereading the raw content.
 - Do not relaunch a sub-agent on the same question without new information.
 
+## Example sequences
+
+The skill ends with four worked sequences, because a decision table alone does not show how a delegation flows:
+
+1. a long simulation that fails (`run`, then `find`, then reading the exact lines yourself);
+2. finding when something broke (`git` or `svn`, then `diff`, then reading one file);
+3. what to do when a report is truncated or timed out (narrower question, never the whole log);
+4. cases not to delegate (short outputs, reasoning, interactive commands).
+
+Each sequence shows the request phrased as the primary agent should write it. Keep them short and generic: no project-specific names.
+
 ## File structure
 
 Plain Markdown with no frontmatter (ADR 0008). The name is the folder name and the description is the first paragraph:
@@ -51,6 +62,8 @@ When and how to delegate voluminous tasks (execution, search, diff, history) to 
 # How to phrase the request
 ...
 # After the answer
+...
+# Example sequences
 ...
 ```
 

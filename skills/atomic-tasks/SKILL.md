@@ -28,3 +28,28 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 - Trust the report, but verify before any irreversible action.
 - If it says `truncated: yes`, or lists uncertainties, ask a narrower question instead of rereading the raw content.
 - Do not ask a sub-agent the same question again without new information.
+
+# Example sequences
+
+## 1. Long simulation that fails
+
+1. Do not run it yourself. Ask `run`: "Run `make sim TEST=smoke >& sim.log` with a timeout of 1800 seconds. Report the errors."
+2. `run` answers `status: failed`, `counts: errors=3 warnings=41`, and one key point: "scoreboard mismatch at 1250 ns (3 times)".
+3. Ask `find`: "Where is the scoreboard that prints 'mismatch' defined?" It returns `tb/scoreboard.sv:212`.
+4. Read lines 200-230 of that file yourself, since you now need the exact code, and fix it.
+
+## 2. When did this break?
+
+1. Ask `git` (or `svn`): "Which commit last changed the width check in `rtl/uart_tx.vhd`?" It returns one commit with author and date.
+2. Ask `diff`: "Summarize what changed in `rtl/` between that commit and its parent." It returns the list of files and any risk.
+3. Read the one changed file yourself and decide.
+
+## 3. Report is not enough
+
+`run` answers `truncated: yes` or `status: timeout`. Do not read the whole log. Ask `run` again with a larger timeout if the job was cut short, or ask `find` a narrower question about the log, for example "In `sim.log`, which test names appear before the first error?".
+
+## 4. Do not delegate
+
+- `ls rtl/`, `git status`, `cat` of a short file: run them yourself, the output is shorter than a delegation request.
+- "Is this design correct?": it needs reasoning, so keep it.
+- A command you must watch interactively: sub-agents never answer prompts.
