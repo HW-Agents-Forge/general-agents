@@ -4,8 +4,10 @@
 
 ## Usage
 
+Targets available today: `claude-code`, `copilot-cli`. `vscode` and `opencode` will be added later (see [targets.md](targets.md)).
+
 ```
-install --target {claude-code,copilot-cli,vscode,opencode} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
+install --target {claude-code,copilot-cli} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
 ```
 
 | Option | Effect |

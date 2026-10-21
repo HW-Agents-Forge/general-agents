@@ -1,6 +1,6 @@
 # general-agents
 
-Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (Claude Code, Copilot CLI, VS Code, OpenCode).
+Small sub-agents that offload token-expensive tasks from the primary agent. They run on the smallest models available and are defined once, then adapted to several agentic tools (Claude Code and Copilot CLI today; VS Code and OpenCode later).
 
 ## Goals
 
@@ -24,11 +24,18 @@ Agents that only add indirection (`read`, `write`, `list`, `glob`) or are determ
 ## Installation
 
 ```
-./install --target {claude-code,copilot-cli,vscode,opencode} [--model AGENT=MODEL]... [--dry-run]
+./install --target {claude-code,copilot-cli} [--model AGENT=MODEL]... [--dry-run]
 ```
 
 `install` never deletes files. To remove an agent, delete its file by hand.
 
 ## Documentation
 
-All design documents are in [docs/](docs/README.md). Nothing is implemented yet: start with the [roadmap](docs/roadmap.md).
+All design documents are in [docs/](docs/README.md). The engine, the `claude-code` target and a draft `copilot-cli` target are implemented; see the [roadmap](docs/roadmap.md) for what remains.
+
+## Development
+
+```
+pip install -e '.[dev]'
+pytest && ruff check . && mypy
+```
