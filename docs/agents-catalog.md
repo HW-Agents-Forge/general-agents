@@ -2,7 +2,7 @@
 
 Critère d'entrée : l'agent **condense** une sortie volumineuse en une réponse courte. Les agents qui n'apportent que de l'indirection sont exclus (voir [vision.md](vision.md)).
 
-Tous les agents sont en `tier: small` au départ. Ils ne modifient jamais de fichier.
+Tous les agents sont en `tier: small` au départ. Aucun n'écrit de fichier de lui-même ; les effets de `run` sont uniquement ceux de la commande fournie par l'agent parent.
 
 ## Vue d'ensemble
 
