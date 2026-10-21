@@ -10,6 +10,8 @@ Fournir un ensemble de **petits sous-agents** qui condensent l'information, util
 
 ## Principes
 
+0. **Uniquement de tout petits modèles.** Aucun agent n'utilise un modèle plus grand que le plus petit disponible (ADR 0006). Les tâches qui demandent du raisonnement délicat restent à l'agent principal.
+
 1. **Condenser, pas seulement déléguer.** Un sous-agent n'a de valeur que s'il renvoie nettement moins que ce qu'il a consommé.
 2. **Un seul format source.** Les agents sont décrits de façon neutre dans `agents/`. Le package `shuttle` les adapte à chaque outil.
 3. **Sûr par défaut.** Lecture seule sauf nécessité. L'installation n'écrase jamais un fichier qui n'appartient pas au projet.

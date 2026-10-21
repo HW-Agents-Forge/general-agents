@@ -23,7 +23,7 @@ Tu exécutes la commande demandée et tu résumes le résultat.
 |---|---|---|---|
 | `name` | oui | chaîne | Identifiant, minuscules, chiffres et tirets. Unique. Doit correspondre au nom du fichier. |
 | `description` | oui | chaîne | Une à trois phrases. Indique **quand** l'agent principal doit l'invoquer. C'est ce texte que l'outil montre au modèle principal. |
-| `tier` | oui | `small` \| `medium` | Niveau de modèle souhaité. Jamais un identifiant de modèle. |
+| `tier` | oui | `small` | Niveau de modèle souhaité. Seule valeur admise : `small` (voir ADR 0006). Jamais un identifiant de modèle. |
 | `tools` | oui | liste | Outils abstraits autorisés (voir ci-dessous). Liste vide interdite. |
 | `max_output_lines` | non | entier | Taille maximale de la réponse, répétée dans le corps comme consigne. Défaut : 40. |
 
@@ -43,8 +43,9 @@ L'écriture de fichiers n'existe pas côté source : aucun agent du catalogue n'
 
 | `tier` | Intention |
 |---|---|
-| `small` | Plus petit modèle rapide disponible. Cas par défaut. |
-| `medium` | Modèle intermédiaire, pour les tâches de synthèse plus délicates. |
+| `small` | Le plus petit modèle disponible dans l'outil cible. Seul niveau existant : aucun agent n'utilise de modèle plus grand. |
+
+Conséquence pour la rédaction : les prompts doivent rester très courts et très directifs, avec un contrat de sortie rigide et au besoin un exemple de réponse. Une tâche qui exige du raisonnement délicat ne doit pas être confiée à un agent ; elle reste à l'agent principal.
 
 La correspondance vers des identifiants réels est définie **dans chaque cible**, jamais dans les sources.
 

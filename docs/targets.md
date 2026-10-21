@@ -9,7 +9,7 @@
 | Emplacement des agents (niveau utilisateur) | À vérifier | À vérifier | À vérifier |
 | Extension et nom de fichier | À vérifier | À vérifier | À vérifier |
 | Clés du frontmatter (nom, description, outils, modèle) | À vérifier | À vérifier | À vérifier |
-| Identifiants de modèles pour `small` et `medium` | À vérifier | À vérifier | À vérifier |
+| Identifiant du plus petit modèle (`small`) | À vérifier | À vérifier | À vérifier |
 | Noms des outils pour `read`, `search`, `shell` | À vérifier | À vérifier | À vérifier |
 | Mode sous-agent (invocable par l'agent principal) | À vérifier | À vérifier | À vérifier |
 | Emplacement des skills et support de `SKILL.md` | À vérifier | À vérifier | À vérifier |
@@ -22,8 +22,7 @@ Chaque cible exprime ces correspondances dans son module.
 
 | Abstrait | Cible concrète |
 |---|---|
-| `tier: small` | Identifiant de modèle de l'outil (jamais dans les sources) |
-| `tier: medium` | Idem |
+| `tier: small` | Identifiant du plus petit modèle de l'outil (jamais dans les sources) |
 | `tools: [read]` | Nom(s) d'outil de lecture de la plateforme |
 | `tools: [search]` | Nom(s) d'outil de recherche |
 | `tools: [shell]` | Nom(s) d'outil d'exécution |
