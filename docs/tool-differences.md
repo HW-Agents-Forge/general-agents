@@ -67,6 +67,16 @@ Implemented as the `claude-code` target.
 - **Skills:** `.opencode/skills/` appears in third-party descriptions of scanned directories; no official personal path was found.
 - **Creation helper:** `opencode agent create` generates an agent file interactively.
 
+## Enforcing read-only limits
+
+The `git`, `svn`, `diff` and `run` prompts list the commands they may use, but a prompt is not a guarantee. What each tool can enforce, from the documentation excerpts found:
+
+- **Claude Code:** a sub-agent's `tools` field is an allow-list of whole tools. A `Bash(git log *)`-style specifier in `disallowedTools` removes the whole tool rather than the matching commands, and the docs do not say whether `Bash(...)` specifiers work in the `tools` field. Command-level control lives in the settings (`permissions.deny`, for example `Bash(git push *)`), which applies to the main conversation and to sub-agents alike. A `PreToolUse` hook on `Bash` in the agent's frontmatter can validate commands, but it is best-effort.
+- **OpenCode:** the `permission` map supports per-command shell patterns and `deny`, so a real allow-list is possible once that target exists.
+- **Copilot CLI and VS Code:** nothing per-command found for a custom agent.
+
+Decision: no `allowed_commands` field in `agents.toml` for now, because no current target could enforce it. When the OpenCode target is written, add it there. Meanwhile, users who want hard guarantees can add deny rules to their own Claude Code settings, for example `Bash(git push *)`, `Bash(git commit *)`, `Bash(svn commit *)` and `Bash(svn update *)`. These are global, so they also affect the main agent.
+
 ## Consequences for the design
 
 1. **Model pinning is the critical difference.** OpenCode sub-agents and Copilot CLI agents inherit a model when none is set. Targets must always write an explicit model, and the installer's "no model found" error (see [install-spec.md](install-spec.md)) is therefore essential, never a silent fallback.

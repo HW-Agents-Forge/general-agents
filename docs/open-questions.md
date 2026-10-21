@@ -21,6 +21,8 @@
 | 4 | Merge `git` and `svn` into one `vcs` agent? | One agent that detects the repository (less overlap, a single prompt) versus two specialized agents (more targeted prompts) |
 | 9 | Evaluation acceptance thresholds (30 % gain) | To adjust after the first measurements |
 | 12 | `run`: how to monitor a long job (periodic reading of the output or of a log file) and what each tool's terminal expiry mechanism is | Depends on what each tool's terminal allows |
+| 13 | Per-command enforcement of read-only limits | Deferred until the OpenCode target; see [tool-differences.md](tool-differences.md) |
+| 14 | EDA error markers in `run` are generic | Provide the real tools' messages (simulator, lint, synthesis) to tune them |
 
 ## To verify in the official documentation
 

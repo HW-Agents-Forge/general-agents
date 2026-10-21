@@ -8,7 +8,7 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 
 | Situation | Decision |
 |---|---|
-| Command with long or lengthy output (simulation, build, regression) | Delegate to `run` with the exact `csh` command and a timeout |
+| Command with long or lengthy output (simulation, build, regression) | Delegate to `run` with the exact `csh` command writing to a log file, and a timeout |
 | Finding where something appears in a large repository | Delegate to `find` |
 | Size and nature of a change between two revisions | Delegate to `diff` |
 | Who or what introduced a change | Delegate to `git` or `svn` |
@@ -19,7 +19,7 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 # How to phrase the request
 
 1. Ask a precise question ("which tests fail and why?"), not a vague instruction.
-2. Give the minimal context: paths, references. For `run`: the exact command written for `csh` AND a timeout in seconds chosen from the expected duration. `run` refuses to start without both.
+2. Give the minimal context: paths, references. For `run`: the exact command written for `csh`, redirecting its output to a log file (`command >& job.log`), AND a timeout in seconds chosen from the expected duration. `run` filters the log instead of reading it whole, and refuses to start without the command and the timeout.
 3. State the expected format only if it differs from the default report.
 4. Do not paste large content into the request.
 

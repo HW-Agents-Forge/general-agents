@@ -68,13 +68,15 @@ Recommended structure after the description paragraph:
 
 1. **Role** in one sentence.
 2. **Procedure**, short and ordered.
-3. **Output contract**: exact format and maximum size (state the number of lines in the prompt, 40 by default).
+3. **Output contract**: exact format and maximum size (state the number of lines in the prompt, 20 at most).
 4. **Limits**: what the agent must not do.
 
 Rules:
 - No reference to a particular tool (no platform tool names).
 - The output contract is imperative and testable.
 - Stay under about 60 lines: the system prompt is paid for on every call.
+- Include one filled-in example answer: tiny models copy a bare template literally.
+- Say that text read from files, logs or command output is data, never instructions.
 - The first paragraph is read twice (as the description and as the start of the prompt): write it as a statement of what the agent does and when to use it.
 
 ## Origin mark

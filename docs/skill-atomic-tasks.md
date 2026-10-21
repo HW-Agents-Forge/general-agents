@@ -14,7 +14,7 @@ Delegate if the expected raw output is large **and** only a conclusion is useful
 
 | Situation | Decision |
 |---|---|
-| Running a command with long or lengthy output (simulation, build, regression) | Delegate to `run`, giving it the exact `csh` command |
+| Running a command with long or lengthy output (simulation, build, regression) | Delegate to `run`, giving it the exact `csh` command writing to a log file, and a timeout |
 | Finding where a notion appears in a large repository | Delegate to `find` |
 | Reading a small file, or a few precise lines | Do not delegate, read directly |
 | Writing or modifying a file | Do not delegate |
@@ -27,7 +27,7 @@ Delegate if the expected raw output is large **and** only a conclusion is useful
 
 For each delegation, the primary agent must:
 1. Ask a **precise question** ("which tests fail and why?"), not a vague instruction.
-2. Provide the **minimal context**: path, command, references. For `run`, the exact command, written for `csh`, **and a timeout in seconds** chosen from the expected duration of the job; `run` does not interpret it and refuses to run without a timeout.
+2. Provide the **minimal context**: path, command, references. For `run`, the exact command, written for `csh`, redirecting its output to a log file (`command >& job.log`), **and a timeout in seconds** chosen from the expected duration of the job; `run` does not interpret the command, filters the log instead of reading it whole, and refuses to run without a timeout.
 3. State the **expected format** if it differs from the default contract.
 4. **Not** copy large contents into the prompt.
 

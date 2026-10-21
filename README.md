@@ -53,7 +53,7 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses*.
 | [`git`](agents/git.md) | Answers questions about git history and state, read-only | `shell` |
 | [`svn`](agents/svn.md) | Answers questions about Subversion history and state, read-only | `shell` |
 
-Every agent replies in a fixed, short format (at most 40 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
+Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
 
 ## Quick start
 
