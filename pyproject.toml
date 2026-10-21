@@ -3,6 +3,8 @@ name = "shuttle"
 version = "0.1.0"
 description = "Adapts neutral agent and skill sources to several agentic tools"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = []
 
 [project.optional-dependencies]

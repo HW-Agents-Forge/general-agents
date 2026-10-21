@@ -3,6 +3,7 @@
 [![CI](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Runtime dependencies: none](https://img.shields.io/badge/runtime%20dependencies-none-brightgreen)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Status: early development](https://img.shields.io/badge/status-early%20development-orange)
 
 **Small sub-agents that take the token-expensive chores off your primary coding agent.**
@@ -22,6 +23,7 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 - [Development](#development)
 - [Repository layout](#repository-layout)
 - [Documentation](#documentation)
+- [Contributing](#contributing)
 - [Status](#status)
 
 ## How it works
@@ -151,8 +153,12 @@ docs/            design documents and decision records
 
 Start with the [documentation index](docs/README.md): [vision](docs/vision.md), [architecture](docs/architecture.md), [agent catalog](docs/agents-catalog.md), [evaluation protocol](docs/evaluation.md), [roadmap](docs/roadmap.md) and [open questions](docs/open-questions.md).
 
+## Contributing
+
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, ground rules and how to add an agent or a target tool.
+
 ## Status
 
 Early development. The engine, the Claude Code target and five agents exist and are tested. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
 
-No license has been chosen yet, so all rights are reserved until one is added.
+Released under the [MIT License](LICENSE).
