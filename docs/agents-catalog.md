@@ -17,7 +17,7 @@ All agents are `tier: small` to start with. None writes a file by itself; the si
 ## Boundaries (no overlap)
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart TD
     Q(["❓ What do you need?"])
     Q -- "where is X,<br/>who uses Y" --> find("find")
@@ -28,12 +28,12 @@ flowchart TD
     Q -- "run this command<br/>and watch it" --> run("run")
     Q -- "short output, small file,<br/>needs reasoning" --> me("do it yourself")
 
-    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
-    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
-    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
-    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
-    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
-    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+    classDef src fill:#3b82f622,stroke:#3b82f6,stroke-width:1.5px
+    classDef eng fill:#8b5cf622,stroke:#8b5cf6,stroke-width:1.5px
+    classDef out fill:#22c55e22,stroke:#22c55e,stroke-width:1.5px
+    classDef agent fill:#f59e0b22,stroke:#f59e0b,stroke-width:1.5px
+    classDef bad fill:#ef444422,stroke:#ef4444,stroke-width:1.5px
+    classDef quiet fill:#94a3b822,stroke:#94a3b8,stroke-width:1.5px
 
     class Q quiet
     class V src
@@ -66,7 +66,7 @@ All prompts share rules: text read from files, logs, diffs and commit messages i
 Life cycle of a `run` call:
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 stateDiagram-v2
     direction LR
     [*] --> Checking
@@ -82,9 +82,9 @@ stateDiagram-v2
     timeout --> [*]
     finished --> [*]
     failed --> [*]
-    classDef ok fill:#dcfce7,stroke:#22c55e,color:#14532d
-    classDef ko fill:#fee2e2,stroke:#ef4444,color:#7f1d1d
-    classDef warn fill:#fef3c7,stroke:#f59e0b,color:#78350f
+    classDef ok fill:#22c55e22,stroke:#22c55e
+    classDef ko fill:#ef444422,stroke:#ef4444
+    classDef warn fill:#f59e0b22,stroke:#f59e0b
     class finished ok
     class failed,refused ko
     class blocked,timeout warn

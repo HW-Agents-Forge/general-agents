@@ -31,7 +31,7 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 ## How it works
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart LR
     subgraph src["📂 Sources"]
         A("agents/*.md<br/>one prompt per agent")
@@ -49,16 +49,19 @@ flowchart LR
     A & S & T & M --> P
     X --> C & G
 
-    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
-    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
-    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
-    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
-    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
-    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+    classDef src fill:#3b82f622,stroke:#3b82f6,stroke-width:1.5px
+    classDef eng fill:#8b5cf622,stroke:#8b5cf6,stroke-width:1.5px
+    classDef out fill:#22c55e22,stroke:#22c55e,stroke-width:1.5px
+    classDef agent fill:#f59e0b22,stroke:#f59e0b,stroke-width:1.5px
+    classDef bad fill:#ef444422,stroke:#ef4444,stroke-width:1.5px
+    classDef quiet fill:#94a3b822,stroke:#94a3b8,stroke-width:1.5px
 
     class A,S,T,M src
     class P,R,X eng
     class C,G out
+    style src fill:none,stroke:#94a3b8,stroke-dasharray:5 5
+    style sh fill:none,stroke:#94a3b8,stroke-dasharray:5 5
+    style out fill:none,stroke:#94a3b8,stroke-dasharray:5 5
 ```
 
 The primary agent never reads the raw log. A delegation looks like this:
@@ -156,7 +159,7 @@ small = "claude-haiku-5-5"   # model for every agent of tier "small"
 For each agent and tool, the model is the first match of: `--model AGENT=MODEL`, then the tool's section, then `[defaults]`. If nothing matches, `install` fails and names the agent and the tool. It never falls back silently to a larger model.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart LR
     Q(["model for<br/>agent A on tool T"]) --> O["1 · --model A=…"]
     O -- "not given" --> S["2 · tool section<br/>of models.toml"]
@@ -166,12 +169,12 @@ flowchart LR
     S -- "listed" --> U
     D -- "found" --> U
 
-    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
-    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
-    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
-    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
-    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
-    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+    classDef src fill:#3b82f622,stroke:#3b82f6,stroke-width:1.5px
+    classDef eng fill:#8b5cf622,stroke:#8b5cf6,stroke-width:1.5px
+    classDef out fill:#22c55e22,stroke:#22c55e,stroke-width:1.5px
+    classDef agent fill:#f59e0b22,stroke:#f59e0b,stroke-width:1.5px
+    classDef bad fill:#ef444422,stroke:#ef4444,stroke-width:1.5px
+    classDef quiet fill:#94a3b822,stroke:#94a3b8,stroke-width:1.5px
 
     class O,S,D src
     class U out
