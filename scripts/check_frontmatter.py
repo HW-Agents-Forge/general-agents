@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Check the frontmatter of every agent and skill, per tool. Read-only; needs PyYAML."""
+"""Check the frontmatter of every agent and skill, per tool. Read-only; needs PyYAML.
+
+That the prompts match across tools is checked by check_prompts_sync.py."""
 
 from __future__ import annotations
 
@@ -133,20 +135,6 @@ def main() -> int:
                 skills.setdefault(tool, {})[path.parent.name] = parsed
         for stray in sorted(p for p in sdir.iterdir() if p.is_dir() and not (p / "SKILL.md").exists()):
             err(stray, "skill folder has no SKILL.md")
-
-    # Every tool must have the same agents and skills, with the same prompt and description.
-    for kind, found in (("agent", agents), ("skill", skills)):
-        reference = TOOLS[0]
-        for tool in TOOLS[1:]:
-            ref, other = found.get(reference, {}), found.get(tool, {})
-            for name in sorted(set(ref) ^ set(other)):
-                errors.append(f"{kind} '{name}' exists for only one of {reference} and {tool}")
-            for name in sorted(set(ref) & set(other)):
-                (rdata, rbody), (odata, obody) = ref[name], other[name]
-                if rbody != obody:
-                    errors.append(f"{kind} '{name}': {reference} and {tool} have different prompts")
-                if rdata.get("description") != odata.get("description"):
-                    errors.append(f"{kind} '{name}': {reference} and {tool} have different descriptions")
 
     for message in errors:
         print(f"error: {message}", file=sys.stderr)

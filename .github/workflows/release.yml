@@ -18,6 +18,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install pyyaml
       - run: python scripts/check_frontmatter.py
+      - run: python scripts/check_prompts_sync.py
       - name: Build one archive per tool
         run: |
           for tool in claude-code vs-code copilot-cli; do

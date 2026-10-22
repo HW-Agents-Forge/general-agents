@@ -8,6 +8,13 @@ permissions:
   contents: read
 
 jobs:
+  prompts-in-sync:
+    name: Prompts identical across tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_prompts_sync.py
+
   frontmatter:
     runs-on: ubuntu-latest
     steps:

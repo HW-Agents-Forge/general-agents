@@ -21,6 +21,7 @@ Keep it short: its description is always in the primary agent's context and its 
 ```sh
 python -m pip install pyyaml
 python scripts/check_frontmatter.py
+python scripts/check_prompts_sync.py
 ```
 
-CI runs the same script. To publish a release, push a tag `vX.Y.Z`.
+CI runs the same scripts. To publish a release, push a tag `vX.Y.Z`.

@@ -47,7 +47,7 @@ agents/copilot-cli/   run.agent.md, ...                same format, kept separat
 skills/<tool>/        delegate-to-run/SKILL.md, csh-pro/SKILL.md, ...
 ```
 
-The prompts are the same everywhere; only the frontmatter differs. There is no generator: you edit each copy, and CI fails when they drift apart.
+The prompts are the same everywhere; only the frontmatter differs. There is no generator: you edit each copy, and CI fails when the prompts drift apart.
 
 > **Not yet verified on the real tools.** The documentation of Copilot and VS Code could not be read from the development environment, so these frontmatters come from search excerpts: the exact model identifier (`Claude Haiku 5.5 (copilot)`; a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, and the tool names. Test them and report what breaks.
 
@@ -57,7 +57,7 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses* 
 
 ## Checks and releases
 
-CI runs `scripts/check_frontmatter.py` (needs PyYAML) on every push: valid YAML, the keys, tool and model values each tool expects, and the same agents, skills, prompts and descriptions in all three folders. Pushing a tag `vX.Y.Z` publishes a release with one zip per tool.
+CI runs two independent jobs on every push: `scripts/check_frontmatter.py` (needs PyYAML) checks the YAML, the keys and the tool and model values each tool expects; `scripts/check_prompts_sync.py` (stdlib only) checks that every agent and skill exists in the three folders with an identical prompt, and prints a diff when one drifts. Pushing a tag `vX.Y.Z` publishes a release with one zip per tool.
 
 ## Contributing
 
