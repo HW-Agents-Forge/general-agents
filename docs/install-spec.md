@@ -76,6 +76,23 @@ For each agent, one file; for each skill, its `SKILL.md` plus each reference fil
 
 ## Possible actions per file
 
+```mermaid
+flowchart TD
+    F["File to write"] --> Q1{"Path stays under<br/>the destination?"}
+    Q1 -- no --> R1["refused: path escapes"]
+    Q1 -- yes --> Q2{"Already exists?"}
+    Q2 -- no --> C["created"]
+    Q2 -- yes --> Q3{"Regular file?"}
+    Q3 -- no --> R2["refused: not a file"]
+    Q3 -- yes --> Q4{"Carries this repository's mark?"}
+    Q4 -- no --> R3["refused: unmarked or marked by another repository"]
+    Q4 -- yes --> Q5{"Same content?"}
+    Q5 -- yes --> N["unchanged"]
+    Q5 -- no --> U["updated"]
+```
+
+The same decision is made for a dry run and a real run; nothing is ever deleted.
+
 | Destination state | Action |
 |---|---|
 | Absent | Create |

@@ -4,6 +4,14 @@
 
 Primary coding agents spend many tokens on tasks where they only need the conclusion: reading build logs, browsing a repository, summarizing a git history. These tasks could be handed to a smaller, cheaper model.
 
+## The idea
+
+```mermaid
+flowchart LR
+    L["Large raw output<br/>(a 20,000-line log)"] --> A["Sub-agent<br/>tiny model"]
+    A --> R["Short report<br/>(about 10 lines)"] --> P["Primary agent<br/>large model"]
+```
+
 ## Goal
 
 Provide a set of **small sub-agents** that condense information, use the **smallest models possible**, and are **defined once** then adapted to several agentic tools.

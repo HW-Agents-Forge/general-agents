@@ -31,6 +31,7 @@ ruff check . && ruff format --check . && mypy && pytest
 - **Standard library only at runtime** ([ADR 0005](docs/decisions/0005-stdlib-only.md)). Development tools (`pytest`, `ruff`, `mypy`) are fine.
 - **All disk writes go through `installer.py`**, and the installer never deletes anything ([ADR 0004](docs/decisions/0004-no-deletion-by-the-script.md)). Do not weaken a safety rule from the [installer specification](docs/install-spec.md) without an ADR.
 - Type annotations everywhere in `src/`; frozen dataclasses for the data model; no global state.
+- Diagrams are Mermaid blocks, not ASCII art.
 - Details: [docs/conventions.md](docs/conventions.md).
 
 ## Common contributions

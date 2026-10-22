@@ -2,6 +2,19 @@
 
 Principle: validate early, on a single agent and a single tool, before generalizing.
 
+```mermaid
+flowchart LR
+    M0["0 Preparation"] --> M1["1 Vertical slice"] --> M2["2 First evaluation"] --> M3["3 Full catalog"] --> M4["4 Multi-tool"] --> M5["5 Finishing"]
+    classDef done fill:#2da44e,stroke:#1a7f37,color:#ffffff
+    classDef partial fill:#bf8700,stroke:#9a6700,color:#ffffff
+    classDef todo fill:#6e7781,stroke:#57606a,color:#ffffff
+    class M1 done
+    class M0,M3,M4,M5 partial
+    class M2 todo
+```
+
+Green: done. Amber: in progress. Grey: not started. The first real evaluation (milestone 2) decides how much to invest in the rest.
+
 ## Milestone 0: preparation
 
 - [x] Answer the blocking points of [open-questions.md](open-questions.md) (smallest model, first targets, `--target` behavior).

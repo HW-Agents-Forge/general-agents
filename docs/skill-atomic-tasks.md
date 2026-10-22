@@ -8,6 +8,19 @@ Tell the primary agent **when** to delegate to a sub-agent of the catalog and **
 
 ## Decision principle
 
+```mermaid
+flowchart TD
+    A["A task to do"] --> B{"Large raw output and<br/>only a conclusion needed?"}
+    B -- no --> Z["do it yourself"]
+    B -- yes --> C{"Needs delicate reasoning<br/>or the exact content?"}
+    C -- yes --> Z
+    C -- no --> D{"Kind of task"}
+    D -->|"a command"| run
+    D -->|"a search"| find
+    D -->|"size of a change"| diff
+    D -->|"history"| vcs["git or svn"]
+```
+
 Delegate if the expected raw output is large **and** only a conclusion is useful. Do not delegate if the primary agent needs the exact content for what follows, or if the operation is trivial.
 
 ## Decision table (content to carry into the skill)
