@@ -12,7 +12,7 @@ For a given task, is the total consumption (primary agent **plus** sub-agent) lo
 %%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart LR
     S(["🎯 real scenario"]) --> BL("Baseline<br/>primary agent alone")
-    S --> DL("Delegation<br/>agent and atomic-tasks skill")
+    S --> DL("Delegation<br/>agent and its delegate-to skill")
     BL --> M("📊 record tokens, cost,<br/>time and quality<br/>3 runs each")
     DL --> M
     M --> G{{"median cost gain<br/>at least 30 %<br/>and quality not lower?"}}
@@ -37,7 +37,7 @@ flowchart LR
 1. Choose a **real scenario** (example: run a project's failing test suite and identify the cause).
 2. Run it twice, from the same state:
    - **Baseline**: the primary agent does everything itself.
-   - **Delegation**: the primary agent has access to the evaluated agent and to the `atomic-tasks` skill.
+   - **Delegation**: the primary agent has access to the evaluated agent and to its `delegate-to-<agent>` skill.
 3. Record, for each run:
    - input and output tokens of the primary agent;
    - input and output tokens of the sub-agent(s);

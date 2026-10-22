@@ -1,8 +1,5 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: 📚 Documentation
-    url: https://github.com/chabrioche/general-agents/blob/main/docs/README.md
-    about: Design documents, agent catalog and open questions. Worth a look before opening an issue.
-  - name: 🧭 Roadmap
-    url: https://github.com/chabrioche/general-agents/blob/main/docs/roadmap.md
-    about: See what is planned and what is already in progress.
+    url: https://github.com/chabrioche/general-agents/blob/main/docs/agents-catalog.md
+    about: Agent catalog and evaluation protocol. Worth a look before opening an issue.
