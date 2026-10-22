@@ -1,0 +1,56 @@
+name: New agent proposal
+description: Propose a new sub-agent for the catalog.
+title: "[Agent] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An agent is accepted only if it **condenses** a large output into a short answer ([ADR 0001](https://github.com/chabrioche/general-agents/blob/main/docs/decisions/0001-keep-only-condensing-agents.md)). Agents that only add indirection (reading a file, listing a directory) are not accepted.
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: Lowercase letters, digits and hyphens.
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: What it does, and when the primary agent should call it.
+    validations:
+      required: true
+  - type: textarea
+    id: volume
+    attributes:
+      label: What large output does it condense?
+      description: Typical size of the raw input and of the report it would return.
+    validations:
+      required: true
+  - type: checkboxes
+    id: tools
+    attributes:
+      label: Tools it needs
+      options:
+        - label: read
+        - label: search
+        - label: shell (explain which commands and why they are safe)
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Boundary with existing agents
+      description: How it differs from `run`, `find`, `diff`, `git` and `svn`, so that there is no overlap.
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Output contract
+      description: The report format, at most 20 lines.
+      render: text
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Evaluation scenario
+      description: A generic scenario to check that it pays for itself, as in the [evaluation protocol](https://github.com/chabrioche/general-agents/blob/main/docs/evaluation.md).

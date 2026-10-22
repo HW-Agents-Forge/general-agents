@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an improvement to the installer, the configuration or the documentation.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that is hard or impossible today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What you would like to see. Mention how it fits the constraints below if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: markdown
+    attributes:
+      value: |
+        Project constraints worth keeping in mind: standard library only at runtime, the installer never deletes anything and writes only under the home, sources are plain Markdown. Changes that go against an [ADR](https://github.com/chabrioche/general-agents/blob/main/docs/decisions/README.md) need a new ADR.

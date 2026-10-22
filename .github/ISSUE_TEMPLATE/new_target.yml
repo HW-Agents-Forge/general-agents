@@ -1,0 +1,44 @@
+name: New target tool
+description: Request support for another agentic tool.
+title: "[Target] "
+labels: ["enhancement"]
+body:
+  - type: input
+    id: tool
+    attributes:
+      label: Tool
+      description: Name and version.
+    validations:
+      required: true
+  - type: input
+    id: docs
+    attributes:
+      label: Link to the official documentation for its custom agents
+    validations:
+      required: true
+  - type: textarea
+    id: format
+    attributes:
+      label: Agent file format
+      description: Location (user level and project level), file name, frontmatter keys, how tools and the model are declared.
+    validations:
+      required: true
+  - type: textarea
+    id: models
+    attributes:
+      label: Models
+      description: Identifier format for models, and the smallest model available.
+  - type: textarea
+    id: skills
+    attributes:
+      label: Skills
+      description: Whether `SKILL.md` skills are supported and where they live.
+  - type: textarea
+    id: mark
+    attributes:
+      label: Origin mark
+      description: Does the tool accept free keys in the frontmatter? If not, a comment in the body is used.
+  - type: markdown
+    attributes:
+      value: |
+        See [docs/targets.md](https://github.com/chabrioche/general-agents/blob/main/docs/targets.md) for what a target needs, and [docs/tool-differences.md](https://github.com/chabrioche/general-agents/blob/main/docs/tool-differences.md) for how existing tools compare.

@@ -64,7 +64,7 @@ Add a failing test first, then the fix. `installer` changes need tests for the u
 
 ## Reporting problems
 
-Open an issue with the command you ran, the target tool and its version, and the output (`--dry-run` output is ideal). **Do not include proprietary code or logs** in issues or pull requests.
+Open an issue and pick the matching template (bug report, feature request, new agent proposal or new target tool). For a bug, give the command you ran, the target tool and its version, and the output (`--dry-run` output is ideal). **Do not include proprietary code or logs** in issues or pull requests.
 
 ## License
 

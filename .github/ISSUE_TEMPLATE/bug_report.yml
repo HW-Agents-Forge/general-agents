@@ -1,0 +1,62 @@
+name: Bug report
+description: Something in the installer, a target or an agent behaves wrongly.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Do not paste proprietary code, logs or paths** from your workplace: reduce the problem to a small, generic example.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Installer / CLI (`install`, `--dry-run`, exit codes)
+        - Target tool (rendering, paths)
+        - Configuration (`models.toml`, `agents.toml`)
+        - Agent prompt (a sub-agent answers wrongly)
+        - Skill (`atomic-tasks`)
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: The exact command you ran and the output. `--dry-run` output is ideal.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target tool and version
+      description: For example "Claude Code 2.x" or "Copilot CLI 1.x".
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.12.3"
+  - type: textarea
+    id: agent-details
+    attributes:
+      label: For agent problems only
+      description: The agent, the model it ran on, the request you sent and the reply you got (without proprietary content).
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and the [open questions](https://github.com/chabrioche/general-agents/blob/main/docs/open-questions.md).
+          required: true
+        - label: My report contains no proprietary or confidential content.
+          required: true

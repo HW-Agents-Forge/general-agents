@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/chabrioche/general-agents/blob/main/docs/README.md
+    about: Design documents, agent catalog and open questions. Check them before opening an issue.
