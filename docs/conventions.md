@@ -4,6 +4,10 @@
 
 - Everything in the repository is in English: documentation, code, agent prompts, skills, commit messages and messages displayed by `install`.
 
+## Diagrams
+
+Diagrams are Mermaid code blocks (GitHub renders them), never ASCII art. Quote node labels that contain punctuation, keep them short, and use `<br/>` for line breaks. Directory trees stay as plain code blocks.
+
 ## Python
 
 - Minimum version: 3.11 (`tomllib` to read `models.toml`).

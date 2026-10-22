@@ -30,11 +30,40 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 
 ## How it works
 
+```mermaid
+flowchart LR
+    subgraph src["Sources"]
+        A["agents/*.md<br/>one prompt per agent"]
+        S["skills/*/SKILL.md<br/>+ examples"]
+        T["agents.toml<br/>tools per agent"]
+        M["models.toml<br/>model per agent"]
+    end
+    subgraph sh["shuttle"]
+        P["parse and validate"] --> R["resolve the model"] --> X["render for the tool"]
+    end
+    subgraph out["Installed files"]
+        C["Claude Code<br/>.claude/agents and skills"]
+        G["Copilot CLI<br/>.copilot or .github"]
+    end
+    A & S & T & M --> P
+    X --> C & G
 ```
-agents/*.md ─┐                           ┌─► ~/.claude/agents/…      (Claude Code)
-skills/*/    ├─► shuttle ─► per-tool ────┤
-agents.toml ─┤    (parse,   rendering    └─► ~/.copilot/agents/…     (Copilot CLI)
-models.toml ─┘    resolve)
+The primary agent never reads the raw log. A delegation looks like this:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor You
+    participant P as Primary agent
+    participant R as run (tiny model)
+    participant T as Terminal
+    You->>P: Run the smoke test and tell me what fails
+    P->>R: exact command, log file, timeout
+    R->>T: run the command under the timeout
+    T-->>R: process ends, log written
+    R->>T: grep and tail on the log only
+    R-->>P: status, error count, key points (about 10 lines)
+    P-->>You: the cause and the fix
 ```
 
 - **Sources are plain Markdown.** No frontmatter: the file name is the agent name, the first paragraph is its description, and the whole file is its prompt.
@@ -108,6 +137,17 @@ small = "claude-haiku-5-5"   # model for every agent of tier "small"
 ```
 
 For each agent and tool, the model is the first match of: `--model AGENT=MODEL`, then the tool's section, then `[defaults]`. If nothing matches, `install` fails and names the agent and the tool. It never falls back silently to a larger model.
+
+```mermaid
+flowchart TD
+    Q["Model for agent A on tool T"] --> O{"--model A=... given?"}
+    O -- yes --> U1["use it"]
+    O -- no --> S{"A listed in the T section<br/>of models.toml?"}
+    S -- yes --> U2["use it"]
+    S -- no --> D{"tier default in<br/>the defaults section?"}
+    D -- yes --> U3["use it"]
+    D -- no --> E["error naming the agent and the tool<br/>(never a silent fallback)"]
+```
 
 **Adding an agent** takes two steps:
 

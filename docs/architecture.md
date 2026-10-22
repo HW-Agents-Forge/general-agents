@@ -38,11 +38,16 @@ general-agents/
 
 ## Data flow
 
+```mermaid
+flowchart LR
+    CFG["models.toml<br/>agents.toml"] --> CONFIG["config and manifest"]
+    SRC["agents/*.md<br/>skills/*/"] --> REG["registry and parser"]
+    CONFIG --> MODEL["typed Agent and Skill<br/>+ resolved model"]
+    REG --> MODEL
+    MODEL --> TGT["Target.render"]
+    TGT --> INST["installer"]
+    INST --> FILES[("files in the home<br/>or in a project")]
 ```
-agents/*.md ──► parser ──► model.Agent ──► Target.render ──► installer ──► files in the home
-skills/*/    ──► parser ──► model.Skill ──┘
-```
-
 0. `config` reads `models.toml` and `manifest` reads `agents.toml`, both at the repository root.
 1. `registry` walks `agents/` and `skills/`.
 2. `parser` validates each Markdown source (name from the file name, description from the first paragraph) and, with the manifest entry, produces typed objects (`Agent`, `Skill`). Every source error is caught here.
@@ -62,6 +67,22 @@ skills/*/    ──► parser ──► model.Skill ──┘
 | `cli` | User interface, exit codes | Business logic |
 
 ## `Target` interface
+
+```mermaid
+classDiagram
+    class Target {
+        <<protocol>>
+        +name str
+        +agent_path(agent, scope) PurePath
+        +skill_path(skill, scope) PurePath
+        +render_agent(agent, model, mark_name) str
+        +render_skill(skill, mark_name) str
+    }
+    Target <|.. ClaudeCodeTarget
+    Target <|.. CopilotCliTarget
+    Target <|.. VsCodeTarget : planned
+    Target <|.. OpenCodeTarget : planned
+```
 
 ```python
 class Target(Protocol):

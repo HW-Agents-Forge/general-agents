@@ -8,6 +8,17 @@ For a given task, is the total consumption (primary agent **plus** sub-agent) lo
 
 ## Protocol
 
+```mermaid
+flowchart LR
+    S["Real scenario"] --> B["Baseline:<br/>primary agent alone"]
+    S --> D["Delegation:<br/>agent + atomic-tasks skill"]
+    B --> M["Record tokens, cost, time<br/>and quality (3 runs each)"]
+    D --> M
+    M --> G{"Median cost gain at least 30 %<br/>and quality not lower?"}
+    G -- yes --> K["keep the agent"]
+    G -- no --> W["rework or remove it"]
+```
+
 1. Choose a **real scenario** (example: run a project's failing test suite and identify the cause).
 2. Run it twice, from the same state:
    - **Baseline**: the primary agent does everything itself.

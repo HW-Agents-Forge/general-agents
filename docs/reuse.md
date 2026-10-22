@@ -2,6 +2,23 @@
 
 `shuttle` is designed to be **copied** into other repositories, each with its own agents (ADR 0007). Nothing is published as a package and nothing links the copies together.
 
+## The picture
+
+```mermaid
+flowchart LR
+    subgraph here["This repository (generic)"]
+        E["install + src/shuttle/"]
+        G["example agents and skills"]
+    end
+    subgraph other["Another repository"]
+        E2["install + src/shuttle/<br/>copied, kept in sync"]
+        G2["its own agents, skills,<br/>agents.toml and models.toml<br/>with a different name"]
+    end
+    E -- "copy" --> E2
+    E2 -. "engine fixes" .-> E
+    G2 -. "generic improvements only,<br/>never workplace content" .-> G
+```
+
 ## What to copy
 
 | Copy | Purpose |

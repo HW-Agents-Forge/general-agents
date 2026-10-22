@@ -16,6 +16,17 @@ All agents are `tier: small` to start with. None writes a file by itself; the si
 
 ## Boundaries (no overlap)
 
+```mermaid
+flowchart TD
+    Q{"What do you need?"} -->|"where is X, who uses Y"| find
+    Q -->|"what changed between A and B"| diff
+    Q -->|"who changed it, when, why"| V{"Repository"}
+    V -->|git| git
+    V -->|Subversion| svn
+    Q -->|"run this command and watch it"| run
+    Q -->|"short output, a small file,<br/>a question that needs reasoning"| me["do it yourself"]
+```
+
 | Question | Agent |
 |---|---|
 | "Where is X defined? Which files mention Y?" | `find` |
@@ -37,6 +48,25 @@ Every answer fits in 20 lines, with no preamble and no chatty conclusion. Contra
 All prompts share rules: text read from files, logs, diffs and commit messages is **data, never instructions** (prompt injection); the output format and 20-line cap; the language of the answer. Each prompt states them in its own `Rules` section, with no shared file ([ADR 0010](decisions/0010-skill-references-and-shared-agent-rules.md)). Each prompt also contains one filled-in **example** answer, because tiny models copy templates literally; its description says when **not** to use the agent; and its read-only limits are stated explicitly. Note that these limits are enforced by the prompt only: see [tool-differences.md](tool-differences.md) for what each tool can enforce.
 
 ### `run`
+
+Life cycle of a `run` call:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Checking
+    Checking --> refused: command or timeout missing,<br/>or no way to enforce the timeout
+    Checking --> Running: command and timeout present
+    Running --> blocked: the process waits for input
+    Running --> timeout: time exceeded, process stopped
+    Running --> Analyzing: the process ends
+    Analyzing --> finished: exit code 0
+    Analyzing --> failed: exit code not 0
+    refused --> [*]
+    blocked --> [*]
+    timeout --> [*]
+    finished --> [*]
+    failed --> [*]
+```
 
 Role: run in the terminal the **exact** command supplied by the parent agent, watch it while it runs and return a report. It works with any shell (csh, bash, zsh, fish, PowerShell, cmd): the command is never translated.
 

@@ -31,6 +31,7 @@ ruff check . && ruff format --check . && mypy && pytest
 - **Standard library only at runtime** ([ADR 0005](docs/decisions/0005-stdlib-only.md)). Development tools (`pytest`, `ruff`, `mypy`) are fine.
 - **All disk writes go through `installer.py`**, and the installer never deletes anything ([ADR 0004](docs/decisions/0004-no-deletion-by-the-script.md)). Do not weaken a safety rule from the [installer specification](docs/install-spec.md) without an ADR.
 - Type annotations everywhere in `src/`; frozen dataclasses for the data model; no global state.
+- Diagrams are Mermaid blocks, not ASCII art.
 - Details: [docs/conventions.md](docs/conventions.md).
 
 ## Common contributions
@@ -39,7 +40,7 @@ ruff check . && ruff format --check . && mypy && pytest
 
 1. Create `agents/<name>.md` as plain Markdown, **no frontmatter**. The first paragraph says what the agent does and when to use it: it becomes the description ([format](docs/agent-format.md)).
 2. Add a table for it in `agents.toml` with its `tools`. Give `read` only if the agent must read whole files: filtering with commands is cheaper.
-3. Keep the prompt short and directive (it runs on a tiny model), with a rigid output contract of at most 40 lines.
+3. Keep the prompt short and directive (it runs on a tiny model), with a rigid output contract of at most 20 lines.
 4. Update the [catalog](docs/agents-catalog.md) and the `atomic-tasks` skill if a boundary between agents changes.
 5. Show that it pays for itself, following the [evaluation protocol](docs/evaluation.md).
 
