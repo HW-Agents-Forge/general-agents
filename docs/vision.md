@@ -7,9 +7,22 @@ Primary coding agents spend many tokens on tasks where they only need the conclu
 ## The idea
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart LR
-    L["Large raw output<br/>(a 20,000-line log)"] --> A["Sub-agent<br/>tiny model"]
-    A --> R["Short report<br/>(about 10 lines)"] --> P["Primary agent<br/>large model"]
+    L("📜 Large raw output<br/>a 20,000-line log") ==> A("🤖 Sub-agent<br/>tiny model")
+    A ==> R("📝 Short report<br/>about 10 lines") ==> P("🧠 Primary agent<br/>large model")
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class L bad
+    class A agent
+    class R out
+    class P src
 ```
 
 ## Goal

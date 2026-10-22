@@ -5,18 +5,21 @@
 ## The picture
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart LR
-    subgraph here["This repository (generic)"]
-        E["install + src/shuttle/"]
-        G["example agents and skills"]
-    end
-    subgraph other["Another repository"]
-        E2["install + src/shuttle/<br/>copied, kept in sync"]
-        G2["its own agents, skills,<br/>agents.toml and models.toml<br/>with a different name"]
-    end
-    E -- "copy" --> E2
-    E2 -. "engine fixes" .-> E
-    G2 -. "generic improvements only,<br/>never workplace content" .-> G
+    E("🏠 this repository<br/>install and src/shuttle/") -- "copy the engine" --> E2("🏢 another repository<br/>install and src/shuttle/")
+    G2("🏢 another repository<br/>its own agents, skills<br/>and configuration") -. "generic improvements only,<br/>never workplace content" .-> G("🏠 this repository<br/>example agents and skills")
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class E,E2 eng
+    class G src
+    class G2 agent
 ```
 
 ## What to copy

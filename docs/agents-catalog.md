@@ -17,14 +17,28 @@ All agents are `tier: small` to start with. None writes a file by itself; the si
 ## Boundaries (no overlap)
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart TD
-    Q{"What do you need?"} -->|"where is X, who uses Y"| find
-    Q -->|"what changed between A and B"| diff
-    Q -->|"who changed it, when, why"| V{"Repository"}
-    V -->|git| git
-    V -->|Subversion| svn
-    Q -->|"run this command and watch it"| run
-    Q -->|"short output, a small file,<br/>a question that needs reasoning"| me["do it yourself"]
+    Q(["❓ What do you need?"])
+    Q -- "where is X,<br/>who uses Y" --> find("find")
+    Q -- "what changed<br/>between A and B" --> diff("diff")
+    Q -- "who changed it,<br/>when, why" --> V{{"repository"}}
+    V -- "git" --> git("git")
+    V -- "Subversion" --> svn("svn")
+    Q -- "run this command<br/>and watch it" --> run("run")
+    Q -- "short output, small file,<br/>needs reasoning" --> me("do it yourself")
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class Q quiet
+    class V src
+    class find,diff,git,svn,run agent
+    class me quiet
 ```
 
 | Question | Agent |
@@ -52,13 +66,15 @@ All prompts share rules: text read from files, logs, diffs and commit messages i
 Life cycle of a `run` call:
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 stateDiagram-v2
+    direction LR
     [*] --> Checking
-    Checking --> refused: command or timeout missing,<br/>or no way to enforce the timeout
+    Checking --> refused: command or timeout missing,<br/>or timeout cannot be enforced
     Checking --> Running: command and timeout present
-    Running --> blocked: the process waits for input
-    Running --> timeout: time exceeded, process stopped
-    Running --> Analyzing: the process ends
+    Running --> blocked: waits for input
+    Running --> timeout: time exceeded,<br/>process stopped
+    Running --> Analyzing: process ends
     Analyzing --> finished: exit code 0
     Analyzing --> failed: exit code not 0
     refused --> [*]
@@ -66,6 +82,12 @@ stateDiagram-v2
     timeout --> [*]
     finished --> [*]
     failed --> [*]
+    classDef ok fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef ko fill:#fee2e2,stroke:#ef4444,color:#7f1d1d
+    classDef warn fill:#fef3c7,stroke:#f59e0b,color:#78350f
+    class finished ok
+    class failed,refused ko
+    class blocked,timeout warn
 ```
 
 Role: run in the terminal the **exact** command supplied by the parent agent, watch it while it runs and return a report. It works with any shell (csh, bash, zsh, fish, PowerShell, cmd): the command is never translated.

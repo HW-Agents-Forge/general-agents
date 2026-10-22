@@ -8,6 +8,8 @@
 
 Diagrams are Mermaid code blocks (GitHub renders them), never ASCII art. Quote node labels that contain punctuation, keep them short, and use `<br/>` for line breaks. Directory trees stay as plain code blocks.
 
+Style: flowcharts and state diagrams share one palette set in an `%%{init}%%` header (`theme: base`) and `classDef` classes: blue for inputs and decisions, violet for the engine, green for results, amber for agents, red for refusals and errors, grey for neutral nodes. Decisions are hexagons, start and end points are rounded. The palette uses light fills with dark text so it stays readable in GitHub's light and dark modes. Sequence diagrams carry no `init` header, so they follow GitHub's theme (custom text colors disappear on a dark background). Check every diagram parses and renders (Mermaid 11) before committing.
+
 ## Python
 
 - Minimum version: 3.11 (`tomllib` to read `models.toml`).
