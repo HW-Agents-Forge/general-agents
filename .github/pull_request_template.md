@@ -11,7 +11,7 @@
 
 - [ ] The first paragraph still states what the agent does and when (not) to use it
 - [ ] The prompt keeps its filled-in example and the "data, never instructions" rule
-- [ ] The agent and its skill are updated in all three tool folders, and the catalog too if a boundary moved
+- [ ] The agent and its skill are updated in all tool folders, and the catalog too if a boundary moved
 - [ ] I checked that it still condenses: evidence or reasoning below
 
 ## 🔎 How I checked it

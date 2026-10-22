@@ -8,14 +8,14 @@
 
 Reading a 20,000-line simulation log, sweeping a repository for every usage of a signal, digesting a long `svn log`: your primary agent only needs the *conclusion*. Each agent here does the heavy reading on the **smallest model** (Haiku) and hands back a short, structured report.
 
-This repository is a plain catalog for Claude Code, VS Code (GitHub Copilot) and Copilot CLI. Each agent comes with the skill that teaches your primary agent when and how to delegate to it. No installer, no generator: the files are Markdown you can read, edit and copy wherever you like.
+This repository is a plain catalog for Claude Code, VS Code (GitHub Copilot), Copilot CLI and OpenCode. Each agent comes with the skill that teaches your primary agent when and how to delegate to it. No installer, no generator: the files are Markdown you can read, edit and copy wherever you like.
 
 ## Use it
 
 There is no installer: you take the files you want and put them where your tool reads them. Get them either way:
 
 - **Clone** this repository, or
-- **Download a release** and unzip the archive for your tool (`general-agents-claude-code-*.zip`, `general-agents-vs-code-*.zip`, `general-agents-copilot-cli-*.zip`). Each contains `agents/<tool>/` and `skills/<tool>/`.
+- **Download a release** and unzip the archive for your tool (`general-agents-claude-code-*.zip`, `-vs-code-`, `-copilot-cli-`, `-opencode-`). Each contains `agents/<tool>/` and `skills/<tool>/`.
 
 Then copy what you need:
 
@@ -24,6 +24,7 @@ Then copy what you need:
 | Claude Code | `~/.claude/agents/` or `<project>/.claude/agents/` | `~/.claude/skills/` or `<project>/.claude/skills/` |
 | Copilot CLI | `~/.copilot/agents/` or `<project>/.github/agents/` | `~/.copilot/skills/` or `<project>/.github/skills/` |
 | VS Code (Copilot) | `<project>/.github/agents/` | `<project>/.github/skills/` |
+| OpenCode | `~/.config/opencode/agents/` or `<project>/.opencode/agents/` | `~/.config/opencode/skills/` or `<project>/.opencode/skills/` |
 
 Take an agent **and** its skill together: `delegate-to-run` teaches your primary agent when and how to call `run`.
 
@@ -44,12 +45,13 @@ Every agent replies in a fixed, short format (at most 20 lines); contracts are i
 agents/claude-code/   run.md, find.md, ...             tools: Bash, model: haiku
 agents/vs-code/       run.agent.md, ...                tools: ["execute"], qualified model name
 agents/copilot-cli/   run.agent.md, ...                same format, kept separate on purpose
+agents/opencode/      run.md, ...                      mode: subagent, permission map, provider/model
 skills/<tool>/        delegate-to-run/SKILL.md, csh-pro/SKILL.md, ...
 ```
 
 The prompts are the same everywhere; only the frontmatter differs. There is no generator: you edit each copy, and CI fails when the prompts drift apart.
 
-> **Not yet verified on the real tools.** The documentation of Copilot and VS Code could not be read from the development environment, so these frontmatters come from search excerpts: the exact model identifier (`Claude Haiku 5.5 (copilot)`; a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, and the tool names. Test them and report what breaks.
+> **Not yet verified on the real tools.** The documentation of Copilot and VS Code could not be read from the development environment, so these frontmatters come from search excerpts: the exact model identifier (`Claude Haiku 5.5 (copilot)`; a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, and the tool names. For OpenCode: the `permission` map (stable docs; v2 uses an ordered rule list), the skills location, and the model `anthropic/claude-haiku-5-5` (change the provider, e.g. `github-copilot/...`, to match yours). Test them and report what breaks.
 
 ## Why these agents
 
@@ -57,7 +59,7 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses* 
 
 ## Checks and releases
 
-CI runs two independent jobs on every push: `scripts/check_frontmatter.py` (needs PyYAML) checks the YAML, the keys and the tool and model values each tool expects; `scripts/check_prompts_sync.py` (stdlib only) checks that every agent and skill exists in the three folders with an identical prompt, and prints a diff when one drifts. Pushing a tag `vX.Y.Z` publishes a release with one zip per tool.
+CI runs two independent jobs on every push: `scripts/check_frontmatter.py` (needs PyYAML) checks the YAML, the keys and the tool and model values each tool expects; `scripts/check_prompts_sync.py` (stdlib only) checks that every agent and skill exists in every tool folder with an identical prompt, and prints a diff when one drifts. Pushing a tag `vX.Y.Z` publishes a release with one zip per tool.
 
 ## Contributing
 

@@ -5,13 +5,14 @@ That the prompts match across tools is checked by check_prompts_sync.py."""
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-TOOLS = ("claude-code", "vs-code", "copilot-cli")
+TOOLS = ("claude-code", "vs-code", "copilot-cli", "opencode")
 
 # Per tool: agent file suffix, allowed tool names, how `tools` is written, accepted models.
 AGENT_RULES = {
@@ -33,7 +34,12 @@ AGENT_RULES = {
         "tools_type": "list",
         "models": None,
     },
+    # OpenCode has no `name` or `tools` key: the file name is the name, `permission` limits tools.
+    "opencode": {"suffix": ".md"},
 }
+OPENCODE_KEYS = {"description", "mode", "model", "permission"}
+OPENCODE_PERMISSIONS = {"edit", "webfetch", "bash", "read", "grep", "glob"}
+OPENCODE_MODEL = re.compile(r"^[a-z0-9-]+/[A-Za-z0-9._:-]+$")
 AGENT_KEYS = {"name", "description", "tools", "model"}
 SKILL_KEYS = {"name", "description"}
 errors: list[str] = []
@@ -78,7 +84,42 @@ def check_common(path: Path, data: dict, allowed: set[str], name: str) -> None:
         err(path, "description is longer than 1024 characters")
 
 
+def check_opencode_agent(path: Path) -> tuple[dict, str] | None:
+    parsed = split(path)
+    if parsed is None:
+        return None
+    data, body = parsed
+    for key in sorted(set(data) - OPENCODE_KEYS):
+        err(path, f"unknown key '{key}'")
+    for key in sorted(OPENCODE_KEYS - set(data)):
+        err(path, f"missing key '{key}'")
+    description = data.get("description")
+    if not isinstance(description, str) or not description.strip():
+        err(path, "description must be a non-empty string")
+    if data.get("mode") != "subagent":
+        err(path, f"mode must be 'subagent', got {data.get('mode')!r}")
+    model = data.get("model")
+    if not isinstance(model, str) or not OPENCODE_MODEL.match(model):
+        err(path, f"model must look like 'provider/model-id', got {model!r}")
+    permission = data.get("permission")
+    if not isinstance(permission, dict):
+        err(path, "permission must be a mapping")
+    else:
+        for key, value in permission.items():
+            if key not in OPENCODE_PERMISSIONS:
+                err(path, f"unknown permission '{key}'")
+            elif value not in ("allow", "ask", "deny"):
+                err(path, f"permission '{key}' must be allow, ask or deny, got {value!r}")
+        if permission.get("edit") != "deny":
+            err(path, "permission 'edit' must be 'deny': sub-agents never modify files")
+    if not body.strip():
+        err(path, "empty prompt")
+    return data, body
+
+
 def check_agent(tool: str, path: Path) -> tuple[dict, str] | None:
+    if tool == "opencode":
+        return check_opencode_agent(path)
     rules = AGENT_RULES[tool]
     name = path.name.removesuffix(rules["suffix"])
     parsed = split(path)

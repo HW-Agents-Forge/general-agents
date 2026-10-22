@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TOOLS = ("claude-code", "vs-code", "copilot-cli")
+TOOLS = ("claude-code", "vs-code", "copilot-cli", "opencode")
 REFERENCE = TOOLS[0]
 
 

@@ -21,7 +21,7 @@ jobs:
       - run: python scripts/check_prompts_sync.py
       - name: Build one archive per tool
         run: |
-          for tool in claude-code vs-code copilot-cli; do
+          for tool in claude-code vs-code copilot-cli opencode; do
             zip -r "general-agents-$tool-${GITHUB_REF_NAME}.zip" "agents/$tool" "skills/$tool"
           done
       - name: Publish
