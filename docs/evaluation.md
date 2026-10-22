@@ -9,7 +9,7 @@ For a given task, is the total consumption (primary agent **plus** sub-agent) lo
 ## Protocol
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart LR
     S(["🎯 real scenario"]) --> BL("Baseline<br/>primary agent alone")
     S --> DL("Delegation<br/>agent and atomic-tasks skill")
@@ -19,12 +19,12 @@ flowchart LR
     G -- "yes" --> K["✅ keep the agent"]
     G -- "no" --> W["🔧 rework or remove it"]
 
-    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
-    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
-    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
-    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
-    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
-    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+    classDef src fill:#3b82f622,stroke:#3b82f6,stroke-width:1.5px
+    classDef eng fill:#8b5cf622,stroke:#8b5cf6,stroke-width:1.5px
+    classDef out fill:#22c55e22,stroke:#22c55e,stroke-width:1.5px
+    classDef agent fill:#f59e0b22,stroke:#f59e0b,stroke-width:1.5px
+    classDef bad fill:#ef444422,stroke:#ef4444,stroke-width:1.5px
+    classDef quiet fill:#94a3b822,stroke:#94a3b8,stroke-width:1.5px
 
     class S quiet
     class BL,DL src

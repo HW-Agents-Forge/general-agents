@@ -3,16 +3,16 @@
 Principle: validate early, on a single agent and a single tool, before generalizing.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+%%{init: {"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48}}}%%
 flowchart LR
     M0("0 · Preparation<br/>🟡 in progress") --> M1("1 · Vertical slice<br/>✅ done")
     M1 --> M2("2 · First evaluation<br/>⚪ not started")
     M2 --> M3("3 · Full catalog<br/>🟡 in progress")
     M3 --> M4("4 · Multi-tool<br/>🟡 in progress")
     M4 --> M5("5 · Finishing<br/>🟡 in progress")
-    classDef done fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
-    classDef wip fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
-    classDef todo fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+    classDef done fill:#22c55e22,stroke:#22c55e,stroke-width:1.5px
+    classDef wip fill:#f59e0b22,stroke:#f59e0b,stroke-width:1.5px
+    classDef todo fill:#94a3b822,stroke:#94a3b8,stroke-width:1.5px
     class M1 done
     class M0,M3,M4,M5 wip
     class M2 todo

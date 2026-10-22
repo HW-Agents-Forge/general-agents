@@ -8,7 +8,7 @@
 
 Diagrams are Mermaid code blocks (GitHub renders them), never ASCII art. Quote node labels that contain punctuation, keep them short, and use `<br/>` for line breaks. Directory trees stay as plain code blocks.
 
-Style: flowcharts and state diagrams share one palette set in an `%%{init}%%` header (`theme: base`) and `classDef` classes: blue for inputs and decisions, violet for the engine, green for results, amber for agents, red for refusals and errors, grey for neutral nodes. Decisions are hexagons, start and end points are rounded. The palette uses light fills with dark text so it stays readable in GitHub's light and dark modes. Sequence diagrams carry no `init` header, so they follow GitHub's theme (custom text colors disappear on a dark background). Check every diagram parses and renders (Mermaid 11) before committing.
+Style: diagrams are transparent and take their text, lines and label chips from GitHub's own theme, so they look native in light and dark mode. Nodes get a tinted translucent fill and a colored border through `classDef` (8-digit hex such as `#3b82f622`, because commas inside `rgba()` break `classDef`): blue for inputs and decisions, violet for the engine, green for results, amber for agents, red for refusals and errors, grey for neutral nodes. Never set `theme`, `color` or other fixed text colors: a fixed dark text disappears on a dark background. The only `%%{init}%%` header allowed sets layout (curve, spacing). Decisions are hexagons, start and end points are rounded, and containers use `style <id> fill:none,stroke:#94a3b8,stroke-dasharray:5 5`. Check every diagram parses and renders (Mermaid 11) in a light and a dark page before committing.
 
 ## Python
 
