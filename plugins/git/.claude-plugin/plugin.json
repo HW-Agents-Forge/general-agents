@@ -1,6 +1,0 @@
-{
-  "name": "git",
-  "description": "Answers a question about git history or state (who changed a line, when, what a commit did, current status) with commits as evidence.",
-  "version": "0.1.0",
-  "license": "MIT"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "run",
-  "description": "Runs one exact command in the terminal's shell under a mandatory timeout and returns a short report.",
-  "version": "0.1.0",
-  "license": "MIT",
-  "agents": "copilot/agents",
-  "skills": "skills"
-}

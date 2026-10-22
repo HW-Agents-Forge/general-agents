@@ -12,60 +12,52 @@ There is no installer and no generator. This repository is a [Claude Code plugin
 
 ## Use it
 
-**Claude Code**
+There is no installer: you take the files you want and put them where your tool reads them. Get them either way:
 
-```
-/plugin marketplace add chabrioche/general-agents
-/plugin install run@general-agents
-```
+- **Clone** this repository, or
+- **Download a release** and unzip the archive for your tool (`general-agents-claude-code-*.zip`, `general-agents-vs-code-*.zip`, `general-agents-copilot-cli-*.zip`). Each contains `agents/<tool>/` and `skills/<tool>/`.
 
-**GitHub Copilot CLI**
+Then copy what you need:
 
-```
-copilot plugin marketplace add chabrioche/general-agents
-copilot plugin install run@general-agents
-```
-
-**VS Code (GitHub Copilot)**: add `chabrioche/general-agents` to the setting `chat.plugins.marketplaces`, then install the plugins from the Extensions view (agent plugins). Or copy the files by hand, see below.
-
-| Plugin | Contains | What it does |
+| Tool | Agents (`agents/<tool>/`) go to | Skills (`skills/<tool>/`) go to |
 |---|---|---|
-| [`run`](plugins/run) | agent `run`, skill `delegate-to-run` | Runs the exact command you give it (any shell) under a mandatory timeout and reports status, exit code and key lines |
-| [`find`](plugins/find) | agent `find`, skill `delegate-to-find` | Searches the codebase and returns paths, lines and a short answer |
-| [`diff`](plugins/diff) | agent `diff`, skill `delegate-to-diff` | Summarizes the changes between two files, directories or revisions |
-| [`git`](plugins/git) | agent `git`, skill `delegate-to-git` | Answers questions about git history and state, read-only |
-| [`svn`](plugins/svn) | agent `svn`, skill `delegate-to-svn` | Answers questions about Subversion history and state, read-only |
-| [`csh-pro`](plugins/csh-pro) | skill `csh-pro` | Verified csh and tcsh reference: bash-to-csh translation and pitfalls |
+| Claude Code | `~/.claude/agents/` or `<project>/.claude/agents/` | `~/.claude/skills/` or `<project>/.claude/skills/` |
+| Copilot CLI | `~/.copilot/agents/` or `<project>/.github/agents/` | `~/.copilot/skills/` or `<project>/.github/skills/` |
+| VS Code (Copilot) | `<project>/.github/agents/` | `<project>/.github/skills/` |
+
+Take an agent **and** its skill together: `delegate-to-run` teaches your primary agent when and how to call `run`.
+
+| Agent | Skill | What it does |
+|---|---|---|
+| `run` | `delegate-to-run` | Runs the exact command you give it (any shell) under a mandatory timeout and reports status, exit code and key lines |
+| `find` | `delegate-to-find` | Searches the codebase and returns paths, lines and a short answer |
+| `diff` | `delegate-to-diff` | Summarizes the changes between two files, directories or revisions |
+| `git` | `delegate-to-git` | Answers questions about git history and state, read-only |
+| `svn` | `delegate-to-svn` | Answers questions about Subversion history and state, read-only |
+| none | `csh-pro` | Verified csh and tcsh reference: bash-to-csh translation and pitfalls |
 
 Every agent replies in a fixed, short format (at most 20 lines); contracts are in the [agent catalog](docs/agents-catalog.md).
 
-## Two formats, one prompt
+## Layout: one folder per tool
 
-The agent frontmatter differs between the tools (tool names, model names), so each plugin carries two copies of the same prompt:
+```
+agents/claude-code/   run.md, find.md, ...             tools: Bash, model: haiku
+agents/vs-code/       run.agent.md, ...                tools: ["execute"], qualified model name
+agents/copilot-cli/   run.agent.md, ...                same format, kept separate on purpose
+skills/<tool>/        delegate-to-run/SKILL.md, csh-pro/SKILL.md, ...
+```
 
-- `plugins/<name>/agents/<name>.md`: Claude Code (`tools: Bash`, `model: haiku`).
-- `plugins/<name>/copilot/agents/<name>.agent.md`: Copilot CLI and VS Code (`tools: ["execute"]`, `model: "Claude Haiku 5.5 (copilot)"`).
-- `plugins/<name>/skills/*/SKILL.md`: the skills, one shared copy.
+The prompts are the same everywhere; only the frontmatter differs. There is no generator: you edit each copy, and CI fails when they drift apart.
 
-Each plugin has a manifest for each tool (`.claude-plugin/plugin.json`, `.github/plugin/plugin.json`), and so does the marketplace. `scripts/check` fails if the two prompts or the two marketplace files drift apart; there is no generator, you edit both files.
-
-To use the files without plugins, copy them: `agents/*.md` to `~/.claude/agents/`, `copilot/agents/*.agent.md` to `~/.copilot/agents/` (user) or `.github/agents/` (project), skills to `~/.claude/skills/`, `~/.copilot/skills/` or `.github/skills/`.
-
-> **Not yet verified on the real tools.** I could not read the Copilot and VS Code documentation from the development environment, so these points come from search excerpts: the exact Copilot model identifier (a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, the `agents`/`skills` fields of `.github/plugin/plugin.json`, and the VS Code marketplace setting. Please test and tell me what breaks.
+> **Not yet verified on the real tools.** The documentation of Copilot and VS Code could not be read from the development environment, so these frontmatters come from search excerpts: the exact model identifier (`Claude Haiku 5.5 (copilot)`; a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, and the tool names. Test them and report what breaks.
 
 ## Why these agents
 
 Delegation has a fixed cost, so an agent earns its place only if it *condenses* a large output into a short answer. That is why there is no `read`, `write` or `list` agent: your primary agent already does those cheaply. Whether each agent pays for itself is checked with the [evaluation protocol](docs/evaluation.md).
 
-## Repository layout
+## Checks and releases
 
-```
-.claude-plugin/marketplace.json   the catalog of plugins
-.github/plugin/marketplace.json  the same catalog, for Copilot
-plugins/<name>/                   one plugin: agents/, copilot/agents/, skills/, two manifests
-scripts/check                     static validation of the marketplace (sh and jq)
-docs/                             agent catalog and evaluation protocol
-```
+CI runs `scripts/check_frontmatter.py` (needs PyYAML) on every push: valid YAML, the keys, tool and model values each tool expects, and the same agents, skills, prompts and descriptions in all three folders. Pushing a tag `vX.Y.Z` publishes a release with one zip per tool.
 
 ## Contributing
 

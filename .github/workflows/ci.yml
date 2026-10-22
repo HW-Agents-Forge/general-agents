@@ -8,9 +8,13 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  frontmatter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate the marketplace
-        run: ./scripts/check
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pyyaml
+      - name: Check the frontmatter of agents and skills
+        run: python scripts/check_frontmatter.py

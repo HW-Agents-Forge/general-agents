@@ -1,6 +1,0 @@
-{
-  "name": "find",
-  "description": "Searches the codebase and returns paths, lines and a short answer.",
-  "version": "0.1.0",
-  "license": "MIT"
-}

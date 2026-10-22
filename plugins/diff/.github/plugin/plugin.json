@@ -1,8 +1,0 @@
-{
-  "name": "diff",
-  "description": "Summarizes the changes between two files, directories or revisions.",
-  "version": "0.1.0",
-  "license": "MIT",
-  "agents": "copilot/agents",
-  "skills": "skills"
-}

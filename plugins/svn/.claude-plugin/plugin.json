@@ -1,6 +1,0 @@
-{
-  "name": "svn",
-  "description": "Answers a question about Subversion history or working copy state (who changed a line, when, what a revision did, current status) with revisions as evidence.",
-  "version": "0.1.0",
-  "license": "MIT"
-}
