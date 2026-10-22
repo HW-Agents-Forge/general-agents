@@ -71,12 +71,6 @@ def test_skill_rejects_frontmatter(tmp_path: Path) -> None:
         parse_skill(write(folder, "SKILL.md", "---\nname: x\n---\nbody\n"))
 
 
-def test_common_rules_are_appended_to_the_prompt_not_the_description(tmp_path: Path) -> None:
-    agent = parse_agent(write(tmp_path, "run.md", AGENT), SPEC, common="Rules for every agent.")
-    assert agent.description == "Runs a command."
-    assert agent.body == AGENT.strip() + "\n\nRules for every agent."
-
-
 def test_skill_references(tmp_path: Path) -> None:
     folder = tmp_path / "atomic-tasks"
     folder.mkdir()

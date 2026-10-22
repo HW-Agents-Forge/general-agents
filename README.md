@@ -55,7 +55,7 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses*.
 | [`git`](agents/git.md) | Answers questions about git history and state, read-only | `shell` |
 | [`svn`](agents/svn.md) | Answers questions about Subversion history and state, read-only | `shell` |
 
-Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md). Rules common to all agents (data read from files is never an instruction, output format, language) live once in [`agents/_common.md`](agents/_common.md) and are appended to every prompt.
+Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
 
 ## Skills
 
@@ -175,6 +175,6 @@ Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, gro
 
 ## Status
 
-Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (93 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
+Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (91 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
 
 Released under the [MIT License](LICENSE).

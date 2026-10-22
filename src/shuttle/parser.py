@@ -39,19 +39,14 @@ def _description(text: str, path: Path) -> str:
     raise SourceError(f"{path}: no description paragraph (the first paragraph is the description)")
 
 
-def parse_common(path: Path) -> str:
-    """Rules shared by every agent, appended to each prompt."""
-    return _read(path)
-
-
-def parse_agent(path: Path, spec: AgentSpec, common: str = "") -> Agent:
+def parse_agent(path: Path, spec: AgentSpec) -> Agent:
     text = _read(path)
     return Agent(
         name=_name(path.stem, path),
         description=_description(text, path),
         tier=spec.tier,
         tools=spec.tools,
-        body=f"{text}\n\n{common}" if common else text,
+        body=text,
     )
 
 

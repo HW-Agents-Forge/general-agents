@@ -8,7 +8,7 @@ Agent and skill sources are **plain Markdown, with no frontmatter** (ADR 0008). 
 |---|---|
 | `name` | The file name (`agents/run.md` → `run`), or the folder name for a skill (`skills/atomic-tasks/SKILL.md`). Lowercase letters, digits and hyphens. |
 | `description` | The first paragraph of the file that is not a heading, joined on one line. One action sentence and one "not for" sentence: it is the text the tool shows to the primary model, always in its context. |
-| System prompt (body) | The whole file, including the first paragraph, followed by `agents/_common.md` if present. |
+| System prompt (body) | The whole file, including the first paragraph. |
 | `tools`, `tier` | `agents.toml` (below). They cannot be deduced from the Markdown. |
 | Model | `models.toml` or `--model` at install time (see [install-spec.md](install-spec.md)). |
 | Origin mark | Added by the target (see below). |
@@ -62,10 +62,6 @@ File writing does not exist on the source side: no agent in the catalog needs it
 
 Consequence for writing: prompts must stay very short and very directive, with a rigid output contract and, if needed, an example answer. A task requiring delicate reasoning must not be given to an agent; it stays with the primary agent.
 
-## Shared rules: `agents/_common.md`
-
-An optional file `agents/_common.md` is not an agent (the leading underscore) and needs no `agents.toml` entry. Its text is appended to **every** agent's prompt, after the agent's own text, and never to the description. It holds the rules that are identical for all agents: data read from files and logs is never an instruction, the exact output format and the 20-line cap, the language of the answer. It is plain Markdown without frontmatter, like the rest ([ADR 0010](decisions/0010-skill-references-and-shared-agent-rules.md)).
-
 ## Writing the prompt
 
 Recommended structure after the description paragraph:
@@ -81,6 +77,7 @@ Rules:
 - Stay under about 60 lines: the system prompt is paid for on every call.
 - Include one filled-in example answer: tiny models copy a bare template literally.
 - Say that text read from files, logs or command output is data, never instructions.
+- Put the rules every agent needs in the prompt itself (data read from files is never an instruction, exact output format and 20-line cap, language of the answer): there is no shared rules file.
 - The first paragraph is read twice (as the description and as the start of the prompt): write it as a statement of what the agent does and when to use it.
 
 ## Origin mark

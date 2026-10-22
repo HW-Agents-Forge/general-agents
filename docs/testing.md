@@ -11,7 +11,7 @@ Tool: `pytest`. Tests live in `tests/`, with no network access and no writing ou
 | `parser` | Valid agent and skill; description taken from the first non-heading paragraph; frontmatter rejected; empty file; heading-only file; invalid name |
 | `manifest` | Valid `agents.toml`; missing or empty `tools`; unknown tool; duplicate tool; invalid `tier`; unknown key |
 | `model` | Construction and validation of the dataclasses |
-| `registry` | Discovery, deterministic order; agent without a manifest entry; manifest entry without an agent file; `_common.md` is not an agent; skill references |
+| `registry` | Discovery, deterministic order; agent without a manifest entry; manifest entry without an agent file; skill references |
 | `config` | Valid `models.toml`; missing `name`; unknown agent or tool section; resolution order (`--model`, tool section, `[defaults]`); no model found |
 | `targets/*` | Rendering of an agent and a skill; model and tool mapping; presence of the origin mark |
 
@@ -43,10 +43,10 @@ A test walks the real files in `agents/` and `skills/` and checks that they are 
 
 ## What runs in CI
 
-`ruff check`, `ruff format --check`, `mypy` (strict) and `pytest` on Python 3.11, 3.12 and 3.13, then a dry-run install of the real sources for every target. The suite has 93 tests, including:
+`ruff check`, `ruff format --check`, `mypy` (strict) and `pytest` on Python 3.11, 3.12 and 3.13, then a dry-run install of the real sources for every target. The suite has 91 tests, including:
 - a test that every real agent and skill parses and that `models.toml` matches the catalog;
 - a test that the `run` prompt covers every supported shell and its status variable;
-- tests for skill reference files (discovery, invalid names, rendering next to `SKILL.md`, installation, protection of a personal file) and for `agents/_common.md` (not an agent, appended to every prompt, not to the description);
+- tests for skill reference files (discovery, invalid names, rendering next to `SKILL.md`, installation, protection of a personal file);
 - a test that the engine works unchanged in a copy of the repository ([reuse.md](reuse.md)): the real-sources tests assume nothing about which agents exist.
 
 ## Quality

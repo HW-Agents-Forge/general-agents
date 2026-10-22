@@ -4,7 +4,7 @@
 
 ```
 general-agents/
-├── agents/                     # one .md per agent, plus _common.md (rules for all)
+├── agents/                     # neutral descriptions, one .md per agent
 ├── skills/
 │   ├── atomic-tasks/           # SKILL.md plus examples-*.md references
 │   └── csh-pro/SKILL.md
