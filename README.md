@@ -12,11 +12,21 @@ There is no installer and no generator. This repository is a [Claude Code plugin
 
 ## Use it
 
+**Claude Code**
+
 ```
 /plugin marketplace add chabrioche/general-agents
 /plugin install run@general-agents
-/plugin install git@general-agents
 ```
+
+**GitHub Copilot CLI**
+
+```
+copilot plugin marketplace add chabrioche/general-agents
+copilot plugin install run@general-agents
+```
+
+**VS Code (GitHub Copilot)**: add `chabrioche/general-agents` to the setting `chat.plugins.marketplaces`, then install the plugins from the Extensions view (agent plugins). Or copy the files by hand, see below.
 
 | Plugin | Contains | What it does |
 |---|---|---|
@@ -29,14 +39,19 @@ There is no installer and no generator. This repository is a [Claude Code plugin
 
 Every agent replies in a fixed, short format (at most 20 lines); contracts are in the [agent catalog](docs/agents-catalog.md).
 
-## Not using Claude Code, or want to adapt them?
+## Two formats, one prompt
 
-Nothing is hidden behind a script. Copy the files you want:
+The agent frontmatter differs between the tools (tool names, model names), so each plugin carries two copies of the same prompt:
 
-- `plugins/<name>/agents/<name>.md`: a sub-agent. The frontmatter is Claude Code's (`name`, `description`, `tools`, `model`); the body is the prompt and works in any tool that supports Markdown agents. Change `model: haiku` to whatever your tool calls its smallest model.
-- `plugins/<name>/skills/*/SKILL.md`: a skill, the open `SKILL.md` format.
+- `plugins/<name>/agents/<name>.md`: Claude Code (`tools: Bash`, `model: haiku`).
+- `plugins/<name>/copilot/agents/<name>.agent.md`: Copilot CLI and VS Code (`tools: ["execute"]`, `model: "Claude Haiku 5.5 (copilot)"`).
+- `plugins/<name>/skills/*/SKILL.md`: the skills, one shared copy.
 
-Put them in `~/.claude/agents/` and `~/.claude/skills/` (or `.claude/` in a project), or in the equivalent folders of your tool. Updates are yours to take: `git pull` and copy again.
+Each plugin has a manifest for each tool (`.claude-plugin/plugin.json`, `.github/plugin/plugin.json`), and so does the marketplace. `scripts/check` fails if the two prompts or the two marketplace files drift apart; there is no generator, you edit both files.
+
+To use the files without plugins, copy them: `agents/*.md` to `~/.claude/agents/`, `copilot/agents/*.agent.md` to `~/.copilot/agents/` (user) or `.github/agents/` (project), skills to `~/.claude/skills/`, `~/.copilot/skills/` or `.github/skills/`.
+
+> **Not yet verified on the real tools.** I could not read the Copilot and VS Code documentation from the development environment, so these points come from search excerpts: the exact Copilot model identifier (a wrong one makes the agent fall back silently to the default model), whether Copilot CLI honors `model`, the `agents`/`skills` fields of `.github/plugin/plugin.json`, and the VS Code marketplace setting. Please test and tell me what breaks.
 
 ## Why these agents
 
@@ -46,7 +61,8 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses* 
 
 ```
 .claude-plugin/marketplace.json   the catalog of plugins
-plugins/<name>/                   one plugin: .claude-plugin/plugin.json, agents/, skills/
+.github/plugin/marketplace.json  the same catalog, for Copilot
+plugins/<name>/                   one plugin: agents/, copilot/agents/, skills/, two manifests
 scripts/check                     static validation of the marketplace (sh and jq)
 docs/                             agent catalog and evaluation protocol
 ```

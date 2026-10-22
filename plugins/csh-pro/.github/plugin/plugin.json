@@ -1,0 +1,7 @@
+{
+  "name": "csh-pro",
+  "description": "Verified csh and tcsh reference: bash-to-csh translation and pitfalls.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "skills": "skills"
+}
