@@ -1,44 +1,65 @@
-name: New target tool
+name: 🔌 New target tool
 description: Request support for another agentic tool.
-title: "[Target] "
+title: "target: "
 labels: ["enhancement"]
 body:
-  - type: input
-    id: tool
-    attributes:
-      label: Tool
-      description: Name and version.
-    validations:
-      required: true
-  - type: input
-    id: docs
-    attributes:
-      label: Link to the official documentation for its custom agents
-    validations:
-      required: true
-  - type: textarea
-    id: format
-    attributes:
-      label: Agent file format
-      description: Location (user level and project level), file name, frontmatter keys, how tools and the model are declared.
-    validations:
-      required: true
-  - type: textarea
-    id: models
-    attributes:
-      label: Models
-      description: Identifier format for models, and the smallest model available.
-  - type: textarea
-    id: skills
-    attributes:
-      label: Skills
-      description: Whether `SKILL.md` skills are supported and where they live.
-  - type: textarea
-    id: mark
-    attributes:
-      label: Origin mark
-      description: Does the tool accept free keys in the frontmatter? If not, a comment in the body is used.
   - type: markdown
     attributes:
       value: |
-        See [docs/targets.md](https://github.com/chabrioche/general-agents/blob/main/docs/targets.md) for what a target needs, and [docs/tool-differences.md](https://github.com/chabrioche/general-agents/blob/main/docs/tool-differences.md) for how existing tools compare.
+        ## 🔌 Request a new target
+
+        See [docs/targets.md](https://github.com/chabrioche/general-agents/blob/main/docs/targets.md) for what a target needs and [docs/tool-differences.md](https://github.com/chabrioche/general-agents/blob/main/docs/tool-differences.md) for how existing tools compare.
+
+  - type: input
+    id: tool
+    attributes:
+      label: 🛠️ Tool and version
+      placeholder: "Example CLI 1.4"
+    validations:
+      required: true
+
+  - type: input
+    id: docs
+    attributes:
+      label: 📖 Official documentation for custom agents
+      placeholder: "https://..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: format
+    attributes:
+      label: 📄 Agent file format
+      description: Location (user and project level), file name, frontmatter keys, how tools and the model are declared.
+    validations:
+      required: true
+
+  - type: textarea
+    id: models
+    attributes:
+      label: 🧠 Models
+      description: Model identifier format, and the smallest model available.
+
+  - type: textarea
+    id: skills
+    attributes:
+      label: 🎓 Skills
+      description: Are `SKILL.md` skills supported, and where do they live?
+
+  - type: dropdown
+    id: mark
+    attributes:
+      label: 🔖 Free keys in the frontmatter?
+      description: Decides how the origin mark is written (a key, or a comment in the body).
+      options:
+        - Yes, unknown keys are accepted
+        - No, unknown keys are rejected
+        - Not sure
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: 🙌 Contribution
+      options:
+        - label: I can test the target on a real installation.
+        - label: I would be willing to implement it.
