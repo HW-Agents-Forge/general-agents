@@ -19,6 +19,7 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 - [Quick start](#quick-start)
 - [Configuration](#configuration)
 - [Supported tools](#supported-tools)
+- [Reusing it elsewhere](#reusing-it-elsewhere)
 - [Safety guarantees](#safety-guarantees)
 - [Development](#development)
 - [Repository layout](#repository-layout)
@@ -116,6 +117,10 @@ Details: [agent format](docs/agent-format.md), [installer specification](docs/in
 | OpenCode | `opencode` | Planned |
 
 How the tools differ, with sources: [tool differences](docs/tool-differences.md).
+
+## Reusing it elsewhere
+
+`shuttle` is meant to be **copied** into other repositories, each with its own agents. Copy `install` and `src/shuttle/`, write your own `agents/`, `agents.toml` and `models.toml`, and give `models.toml` a different `name`. The checklist and the way to keep the engine in sync are in [docs/reuse.md](docs/reuse.md).
 
 ## Safety guarantees
 

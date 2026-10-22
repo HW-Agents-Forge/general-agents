@@ -12,6 +12,7 @@ Index of the design documents. Read them in this order for a first overview.
 | [targets.md](targets.md) | Target tools (VS Code, Copilot CLI, OpenCode) and mappings |
 | [tool-differences.md](tool-differences.md) | Differences between the three tools, with sources |
 | [install-spec.md](install-spec.md) | `install` CLI, safety, origin mark |
+| [reuse.md](reuse.md) | Copying shuttle into another repository |
 | [evaluation.md](evaluation.md) | Measuring token savings |
 | [testing.md](testing.md) | Test strategy |
 | [conventions.md](conventions.md) | Code, commit and contribution conventions |
