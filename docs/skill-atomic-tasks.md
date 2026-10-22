@@ -66,6 +66,12 @@ When and how to delegate voluminous tasks (execution, search, diff, history) to 
 ...
 ```
 
+## Companion skill: `csh-pro`
+
+`skills/csh-pro/SKILL.md` is a reference for writing csh and tcsh commands and scripts: a bash-to-csh translation table, verified pitfalls (unmatched globs abort, loops must start their own line, `@` needs spaces, `\$` does not escape in double quotes, pipeline status) and when to switch to Python or bash. Its facts were checked against tcsh. It exists because models drift to bash syntax in csh, which also breaks the commands handed to `run`.
+
+Only the primary agent loads it, when it writes csh. It is deliberately not preloaded into `run`: preloading injects the full skill on every call, which costs more than the shell table `run` already carries. Workplace-specific conventions (script names, environment setup) belong in the other repository's own skill, not here.
+
 ## Constraints
 
 - Stay short: the skill is loaded into the primary agent's context; every line has a cost.

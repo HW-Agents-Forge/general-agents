@@ -145,7 +145,7 @@ CI runs the same checks on Python 3.11, 3.12 and 3.13, plus a dry-run install of
 
 ```
 agents/          one Markdown prompt per agent
-skills/          the atomic-tasks skill
+skills/          the atomic-tasks and csh-pro skills
 agents.toml      tools and tier of each agent
 models.toml      repository name and models
 install          thin executable calling shuttle
