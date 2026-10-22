@@ -60,7 +60,7 @@ Add a failing test first, then the fix. `installer` changes need tests for the u
 - One idea per pull request, with imperative commit messages and a short first line.
 - CI must be green: lint, format, types, tests and the installer smoke test.
 - Update the documentation your change touches, and the golden files if a target's output changes on purpose.
-- Describe what changed and why, and how you checked it.
+- Fill in the pull request template: what changed and why, the checklist, and how you checked it.
 
 ## Reporting problems
 
