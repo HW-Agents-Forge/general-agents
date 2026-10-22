@@ -11,7 +11,7 @@ from typing import NoReturn
 from .config import CONFIG_FILE, Config, check_agents, load_config, parse_overrides, resolve_model
 from .errors import ShuttleError, UsageError
 from .installer import Action, Outcome, PlannedFile, install, plan
-from .model import Catalog
+from .model import Catalog, Scope
 from .registry import discover
 from .targets import TARGETS, get_target
 from .targets.base import reference_path, render_reference
@@ -36,17 +36,26 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--dry-run", action="store_true", help="show what would be written")
     parser.add_argument("--yes", action="store_true", help="do not ask for confirmation")
-    parser.add_argument("--home", type=Path, default=None, help="substitute home directory")
+    parser.add_argument(
+        "--scope",
+        choices=[scope.value for scope in Scope],
+        default=Scope.USER.value,
+        help="user: install in the home directory (default); project: install in a project",
+    )
+    parser.add_argument("--home", type=Path, default=None, help="user scope: substitute home")
+    parser.add_argument(
+        "--project", type=Path, default=None, help="project scope: project root (default: .)"
+    )
     return parser
 
 
 def _build_files(
-    catalog: Catalog, config: Config, target_name: str, overrides: dict[str, str]
+    catalog: Catalog, config: Config, target_name: str, overrides: dict[str, str], scope: Scope
 ) -> list[PlannedFile]:
     target = get_target(target_name)
     files = [
         PlannedFile(
-            target.agent_path(agent),
+            target.agent_path(agent, scope),
             target.render_agent(
                 agent,
                 resolve_model(config, target_name, agent.name, agent.tier, overrides),
@@ -56,10 +65,12 @@ def _build_files(
         for agent in catalog.agents
     ]
     for skill in catalog.skills:
-        files.append(PlannedFile(target.skill_path(skill), target.render_skill(skill, config.name)))
+        files.append(
+            PlannedFile(target.skill_path(skill, scope), target.render_skill(skill, config.name))
+        )
         files += [
             PlannedFile(
-                reference_path(target, skill, reference),
+                reference_path(target, skill, reference, scope),
                 render_reference(reference, config.name),
             )
             for reference in skill.references
@@ -85,14 +96,26 @@ def _report(outcomes: list[Outcome], dry_run: bool) -> None:
     print(", ".join(f"{counts[action]} {action.value}" for action in Action))
 
 
+def _destination(args: argparse.Namespace, scope: Scope) -> Path:
+    """The directory the relative paths of the targets are resolved against."""
+    if scope is Scope.USER:
+        if args.project is not None:
+            raise UsageError("--project only applies with --scope project")
+        return (args.home if args.home is not None else Path.home()).expanduser()
+    if args.home is not None:
+        raise UsageError("--home only applies with --scope user")
+    return (args.project if args.project is not None else Path.cwd()).expanduser()
+
+
 def run(argv: Sequence[str] | None, root: Path) -> int:
     args = build_parser().parse_args(argv)
     config = load_config(root / CONFIG_FILE, TARGETS)
     catalog = discover(root)
     check_agents(config, catalog.agent_names())
     overrides = parse_overrides(args.model, catalog.agent_names())
-    files = _build_files(catalog, config, args.target, overrides)
-    home = (args.home if args.home is not None else Path.home()).expanduser()
+    scope = Scope(args.scope)
+    files = _build_files(catalog, config, args.target, overrides, scope)
+    home = _destination(args, scope)
 
     if not args.dry_run:
         preview = plan(home, files, config.name)

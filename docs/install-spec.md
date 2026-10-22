@@ -7,7 +7,7 @@
 Targets available today: `claude-code`, `copilot-cli`. `vscode` and `opencode` will be added later (see [targets.md](targets.md)).
 
 ```
-install --target {claude-code,copilot-cli} [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH]
+install --target {claude-code,copilot-cli} [--scope {user,project}] [--model AGENT=MODEL]... [--dry-run] [--yes] [--home PATH | --project PATH]
 ```
 
 | Option | Effect |
@@ -16,7 +16,20 @@ install --target {claude-code,copilot-cli} [--model AGENT=MODEL]... [--dry-run] 
 | `--model AGENT=MODEL` | Repeatable. Sets the model of **one** agent for this run. Never applies to all agents. An unknown agent name is a usage error. |
 | `--dry-run` | Shows every file that would be created or updated, without writing anything. |
 | `--yes` | Do not ask for confirmation. Without it, `install` lists what it will write and asks `[y/N]`; without an interactive terminal it refuses to write (usage error, code 3). |
-| `--home PATH` | Substitute home root (tests and trials). |
+| `--scope` | `user` (default) installs in the home; `project` installs inside a project ([ADR 0011](decisions/0011-install-scope.md)). |
+| `--home PATH` | User scope only: substitute home root (tests and trials). |
+| `--project PATH` | Project scope only: project root, default the current directory. |
+
+`--home` with `--scope project`, or `--project` with `--scope user`, is a usage error (code 3).
+
+### Where files go
+
+| Target | User scope | Project scope |
+|---|---|---|
+| `claude-code` | `~/.claude/agents/`, `~/.claude/skills/` | `<project>/.claude/agents/`, `<project>/.claude/skills/` |
+| `copilot-cli` | `~/.copilot/agents/`, `~/.copilot/skills/` | `<project>/.github/agents/`, `<project>/.github/skills/` |
+
+The installer writes only these agent and skill files. It never reads or modifies any other file of the destination, such as an existing instructions file.
 
 ## Models and `models.toml`
 

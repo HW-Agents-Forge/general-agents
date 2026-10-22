@@ -81,7 +81,11 @@ cd general-agents
 ./install --target claude-code
 ```
 
-`--target` is required and takes one tool per run.
+`--target` is required and takes one tool per run. By default agents go in your home; to install inside a project (next to its own configuration), use `--scope project`:
+
+```sh
+./install --target claude-code --scope project --project /path/to/project
+```
 
 Choose a model for one agent without touching any file:
 
@@ -175,6 +179,6 @@ Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, gro
 
 ## Status
 
-Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (91 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
+Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (95 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
 
 Released under the [MIT License](LICENSE).

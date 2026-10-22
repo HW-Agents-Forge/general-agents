@@ -11,7 +11,7 @@ import json
 from pathlib import PurePath
 
 from ..mark import MARK_KEY
-from ..model import Agent, Skill, Tool
+from ..model import Agent, Scope, Skill, Tool
 
 TOOL_NAMES: dict[Tool, tuple[str, ...]] = {
     Tool.READ: ("Read",),
@@ -28,10 +28,11 @@ def _quote(value: str) -> str:
 class ClaudeCodeTarget:
     name = "claude-code"
 
-    def agent_path(self, agent: Agent) -> PurePath:
+    # `~/.claude/` and `<project>/.claude/` share the same layout.
+    def agent_path(self, agent: Agent, scope: Scope = Scope.USER) -> PurePath:
         return PurePath(".claude", "agents", f"{agent.name}.md")
 
-    def skill_path(self, skill: Skill) -> PurePath:
+    def skill_path(self, skill: Skill, scope: Scope = Scope.USER) -> PurePath:
         return PurePath(".claude", "skills", skill.name, "SKILL.md")
 
     def render_agent(self, agent: Agent, model: str, mark_name: str) -> str:

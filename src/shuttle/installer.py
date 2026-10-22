@@ -92,7 +92,7 @@ def install(
 ) -> list[Outcome]:
     """Apply the plan (or only report it with `dry_run`). Refused files are skipped."""
     if not home.is_dir():
-        raise UsageError(f"{home}: the home directory does not exist")
+        raise UsageError(f"{home}: the destination directory does not exist")
     root = home.resolve()
     decisions = [_decide(root, planned, mark_name) for planned in files]
     if not dry_run:

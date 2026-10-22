@@ -48,3 +48,20 @@ def test_reference_files_sit_next_to_the_skill_and_carry_the_mark(name: str) -> 
     rendered = render_reference(reference, "test-repo")
     assert read_mark(rendered) == "test-repo"
     assert rendered == "<!-- managed-by: test-repo -->\n\n# Examples\n\nOne.\n"
+
+
+def test_project_scope_paths() -> None:
+    from shuttle.model import Agent as AgentModel
+    from shuttle.model import Scope, Skill, Tier, Tool
+
+    agent = AgentModel("run", "d", Tier.SMALL, (Tool.SHELL,), "b")
+    skill = Skill(name="atomic-tasks", description="d", body="b")
+    claude, copilot = get_target("claude-code"), get_target("copilot-cli")
+    # Claude Code: `.claude/` at user level and in a project
+    assert claude.agent_path(agent, Scope.PROJECT) == claude.agent_path(agent, Scope.USER)
+    assert str(claude.agent_path(agent, Scope.PROJECT)) == ".claude/agents/run.md"
+    # Copilot CLI: `.copilot/` for the user, `.github/` in a project
+    assert str(copilot.agent_path(agent, Scope.USER)) == ".copilot/agents/run.agent.md"
+    assert str(copilot.agent_path(agent, Scope.PROJECT)) == ".github/agents/run.agent.md"
+    assert str(copilot.skill_path(skill, Scope.USER)) == ".copilot/skills/atomic-tasks/SKILL.md"
+    assert str(copilot.skill_path(skill, Scope.PROJECT)) == ".github/skills/atomic-tasks/SKILL.md"

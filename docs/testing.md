@@ -31,6 +31,7 @@ In a temporary fake home:
 
 - Exit codes for each case of the table in [install-spec.md](install-spec.md).
 - `--target` missing or unknown: usage error, nothing is written.
+- Project scope: files land under the project, an existing instructions file is untouched, the home stays empty; `--home` and `--project` cannot be mixed up.
 - Readable output for `--dry-run`.
 
 ## Reference tests (golden files)
@@ -43,7 +44,7 @@ A test walks the real files in `agents/` and `skills/` and checks that they are 
 
 ## What runs in CI
 
-`ruff check`, `ruff format --check`, `mypy` (strict) and `pytest` on Python 3.11, 3.12 and 3.13, then a dry-run install of the real sources for every target. The suite has 91 tests, including:
+`ruff check`, `ruff format --check`, `mypy` (strict) and `pytest` on Python 3.11, 3.12 and 3.13, then a dry-run install of the real sources for every target. The suite has 95 tests, including:
 - a test that every real agent and skill parses and that `models.toml` matches the catalog;
 - a test that the `run` prompt covers every supported shell and its status variable;
 - tests for skill reference files (discovery, invalid names, rendering next to `SKILL.md`, installation, protection of a personal file);

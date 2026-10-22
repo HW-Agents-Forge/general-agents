@@ -92,3 +92,33 @@ def test_skill_reference_files_are_installed_and_protected(repo: Path, home: Pat
     reference.write_text("personal notes\n")
     assert run(repo, home, "--target", "claude-code", "--yes") == 1
     assert reference.read_text() == "personal notes\n"
+
+
+def test_project_scope_installs_in_the_project(repo: Path, home: Path, tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    project.mkdir()
+    (project / "AGENT.md").write_text("existing instructions\n")
+    args = ["--scope", "project", "--project", str(project), "--yes"]
+    assert main(["--target", "copilot-cli", *args], root=repo) == 0
+    assert (project / ".github" / "agents" / "run.agent.md").is_file()
+    assert (project / ".github" / "skills" / "atomic-tasks" / "SKILL.md").is_file()
+    assert main(["--target", "claude-code", *args], root=repo) == 0
+    assert (project / ".claude" / "agents" / "run.md").is_file()
+    assert (project / "AGENT.md").read_text() == "existing instructions\n"
+    assert list(home.iterdir()) == []
+
+
+def test_project_scope_defaults_to_the_working_directory(
+    repo: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    project = tmp_path / "project"
+    project.mkdir()
+    monkeypatch.chdir(project)
+    assert main(["--target", "claude-code", "--scope", "project", "--yes"], root=repo) == 0
+    assert (project / ".claude" / "agents" / "run.md").is_file()
+
+
+def test_scope_options_must_match(repo: Path, home: Path, tmp_path: Path) -> None:
+    assert run(repo, home, "--target", "claude-code", "--scope", "project", "--yes") == 3
+    assert run(repo, home, "--target", "claude-code", "--project", str(tmp_path), "--yes") == 3
+    assert list(home.iterdir()) == []

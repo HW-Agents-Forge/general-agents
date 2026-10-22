@@ -10,6 +10,13 @@ NAME_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 REFERENCE_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*\.md$")
 
 
+class Scope(StrEnum):
+    """Where agents are installed: for the user (home) or inside one project."""
+
+    USER = "user"
+    PROJECT = "project"
+
+
 class Tier(StrEnum):
     """Model tiers. `small` is the only one (ADR 0006)."""
 

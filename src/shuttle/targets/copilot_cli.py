@@ -11,7 +11,7 @@ import json
 from pathlib import PurePath
 
 from ..mark import MARK_KEY
-from ..model import Agent, Skill, Tool
+from ..model import Agent, Scope, Skill, Tool
 
 TOOL_NAMES = {
     Tool.READ: "read",
@@ -28,11 +28,16 @@ def _quote(value: str) -> str:
 class CopilotCliTarget:
     name = "copilot-cli"
 
-    def agent_path(self, agent: Agent) -> PurePath:
-        return PurePath(".copilot", "agents", f"{agent.name}.agent.md")
+    # User level lives in `~/.copilot/`, project level in `<project>/.github/`.
+    @staticmethod
+    def _base(scope: Scope) -> str:
+        return ".copilot" if scope is Scope.USER else ".github"
 
-    def skill_path(self, skill: Skill) -> PurePath:
-        return PurePath(".copilot", "skills", skill.name, "SKILL.md")
+    def agent_path(self, agent: Agent, scope: Scope = Scope.USER) -> PurePath:
+        return PurePath(self._base(scope), "agents", f"{agent.name}.agent.md")
+
+    def skill_path(self, skill: Skill, scope: Scope = Scope.USER) -> PurePath:
+        return PurePath(self._base(scope), "skills", skill.name, "SKILL.md")
 
     def render_agent(self, agent: Agent, model: str, mark_name: str) -> str:
         tools = ", ".join(_quote(TOOL_NAMES[tool]) for tool in agent.tools)
