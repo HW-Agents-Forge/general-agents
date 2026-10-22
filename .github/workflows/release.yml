@@ -1,0 +1,30 @@
+name: Release
+
+# Push a tag such as v0.1.0 to publish one archive per tool.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pyyaml
+      - run: python scripts/check_frontmatter.py
+      - run: python scripts/check_prompts_sync.py
+      - name: Build one archive per tool
+        run: |
+          for tool in claude-code vs-code copilot-cli; do
+            zip -r "general-agents-$tool-${GITHUB_REF_NAME}.zip" "agents/$tool" "skills/$tool"
+          done
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes general-agents-*.zip

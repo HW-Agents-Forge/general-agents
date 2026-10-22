@@ -8,7 +8,7 @@ body:
       value: |
         ## 🤖 Propose a sub-agent
 
-        An agent is accepted only if it **condenses** a large output into a short answer ([ADR 0001](https://github.com/chabrioche/general-agents/blob/main/docs/decisions/0001-keep-only-condensing-agents.md)). Agents that merely add indirection, such as reading a file or listing a directory, are not accepted.
+        An agent is accepted only if it **condenses** a large output into a short answer . Agents that merely add indirection, such as reading a file or listing a directory, are not accepted.
 
   - type: input
     id: name

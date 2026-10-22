@@ -7,45 +7,21 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  test:
-    name: Python ${{ matrix.python-version }}
+  prompts-in-sync:
+    name: Prompts identical across tools
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
+      - run: python3 scripts/check_prompts_sync.py
 
+  frontmatter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: pyproject.toml
-
-      - name: Install
-        run: python -m pip install -e '.[dev]'
-
-      - name: Lint
-        run: ruff check .
-
-      - name: Format
-        run: ruff format --check .
-
-      - name: Type check
-        run: mypy
-
-      - name: Test
-        run: pytest
-
-      - name: Smoke test the installer on the real sources
-        run: |
-          for target in claude-code copilot-cli; do
-            mkdir -p "$RUNNER_TEMP/home-$target"
-            ./install --target "$target" --home "$RUNNER_TEMP/home-$target" --dry-run
-          done
+          python-version: "3.12"
+      - run: python -m pip install pyyaml
+      - name: Check the frontmatter of agents and skills
+        run: python scripts/check_frontmatter.py
