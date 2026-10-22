@@ -9,16 +9,28 @@ Tell the primary agent **when** to delegate to a sub-agent of the catalog and **
 ## Decision principle
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart TD
-    A["A task to do"] --> B{"Large raw output and<br/>only a conclusion needed?"}
-    B -- no --> Z["do it yourself"]
-    B -- yes --> C{"Needs delicate reasoning<br/>or the exact content?"}
-    C -- yes --> Z
-    C -- no --> D{"Kind of task"}
-    D -->|"a command"| run
-    D -->|"a search"| find
-    D -->|"size of a change"| diff
-    D -->|"history"| vcs["git or svn"]
+    A(["A task to do"]) --> B{{"large raw output and<br/>only a conclusion needed?"}}
+    B -- "no" --> Z["do it yourself"]
+    B -- "yes" --> C{{"needs delicate reasoning<br/>or the exact content?"}}
+    C -- "yes" --> Z
+    C -- "no" --> D{{"kind of task"}}
+    D -- "a command" --> run("run")
+    D -- "a search" --> find("find")
+    D -- "size of a change" --> diff("diff")
+    D -- "history" --> vcs("git or svn")
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class A,Z quiet
+    class B,C,D src
+    class run,find,diff,vcs agent
 ```
 
 Delegate if the expected raw output is large **and** only a conclusion is useful. Do not delegate if the primary agent needs the exact content for what follows, or if the operation is trivial.

@@ -39,14 +39,26 @@ general-agents/
 ## Data flow
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart LR
-    CFG["models.toml<br/>agents.toml"] --> CONFIG["config and manifest"]
-    SRC["agents/*.md<br/>skills/*/"] --> REG["registry and parser"]
-    CONFIG --> MODEL["typed Agent and Skill<br/>+ resolved model"]
+    CFG("models.toml<br/>agents.toml") --> CONFIG("config and<br/>manifest")
+    SRC("agents/*.md<br/>skills/*/") --> REG("registry and<br/>parser")
+    CONFIG --> MODEL("typed Agent, Skill<br/>and resolved model")
     REG --> MODEL
-    MODEL --> TGT["Target.render"]
-    TGT --> INST["installer"]
+    MODEL --> TGT("Target<br/>render")
+    TGT --> INST("installer<br/>the only writer")
     INST --> FILES[("files in the home<br/>or in a project")]
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class CFG,SRC src
+    class CONFIG,REG,MODEL,TGT,INST eng
+    class FILES out
 ```
 0. `config` reads `models.toml` and `manifest` reads `agents.toml`, both at the repository root.
 1. `registry` walks `agents/` and `skills/`.
@@ -69,7 +81,9 @@ flowchart LR
 ## `Target` interface
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 classDiagram
+    direction TB
     class Target {
         <<protocol>>
         +name str
@@ -78,10 +92,22 @@ classDiagram
         +render_agent(agent, model, mark_name) str
         +render_skill(skill, mark_name) str
     }
+    class ClaudeCodeTarget {
+        <<implemented>>
+    }
+    class CopilotCliTarget {
+        <<draft>>
+    }
+    class VsCodeTarget {
+        <<planned>>
+    }
+    class OpenCodeTarget {
+        <<planned>>
+    }
     Target <|.. ClaudeCodeTarget
     Target <|.. CopilotCliTarget
-    Target <|.. VsCodeTarget : planned
-    Target <|.. OpenCodeTarget : planned
+    Target <|.. VsCodeTarget
+    Target <|.. OpenCodeTarget
 ```
 
 ```python

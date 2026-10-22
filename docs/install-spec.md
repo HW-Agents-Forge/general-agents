@@ -77,18 +77,31 @@ For each agent, one file; for each skill, its `SKILL.md` plus each reference fil
 ## Possible actions per file
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart TD
-    F["File to write"] --> Q1{"Path stays under<br/>the destination?"}
-    Q1 -- no --> R1["refused: path escapes"]
-    Q1 -- yes --> Q2{"Already exists?"}
-    Q2 -- no --> C["created"]
-    Q2 -- yes --> Q3{"Regular file?"}
-    Q3 -- no --> R2["refused: not a file"]
-    Q3 -- yes --> Q4{"Carries this repository's mark?"}
-    Q4 -- no --> R3["refused: unmarked or marked by another repository"]
-    Q4 -- yes --> Q5{"Same content?"}
-    Q5 -- yes --> N["unchanged"]
-    Q5 -- no --> U["updated"]
+    F(["📄 file to write"]) --> Q1{{"path stays under<br/>the destination?"}}
+    Q1 -- "no" --> R1["refused<br/>path escapes"]
+    Q1 -- "yes" --> Q2{{"already exists?"}}
+    Q2 -- "no" --> C["created"]
+    Q2 -- "yes" --> Q3{{"regular file?"}}
+    Q3 -- "no" --> R2["refused<br/>not a file"]
+    Q3 -- "yes" --> Q4{{"carries this<br/>repository's mark?"}}
+    Q4 -- "no" --> R3["refused<br/>unmarked, or another<br/>repository's mark"]
+    Q4 -- "yes" --> Q5{{"same content?"}}
+    Q5 -- "yes" --> N["unchanged"]
+    Q5 -- "no" --> U["updated"]
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class F quiet
+    class Q1,Q2,Q3,Q4,Q5 src
+    class C,U,N out
+    class R1,R2,R3 bad
 ```
 
 The same decision is made for a dry run and a real run; nothing is ever deleted.

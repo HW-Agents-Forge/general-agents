@@ -31,38 +31,55 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 ## How it works
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
 flowchart LR
-    subgraph src["Sources"]
-        A["agents/*.md<br/>one prompt per agent"]
-        S["skills/*/SKILL.md<br/>+ examples"]
-        T["agents.toml<br/>tools per agent"]
-        M["models.toml<br/>model per agent"]
+    subgraph src["📂 Sources"]
+        A("agents/*.md<br/>one prompt per agent")
+        S("skills/*/SKILL.md<br/>and example files")
+        T("agents.toml<br/>tools per agent")
+        M("models.toml<br/>model per agent")
     end
-    subgraph sh["shuttle"]
-        P["parse and validate"] --> R["resolve the model"] --> X["render for the tool"]
+    subgraph sh["⚙️ shuttle"]
+        P("parse and<br/>validate") --> R("resolve<br/>the model") --> X("render for<br/>the tool")
     end
-    subgraph out["Installed files"]
-        C["Claude Code<br/>.claude/agents and skills"]
-        G["Copilot CLI<br/>.copilot or .github"]
+    subgraph out["📦 Installed files"]
+        C("Claude Code<br/>.claude/agents<br/>.claude/skills")
+        G("Copilot CLI<br/>.copilot or .github<br/>agents and skills")
     end
     A & S & T & M --> P
     X --> C & G
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class A,S,T,M src
+    class P,R,X eng
+    class C,G out
 ```
+
 The primary agent never reads the raw log. A delegation looks like this:
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor You
-    participant P as Primary agent
-    participant R as run (tiny model)
+    participant P as Primary agent<br/>(large model)
+    participant R as run<br/>(tiny model)
     participant T as Terminal
     You->>P: Run the smoke test and tell me what fails
     P->>R: exact command, log file, timeout
+    activate R
     R->>T: run the command under the timeout
     T-->>R: process ends, log written
     R->>T: grep and tail on the log only
-    R-->>P: status, error count, key points (about 10 lines)
+    Note over R,T: the raw log never reaches a model
+    R-->>P: status, error count, key points
+    deactivate R
+    Note over P,R: about 10 lines instead of thousands
     P-->>You: the cause and the fix
 ```
 
@@ -139,14 +156,27 @@ small = "claude-haiku-5-5"   # model for every agent of tier "small"
 For each agent and tool, the model is the first match of: `--model AGENT=MODEL`, then the tool's section, then `[defaults]`. If nothing matches, `install` fails and names the agent and the tool. It never falls back silently to a larger model.
 
 ```mermaid
-flowchart TD
-    Q["Model for agent A on tool T"] --> O{"--model A=... given?"}
-    O -- yes --> U1["use it"]
-    O -- no --> S{"A listed in the T section<br/>of models.toml?"}
-    S -- yes --> U2["use it"]
-    S -- no --> D{"tier default in<br/>the defaults section?"}
-    D -- yes --> U3["use it"]
-    D -- no --> E["error naming the agent and the tool<br/>(never a silent fallback)"]
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","textColor":"#1e293b","lineColor":"#64748b","primaryColor":"#dbeafe","primaryBorderColor":"#3b82f6","primaryTextColor":"#1e3a8a","secondaryColor":"#ede9fe","tertiaryColor":"#f8fafc","edgeLabelBackground":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","titleColor":"#334155"},"flowchart":{"curve":"basis","padding":14,"nodeSpacing":36,"rankSpacing":48,"htmlLabels":true}}}%%
+flowchart LR
+    Q(["model for<br/>agent A on tool T"]) --> O["1 · --model A=…"]
+    O -- "not given" --> S["2 · tool section<br/>of models.toml"]
+    S -- "not listed" --> D["3 · tier default<br/>in [defaults]"]
+    D -- "missing" --> E["❌ error naming<br/>the agent and the tool"]
+    O -- "given" --> U(["✅ model written<br/>into the file"])
+    S -- "listed" --> U
+    D -- "found" --> U
+
+    classDef src fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px,color:#1e3a8a
+    classDef eng fill:#ede9fe,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95
+    classDef out fill:#dcfce7,stroke:#22c55e,stroke-width:1.5px,color:#14532d
+    classDef agent fill:#fef3c7,stroke:#f59e0b,stroke-width:1.5px,color:#78350f
+    classDef bad fill:#fee2e2,stroke:#ef4444,stroke-width:1.5px,color:#7f1d1d
+    classDef quiet fill:#f1f5f9,stroke:#94a3b8,stroke-width:1.5px,color:#0f172a
+
+    class O,S,D src
+    class U out
+    class E bad
+    class Q quiet
 ```
 
 **Adding an agent** takes two steps:
