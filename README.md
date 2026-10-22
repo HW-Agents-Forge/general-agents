@@ -1,13 +1,12 @@
 # general-agents
 
+[![CI](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Runtime dependencies: none](https://img.shields.io/badge/runtime%20dependencies-none-brightgreen)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Status: early development](https://img.shields.io/badge/status-early%20development-orange)
 
 **Small sub-agents that take the token-expensive chores off your primary coding agent.**
-
-CI: see the [Actions tab](https://github.com/chabrioche/general-agents/actions/workflows/ci.yml). The status badge is left out while the repository is private, because GitHub's image proxy cannot authenticate to fetch it.
 
 Reading a 20,000-line simulation log, sweeping a repository for every usage of a signal, digesting a long `svn log`: your primary agent only needs the *conclusion*. general-agents defines a handful of focused sub-agents that do the heavy reading on the **smallest model available** and hand back a short, structured report.
 
