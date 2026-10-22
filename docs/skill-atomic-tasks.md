@@ -37,9 +37,15 @@ For each delegation, the primary agent must:
 - If the answer reports `truncated: yes` or uncertainties, relaunch with a more targeted question rather than rereading the raw content.
 - Do not relaunch a sub-agent on the same question without new information.
 
+## Structure: a short skill and one examples file per agent
+
+The skill is split ([ADR 0010](decisions/0010-skill-references-and-shared-agent-rules.md)): `SKILL.md` holds the decision principle, the table, how to phrase a request, what to do after the answer, the list of cases not to delegate, and links to reference files. The worked sequences live next to it, one file per agent, so that a consultation loads about 730 tokens instead of about 1,900:
+
+`examples-run.md`, `examples-find.md`, `examples-diff.md`, `examples-git-svn.md`, `examples-combined.md`.
+
 ## Example sequences
 
-The skill ends with worked sequences, because a decision table alone does not show how a delegation flows. They are grouped by sub-agent (`run`, `find`, `diff`, `git`, `svn`), followed by sequences combining agents and a list of cases not to delegate. Each shows the request as the primary agent should write it, the shape of the reply, and the next step.
+The reference files hold worked sequences, because a decision table alone does not show how a delegation flows. They are grouped by sub-agent (`run`, `find`, `diff`, `git`, `svn`), followed by sequences combining agents and a list of cases not to delegate. Each shows the request as the primary agent should write it, the shape of the reply, and the next step.
 
 Rules for writing them:
 - Keep them generic: no project-specific names, no proprietary tool commands.

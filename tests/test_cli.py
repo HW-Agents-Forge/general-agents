@@ -79,3 +79,16 @@ def test_claude_code_install(repo: Path, home: Path) -> None:
     assert "managed-by: test-repo" in agent.read_text()
     assert (home / ".claude" / "skills" / "atomic-tasks" / "SKILL.md").is_file()
     assert run(repo, home, "--target", "claude-code", "--yes") == 0
+
+
+def test_skill_reference_files_are_installed_and_protected(repo: Path, home: Path) -> None:
+    (repo / "skills" / "atomic-tasks" / "examples-run.md").write_text(
+        "# Examples\n", encoding="utf-8"
+    )
+    assert run(repo, home, "--target", "claude-code", "--yes") == 0
+    reference = home / ".claude" / "skills" / "atomic-tasks" / "examples-run.md"
+    assert "managed-by: test-repo" in reference.read_text()
+    assert run(repo, home, "--target", "claude-code", "--yes") == 0
+    reference.write_text("personal notes\n")
+    assert run(repo, home, "--target", "claude-code", "--yes") == 1
+    assert reference.read_text() == "personal notes\n"

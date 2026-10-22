@@ -38,7 +38,8 @@ ruff check . && ruff format --check . && mypy && pytest
 ### Add or change an agent
 
 1. Create `agents/<name>.md` as plain Markdown, **no frontmatter**. The first paragraph says what the agent does and when to use it: it becomes the description ([format](docs/agent-format.md)).
-2. Add a table for it in `agents.toml` with its `tools`.
+2. Add a table for it in `agents.toml` with its `tools`. Give `read` only if the agent must read whole files: filtering with commands is cheaper.
+   Rules shared by all agents live in `agents/_common.md`; do not repeat them.
 3. Keep the prompt short and directive (it runs on a tiny model), with a rigid output contract of at most 40 lines.
 4. Update the [catalog](docs/agents-catalog.md) and the `atomic-tasks` skill if a boundary between agents changes.
 5. Show that it pays for itself, following the [evaluation protocol](docs/evaluation.md).
@@ -47,8 +48,9 @@ ruff check . && ruff format --check . && mypy && pytest
 
 1. Create `skills/<name>/SKILL.md` as plain Markdown, **no frontmatter**. The folder name is the skill name and the first paragraph is its description: say when to consult it.
 2. Keep it short, since its description is always in the primary agent's context and its body is loaded when consulted.
-3. **Verify every technical claim by running it** (the `csh-pro` skill was checked against tcsh), and say when only one implementation was tested.
-4. Keep workplace-specific conventions out of this repository.
+3. Put long material (worked examples, per-agent detail) in reference files next to `SKILL.md` (`examples-run.md`) and link to them: the tool loads a reference only when it is needed.
+4. **Verify every technical claim by running it** (the `csh-pro` skill was checked against tcsh), and say when only one implementation was tested.
+5. Keep workplace-specific conventions out of this repository.
 
 ### Add a target tool
 

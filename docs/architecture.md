@@ -4,9 +4,9 @@
 
 ```
 general-agents/
-├── agents/                     # neutral descriptions, one .md per agent
+├── agents/                     # one .md per agent, plus _common.md (rules for all)
 ├── skills/
-│   ├── atomic-tasks/SKILL.md
+│   ├── atomic-tasks/           # SKILL.md plus examples-*.md references
 │   └── csh-pro/SKILL.md
 ├── install                     # thin executable: calls shuttle.cli.main()
 ├── models.toml                 # repository name and models per tool and agent

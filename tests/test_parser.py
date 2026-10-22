@@ -69,3 +69,38 @@ def test_skill_rejects_frontmatter(tmp_path: Path) -> None:
     folder.mkdir()
     with pytest.raises(SourceError, match="frontmatter"):
         parse_skill(write(folder, "SKILL.md", "---\nname: x\n---\nbody\n"))
+
+
+def test_common_rules_are_appended_to_the_prompt_not_the_description(tmp_path: Path) -> None:
+    agent = parse_agent(write(tmp_path, "run.md", AGENT), SPEC, common="Rules for every agent.")
+    assert agent.description == "Runs a command."
+    assert agent.body == AGENT.strip() + "\n\nRules for every agent."
+
+
+def test_skill_references(tmp_path: Path) -> None:
+    folder = tmp_path / "atomic-tasks"
+    folder.mkdir()
+    write(folder, "examples-run.md", "# Run examples\n\nOne.\n")
+    write(folder, "examples-find.md", "# Find examples\n")
+    skill = parse_skill(write(folder, "SKILL.md", SKILL))
+    assert [reference.filename for reference in skill.references] == [
+        "examples-find.md",
+        "examples-run.md",
+    ]
+    assert skill.references[1].body.startswith("# Run examples")
+
+
+@pytest.mark.parametrize(
+    ("filename", "text", "message"),
+    [
+        ("Bad_Name.md", "# x\n", "invalid file name"),
+        ("examples.md", "---\nname: x\n---\nbody\n", "must not contain frontmatter"),
+        ("examples.md", "", "file is empty"),
+    ],
+)
+def test_invalid_reference(tmp_path: Path, filename: str, text: str, message: str) -> None:
+    folder = tmp_path / "atomic-tasks"
+    folder.mkdir()
+    write(folder, filename, text)
+    with pytest.raises(SourceError, match=message):
+        parse_skill(write(folder, "SKILL.md", SKILL))

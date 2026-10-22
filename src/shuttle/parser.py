@@ -10,7 +10,7 @@ from pathlib import Path
 
 from .errors import SourceError
 from .manifest import AgentSpec
-from .model import NAME_PATTERN, Agent, Skill
+from .model import NAME_PATTERN, REFERENCE_PATTERN, Agent, Reference, Skill
 
 FRONTMATTER_MARKERS = ("---", "+++")
 
@@ -39,15 +39,32 @@ def _description(text: str, path: Path) -> str:
     raise SourceError(f"{path}: no description paragraph (the first paragraph is the description)")
 
 
-def parse_agent(path: Path, spec: AgentSpec) -> Agent:
+def parse_common(path: Path) -> str:
+    """Rules shared by every agent, appended to each prompt."""
+    return _read(path)
+
+
+def parse_agent(path: Path, spec: AgentSpec, common: str = "") -> Agent:
     text = _read(path)
     return Agent(
         name=_name(path.stem, path),
         description=_description(text, path),
         tier=spec.tier,
         tools=spec.tools,
-        body=text,
+        body=f"{text}\n\n{common}" if common else text,
     )
+
+
+def parse_references(skill_file: Path) -> tuple[Reference, ...]:
+    """Every other Markdown file next to SKILL.md, in sorted order."""
+    references: list[Reference] = []
+    for path in sorted(skill_file.parent.glob("*.md")):
+        if path.name == skill_file.name:
+            continue
+        if not REFERENCE_PATTERN.match(path.name):
+            raise SourceError(f"{path}: invalid file name (lowercase letters, digits, hyphens)")
+        references.append(Reference(filename=path.name, body=_read(path)))
+    return tuple(references)
 
 
 def parse_skill(path: Path) -> Skill:
@@ -56,4 +73,5 @@ def parse_skill(path: Path) -> Skill:
         name=_name(path.parent.name, path),
         description=_description(text, path),
         body=text,
+        references=parse_references(path),
     )

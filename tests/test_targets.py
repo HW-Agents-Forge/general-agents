@@ -34,3 +34,17 @@ def test_target_rendering_matches_golden_and_carries_the_mark(name: str, repo: P
 def test_unknown_target() -> None:
     with pytest.raises(UsageError, match="unknown target"):
         get_target("nope")
+
+
+@pytest.mark.parametrize("name", sorted(TARGETS))
+def test_reference_files_sit_next_to_the_skill_and_carry_the_mark(name: str) -> None:
+    from shuttle.model import Reference, Skill
+    from shuttle.targets.base import reference_path, render_reference
+
+    target = get_target(name)
+    skill = Skill(name="atomic-tasks", description="d", body="b")
+    reference = Reference(filename="examples-run.md", body="# Examples\n\nOne.")
+    assert reference_path(target, skill, reference).parent == target.skill_path(skill).parent
+    rendered = render_reference(reference, "test-repo")
+    assert read_mark(rendered) == "test-repo"
+    assert rendered == "<!-- managed-by: test-repo -->\n\n# Examples\n\nOne.\n"

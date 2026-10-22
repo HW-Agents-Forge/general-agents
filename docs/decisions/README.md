@@ -28,3 +28,4 @@ Each structural decision is recorded in a numbered file `NNNN-title.md`.
 | [0007](0007-per-agent-models-in-models-toml.md) | Per-agent models in models.toml, copied script | accepted |
 | [0008](0008-no-frontmatter-in-sources.md) | No frontmatter in the sources | accepted |
 | [0009](0009-shell-agnostic-run-and-csh-skill.md) | Shell-agnostic run and the csh-pro skill | accepted |
+| [0010](0010-skill-references-and-shared-agent-rules.md) | Skill reference files and shared agent rules | accepted |

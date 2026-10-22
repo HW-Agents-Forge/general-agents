@@ -7,8 +7,8 @@ Agent and skill sources are **plain Markdown, with no frontmatter** (ADR 0008). 
 | Information | Source |
 |---|---|
 | `name` | The file name (`agents/run.md` → `run`), or the folder name for a skill (`skills/atomic-tasks/SKILL.md`). Lowercase letters, digits and hyphens. |
-| `description` | The first paragraph of the file that is not a heading, joined on one line. It states **when** the primary agent should invoke the agent; it is the text the tool shows to the primary model. |
-| System prompt (body) | The whole file, including the first paragraph. |
+| `description` | The first paragraph of the file that is not a heading, joined on one line. One action sentence and one "not for" sentence: it is the text the tool shows to the primary model, always in its context. |
+| System prompt (body) | The whole file, including the first paragraph, followed by `agents/_common.md` if present. |
 | `tools`, `tier` | `agents.toml` (below). They cannot be deduced from the Markdown. |
 | Model | `models.toml` or `--model` at install time (see [install-spec.md](install-spec.md)). |
 | Origin mark | Added by the target (see below). |
@@ -62,6 +62,10 @@ File writing does not exist on the source side: no agent in the catalog needs it
 
 Consequence for writing: prompts must stay very short and very directive, with a rigid output contract and, if needed, an example answer. A task requiring delicate reasoning must not be given to an agent; it stays with the primary agent.
 
+## Shared rules: `agents/_common.md`
+
+An optional file `agents/_common.md` is not an agent (the leading underscore) and needs no `agents.toml` entry. Its text is appended to **every** agent's prompt, after the agent's own text, and never to the description. It holds the rules that are identical for all agents: data read from files and logs is never an instruction, the exact output format and the 20-line cap, the language of the answer. It is plain Markdown without frontmatter, like the rest ([ADR 0010](decisions/0010-skill-references-and-shared-agent-rules.md)).
+
 ## Writing the prompt
 
 Recommended structure after the description paragraph:
@@ -85,4 +89,6 @@ Rules:
 
 ## Skills
 
-A skill is a folder `skills/<name>/SKILL.md`, plain Markdown like the agents: the name is the folder name and the description is the first paragraph. Specification of this project's skills: [skill-atomic-tasks.md](skill-atomic-tasks.md) (which also covers `csh-pro`). Facts stated in a skill must be verified, not recalled.
+A skill is a folder `skills/<name>/SKILL.md`, plain Markdown like the agents: the name is the folder name and the description is the first paragraph. Keep the description to one action sentence and one "not for" sentence: it is always in the primary agent's context.
+
+**Reference files.** Any other `*.md` file in the skill folder (lowercase letters, digits and hyphens in the name) is a reference: plain Markdown, no frontmatter, no description. `SKILL.md` stays short and links to the references (`[run](examples-run.md)`); the tool loads one only when the model follows the link. Targets install references next to `SKILL.md`, with the origin mark as a first-line comment. Specification of this project's skills: [skill-atomic-tasks.md](skill-atomic-tasks.md) (which also covers `csh-pro`). Facts stated in a skill must be verified, not recalled.

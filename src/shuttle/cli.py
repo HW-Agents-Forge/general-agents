@@ -14,6 +14,7 @@ from .installer import Action, Outcome, PlannedFile, install, plan
 from .model import Catalog
 from .registry import discover
 from .targets import TARGETS, get_target
+from .targets.base import reference_path, render_reference
 
 
 class _Parser(argparse.ArgumentParser):
@@ -54,10 +55,15 @@ def _build_files(
         )
         for agent in catalog.agents
     ]
-    files += [
-        PlannedFile(target.skill_path(skill), target.render_skill(skill, config.name))
-        for skill in catalog.skills
-    ]
+    for skill in catalog.skills:
+        files.append(PlannedFile(target.skill_path(skill), target.render_skill(skill, config.name)))
+        files += [
+            PlannedFile(
+                reference_path(target, skill, reference),
+                render_reference(reference, config.name),
+            )
+            for reference in skill.references
+        ]
     return files
 
 

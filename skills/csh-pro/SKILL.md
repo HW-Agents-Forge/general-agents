@@ -1,4 +1,4 @@
-Reference for writing and fixing csh and tcsh commands, one-liners and scripts: the bash habits that fail in csh, their exact replacements, and the pitfalls that cost time. Consult it before writing or editing any csh or tcsh command or script, and when a command for the `run` agent must be written for csh.
+csh and tcsh reference: the bash habits that fail, their replacements, and verified pitfalls. Consult before writing or editing a csh or tcsh command or script.
 
 # Bash habit to csh
 

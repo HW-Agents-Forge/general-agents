@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+REFERENCE_PATTERN = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*\.md$")
 
 
 class Tier(StrEnum):
@@ -33,10 +34,19 @@ class Agent:
 
 
 @dataclass(frozen=True)
+class Reference:
+    """An extra file of a skill, loaded by the tool only when the skill points to it."""
+
+    filename: str
+    body: str
+
+
+@dataclass(frozen=True)
 class Skill:
     name: str
     description: str
     body: str
+    references: tuple[Reference, ...] = ()
 
 
 @dataclass(frozen=True)

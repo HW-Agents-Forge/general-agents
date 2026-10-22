@@ -43,4 +43,4 @@ Partial findings and conflicts are listed in [tool-differences.md](tool-differen
 - Agent formats, locations and tool names of each remaining target (see [targets.md](targets.md)).
 - `SKILL.md` support and skill location in each tool.
 - Whether a free key is allowed in the frontmatter for the origin mark.
-- Whether the installed skills are actually loaded and consulted by each tool (not tested in a real session).
+- Whether the installed skills are actually loaded and consulted by each tool, and whether each tool follows a relative link from `SKILL.md` to a reference file (not tested in a real session).

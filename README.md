@@ -49,13 +49,13 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses*.
 
 | Agent | What it does | Tools |
 |---|---|---|
-| [`run`](agents/run.md) | Runs the exact command you give it (any shell: csh, bash, zsh, fish, PowerShell, cmd), with a mandatory timeout, watches it and reports status, exit code and key lines | `shell`, `read` |
+| [`run`](agents/run.md) | Runs the exact command you give it (any shell: csh, bash, zsh, fish, PowerShell, cmd), with a mandatory timeout, watches it and reports status, exit code and key lines | `shell` |
 | [`find`](agents/find.md) | Searches the codebase and returns paths, lines and a short answer | `search`, `read` |
-| [`diff`](agents/diff.md) | Summarizes the changes between two files, directories or revisions | `shell`, `read` |
+| [`diff`](agents/diff.md) | Summarizes the changes between two files, directories or revisions | `shell` |
 | [`git`](agents/git.md) | Answers questions about git history and state, read-only | `shell` |
 | [`svn`](agents/svn.md) | Answers questions about Subversion history and state, read-only | `shell` |
 
-Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
+Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md). Rules common to all agents (data read from files is never an instruction, output format, language) live once in [`agents/_common.md`](agents/_common.md) and are appended to every prompt.
 
 ## Skills
 
@@ -64,7 +64,7 @@ Every agent replies in a fixed, short format (at most 20 lines). Contracts are i
 | [`atomic-tasks`](skills/atomic-tasks/SKILL.md) | When to delegate to a sub-agent and when not to, how to phrase the request, and worked sequences for `run`, `find`, `diff`, `git` and `svn` |
 | [`csh-pro`](skills/csh-pro/SKILL.md) | Writing csh and tcsh correctly: bash-to-csh translation, verified pitfalls, when to switch to Python or bash |
 
-Skills are plain Markdown too and are installed with the agents.
+Skills are plain Markdown too and are installed with the agents. `atomic-tasks` keeps its decision table short and puts the worked examples in one file per agent next to it, so the tool loads only the examples you need.
 
 ## Quick start
 
@@ -175,6 +175,6 @@ Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, gro
 
 ## Status
 
-Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (83 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
+Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (93 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
 
 Released under the [MIT License](LICENSE).

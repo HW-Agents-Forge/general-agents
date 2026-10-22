@@ -71,3 +71,19 @@ def test_run_prompt_is_not_tied_to_one_shell() -> None:
         assert shell in prompt, shell
     for status_variable in ("$status", "$?", "$LASTEXITCODE", "%ERRORLEVEL%"):
         assert status_variable in prompt, status_variable
+
+
+def test_common_file_is_not_an_agent_and_is_appended(repo: Path) -> None:
+    (repo / "agents" / "_common.md").write_text("Shared rule.\n", encoding="utf-8")
+    catalog = discover(repo)
+    assert catalog.agent_names() == {"run"}
+    assert catalog.agents[0].body.endswith("\n\nShared rule.")
+    assert catalog.agents[0].description == "Runs a command."
+
+
+def test_skill_references_are_discovered(repo: Path) -> None:
+    (repo / "skills" / "atomic-tasks" / "examples-run.md").write_text(
+        "# Examples\n", encoding="utf-8"
+    )
+    (skill,) = discover(repo).skills
+    assert [reference.filename for reference in skill.references] == ["examples-run.md"]

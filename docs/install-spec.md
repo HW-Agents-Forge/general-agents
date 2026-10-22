@@ -57,6 +57,10 @@ Every generated file contains `managed-by: <name>`, where `<name>` is the `name`
 5. **Atomic write**: write to a temporary file in the same folder, then rename.
 6. **Idempotence**: rerunning `install` without any source change modifies nothing.
 
+## Files written
+
+For each agent, one file; for each skill, its `SKILL.md` plus each reference file next to it. Every file gets the origin mark (a key, or a first-line comment) and follows the same safety rules below.
+
 ## Possible actions per file
 
 | Destination state | Action |

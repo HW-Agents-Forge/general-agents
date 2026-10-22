@@ -5,7 +5,8 @@ from __future__ import annotations
 from pathlib import PurePath
 from typing import Protocol
 
-from ..model import Agent, Skill
+from ..mark import MARK_KEY
+from ..model import Agent, Reference, Skill
 
 
 class Target(Protocol):
@@ -24,3 +25,13 @@ class Target(Protocol):
     def render_agent(self, agent: Agent, model: str, mark_name: str) -> str: ...
 
     def render_skill(self, skill: Skill, mark_name: str) -> str: ...
+
+
+def reference_path(target: Target, skill: Skill, reference: Reference) -> PurePath:
+    """A reference file sits next to the skill's SKILL.md, whatever the tool."""
+    return target.skill_path(skill).parent / reference.filename
+
+
+def render_reference(reference: Reference, mark_name: str) -> str:
+    """References are plain Markdown for every tool; only the origin mark is added."""
+    return f"<!-- {MARK_KEY}: {mark_name} -->\n\n{reference.body}\n"
