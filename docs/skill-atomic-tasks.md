@@ -39,14 +39,13 @@ For each delegation, the primary agent must:
 
 ## Example sequences
 
-The skill ends with four worked sequences, because a decision table alone does not show how a delegation flows:
+The skill ends with worked sequences, because a decision table alone does not show how a delegation flows. They are grouped by sub-agent (`run`, `find`, `diff`, `git`, `svn`), followed by sequences combining agents and a list of cases not to delegate. Each shows the request as the primary agent should write it, the shape of the reply, and the next step.
 
-1. a long simulation that fails (`run`, then `find`, then reading the exact lines yourself);
-2. finding when something broke (`git` or `svn`, then `diff`, then reading one file);
-3. what to do when a report is truncated or timed out (narrower question, never the whole log);
-4. cases not to delegate (short outputs, reasoning, interactive commands).
-
-Each sequence shows the request phrased as the primary agent should write it. Keep them short and generic: no project-specific names.
+Rules for writing them:
+- Keep them generic: no project-specific names, no proprietary tool commands.
+- One scenario per entry, two to four sentences.
+- Every agent has at least three entries, including its failure modes (timeout, blocked, no match).
+- The cost is real: the skill is loaded into the primary agent's context. When it grows too long, keep the most instructive entry per agent and move the rest to documentation.
 
 ## File structure
 
