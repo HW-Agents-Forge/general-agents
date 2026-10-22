@@ -20,7 +20,8 @@ Provide a set of **small sub-agents** that condense information, use the **small
 ## Scope
 
 - Agents: `run`, `find`, `diff`, `git`, `svn` (see [agents-catalog.md](agents-catalog.md)).
-- `atomic-tasks` skill telling the primary agent when and how to delegate.
+- `atomic-tasks` skill telling the primary agent when and how to delegate, and a `csh-pro` skill for writing csh and tcsh correctly.
+- Reuse by copying the script into other repositories ([reuse.md](reuse.md)).
 - Python package `shuttle` and `install` executable.
 - Target tools: Claude Code and Copilot CLI first; VS Code and OpenCode later.
 
@@ -37,4 +38,5 @@ Provide a set of **small sub-agents** that condense information, use the **small
 - On real cases, delegation reduces the primary agent's total token consumption without degrading answer quality.
 - Adding a target tool amounts to adding one file.
 - Adding an agent amounts to adding one Markdown file and one table in `agents.toml`.
+- Agents work in any shell, not only the author's.
 - `install --dry-run` describes exactly what will be written.

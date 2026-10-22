@@ -43,6 +43,13 @@ ruff check . && ruff format --check . && mypy && pytest
 4. Update the [catalog](docs/agents-catalog.md) and the `atomic-tasks` skill if a boundary between agents changes.
 5. Show that it pays for itself, following the [evaluation protocol](docs/evaluation.md).
 
+### Add or change a skill
+
+1. Create `skills/<name>/SKILL.md` as plain Markdown, **no frontmatter**. The folder name is the skill name and the first paragraph is its description: say when to consult it.
+2. Keep it short, since its description is always in the primary agent's context and its body is loaded when consulted.
+3. **Verify every technical claim by running it** (the `csh-pro` skill was checked against tcsh), and say when only one implementation was tested.
+4. Keep workplace-specific conventions out of this repository.
+
 ### Add a target tool
 
 1. Fill in the tool's column in [docs/targets.md](docs/targets.md) from its **official documentation**, and note the verification date.

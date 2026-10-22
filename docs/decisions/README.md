@@ -27,3 +27,4 @@ Each structural decision is recorded in a numbered file `NNNN-title.md`.
 | [0006](0006-smallest-models-only.md) | Tiny models only by default | accepted |
 | [0007](0007-per-agent-models-in-models-toml.md) | Per-agent models in models.toml, copied script | accepted |
 | [0008](0008-no-frontmatter-in-sources.md) | No frontmatter in the sources | accepted |
+| [0009](0009-shell-agnostic-run-and-csh-skill.md) | Shell-agnostic run and the csh-pro skill | accepted |

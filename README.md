@@ -16,6 +16,7 @@ You write each agent once, as plain Markdown. A small Python tool, `shuttle`, ad
 
 - [How it works](#how-it-works)
 - [Agents](#agents)
+- [Skills](#skills)
 - [Quick start](#quick-start)
 - [Configuration](#configuration)
 - [Supported tools](#supported-tools)
@@ -40,7 +41,7 @@ models.toml ─┘    resolve)
 - **`agents.toml`** lists each agent's abstract tools (`read`, `search`, `shell`).
 - **`models.toml`** picks the model, agent by agent, per tool.
 - **`shuttle`** generates each tool's own format, frontmatter included, and installs it.
-- The **`atomic-tasks` skill** tells your primary agent when delegating is worth it, and how to phrase the request.
+- The **skills** are installed alongside: `atomic-tasks` tells your primary agent when delegating is worth it and how to phrase the request, with worked example sequences for every agent; `csh-pro` is a verified csh and tcsh reference.
 
 Delegation has a fixed cost, so an agent earns its place only if it *condenses*. That is why this repository has no `read`, `write` or `list` agent: your primary agent already does those cheaply. See [ADR 0001](docs/decisions/0001-keep-only-condensing-agents.md).
 
@@ -55,6 +56,15 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses*.
 | [`svn`](agents/svn.md) | Answers questions about Subversion history and state, read-only | `shell` |
 
 Every agent replies in a fixed, short format (at most 20 lines). Contracts are in the [agent catalog](docs/agents-catalog.md).
+
+## Skills
+
+| Skill | What it is for |
+|---|---|
+| [`atomic-tasks`](skills/atomic-tasks/SKILL.md) | When to delegate to a sub-agent and when not to, how to phrase the request, and worked sequences for `run`, `find`, `diff`, `git` and `svn` |
+| [`csh-pro`](skills/csh-pro/SKILL.md) | Writing csh and tcsh correctly: bash-to-csh translation, verified pitfalls, when to switch to Python or bash |
+
+Skills are plain Markdown too and are installed with the agents.
 
 ## Quick start
 
@@ -145,13 +155,14 @@ CI runs the same checks on Python 3.11, 3.12 and 3.13, plus a dry-run install of
 
 ```
 agents/          one Markdown prompt per agent
-skills/          the atomic-tasks and csh-pro skills
+skills/          the atomic-tasks and csh-pro skills (plain Markdown)
 agents.toml      tools and tier of each agent
 models.toml      repository name and models
 install          thin executable calling shuttle
 src/shuttle/     the Python package (parser, config, installer, targets, CLI)
 tests/           pytest suite with golden files per target
 docs/            design documents and decision records
+.github/         CI workflow, issue forms, pull request template, Dependabot
 ```
 
 ## Documentation
@@ -164,6 +175,6 @@ Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, gro
 
 ## Status
 
-Early development. The engine, the Claude Code target and five agents exist and are tested. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
+Early development. The engine, the Claude Code target, a draft Copilot CLI target, five agents and two skills exist and are tested (83 tests, CI on Python 3.11 to 3.13); the agents have not yet been exercised in a real session. **The token savings have not been measured yet**: the first evaluation, on `run`, is the next milestone (see the [roadmap](docs/roadmap.md)), and an agent that does not pay for itself will be reworked or removed.
 
 Released under the [MIT License](LICENSE).

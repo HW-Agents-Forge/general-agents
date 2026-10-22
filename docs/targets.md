@@ -15,18 +15,20 @@ See [tool-differences.md](tool-differences.md) for what is already known, with s
 
 ## Information to establish for each tool
 
-| Information | VS Code | Copilot CLI | OpenCode |
-|---|---|---|---|
-| Agent location (user level) | To verify | To verify | To verify |
-| File extension and name | To verify | To verify | To verify |
-| Frontmatter keys (name, description, tools, model) | To verify | To verify | To verify |
-| Identifier of the smallest model (`small`) | To verify | To verify | To verify |
-| Tool names for `read`, `search`, `shell` | To verify | To verify | To verify |
-| Sub-agent mode (invocable by the primary agent) | To verify | To verify | To verify |
-| Skill location and `SKILL.md` support | To verify | To verify | To verify |
-| Accepts a free key for the origin mark | To verify | To verify | To verify |
-| Terminal timeout mechanism (for `run`) | To verify | To verify | To verify |
-| Verification date | — | — | — |
+Claude Code is filled in from the official documentation excerpts (2026-10-21); the other columns are still to verify (see [tool-differences.md](tool-differences.md)).
+
+| Information | Claude Code | VS Code | Copilot CLI | OpenCode |
+|---|---|---|---|---|
+| Agent location (user level) | `~/.claude/agents/` | To verify | To verify | To verify |
+| File extension and name | `<name>.md` | To verify | To verify | To verify |
+| Frontmatter keys | `name`, `description`, `tools`, `model`; unknown keys ignored | To verify | To verify | To verify |
+| Identifier of the smallest model (`small`) | Alias (`haiku`) or full ID (`claude-haiku-5-5`) | To verify | To verify | To verify |
+| Tool names for `read`, `search`, `shell` | `Read`, `Grep` + `Glob`, `Bash` | To verify | To verify | To verify |
+| Sub-agent mode (invocable by the primary agent) | By description; to confirm in a session | To verify | To verify | To verify |
+| Skill location and `SKILL.md` support | `~/.claude/skills/<name>/SKILL.md` | To verify | To verify | To verify |
+| Accepts a free key for the origin mark | Yes (unknown keys ignored) | To verify | To verify | To verify |
+| Terminal timeout mechanism (for `run`) | To verify | To verify | To verify | Reported 2-minute default |
+| Verification date | 2026-10-21 (documentation excerpts) | — | — | — |
 
 ## Expected mapping table
 
@@ -34,10 +36,10 @@ Each target expresses these mappings in its module.
 
 | Abstract | Concrete target |
 |---|---|
-| `tier: small` | Identifier of the tool's smallest model (never in the sources) |
-| `tools: [read]` | Platform read tool name(s) |
-| `tools: [search]` | Search tool name(s) |
-| `tools: [shell]` | Execution tool name(s) |
+| `tier: small` | Model from `models.toml` or `--model` (never in the sources) |
+| `tools: [read]` | Platform read tool name(s): `Read` in Claude Code |
+| `tools: [search]` | Search tool name(s): `Grep`, `Glob` in Claude Code |
+| `tools: [shell]` | Execution tool name(s): `Bash` in Claude Code |
 
 ## Origin mark handling
 

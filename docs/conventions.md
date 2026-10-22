@@ -24,6 +24,8 @@ All writing goes through `installer`. No other module opens a file for writing.
 - The first paragraph states what the agent does and **when** to use it (it becomes the description).
 - Short body, explicit output contract (see [agent-format.md](agent-format.md)).
 - Any change of boundary between agents updates the catalog and the `atomic-tasks` skill.
+- Skills are plain Markdown like agents. Every technical claim in a skill (syntax, behavior of a tool) is checked by running it; the skill says so when only one implementation was tested.
+- Agents must not be tied to one shell or one tool: say which shell syntax applies, never assume it.
 
 ## Git
 

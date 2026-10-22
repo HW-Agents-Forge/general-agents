@@ -6,7 +6,8 @@
 general-agents/
 ├── agents/                     # neutral descriptions, one .md per agent
 ├── skills/
-│   └── atomic-tasks/SKILL.md
+│   ├── atomic-tasks/SKILL.md
+│   └── csh-pro/SKILL.md
 ├── install                     # thin executable: calls shuttle.cli.main()
 ├── models.toml                 # repository name and models per tool and agent
 ├── agents.toml                 # per-agent tools and tier
@@ -29,7 +30,10 @@ general-agents/
 │   ├── installer.py            # the only module that writes to disk
 │   └── errors.py
 ├── tests/
-└── docs/
+├── docs/
+├── .github/                    # CI workflow, issue and pull request templates
+├── LICENSE
+└── CONTRIBUTING.md
 ```
 
 ## Data flow

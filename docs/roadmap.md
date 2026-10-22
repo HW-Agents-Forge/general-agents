@@ -4,8 +4,10 @@ Principle: validate early, on a single agent and a single tool, before generaliz
 
 ## Milestone 0: preparation
 
-- [ ] Answer the blocking points of [open-questions.md](open-questions.md) (exact model identifiers per tool).
-- [ ] Check each target tool's format in its official documentation and fill in [targets.md](targets.md).
+- [x] Answer the blocking points of [open-questions.md](open-questions.md) (smallest model, first targets, `--target` behavior).
+- [ ] Confirm the exact model identifier of Haiku 5.5 in each tool.
+- [x] Claude Code format checked against the official documentation excerpts.
+- [ ] Check the other tools' formats in their official documentation and fill in [targets.md](targets.md).
 - [x] `pyproject.toml`, `src/shuttle/` skeleton, `tests/`, lint and typing tools.
 
 ## Milestone 1: minimal vertical slice
@@ -21,7 +23,7 @@ Goal: `agents/run.md` installed end to end for **one** tool.
 - [x] `cli.py` and `install` executable (`--dry-run` included).
 - [x] `run` agent written.
 
-Exit criterion: `install --dry-run` then `install` produce the right file in a test home; the agent is usable in the tool.
+Exit criterion: `install --dry-run` then `install` produce the right file in a test home; the agent is usable in the tool. Met in a test home for Claude Code; use in a real session is still to be confirmed.
 
 ## Milestone 2: first evaluation
 
@@ -33,18 +35,23 @@ This milestone conditions what follows: if the gain is not demonstrated, review 
 ## Milestone 3: full catalog
 
 - [x] `find`, `diff`, `git`, `svn` written as first drafts (kept separate, no `vcs` merge); evaluation pending.
-- [x] `atomic-tasks` skill.
+- [x] `atomic-tasks` skill, with example sequences for every agent.
+- [x] `csh-pro` skill (facts verified against tcsh).
+- [x] `run` is shell-agnostic (ADR 0009); agents hardened (injection guard, filled-in examples, log filtering).
 - [ ] Evaluation of each agent.
 
 ## Milestone 4: multi-tool
 
-- [ ] Remaining targets (VS Code, Copilot CLI, OpenCode), one at a time, each preceded by checking its format.
-- [ ] Reference tests per target.
-- [ ] Skill installation at each tool's locations.
+- [x] Claude Code target.
+- [ ] Verify the Copilot CLI draft against a real CLI.
+- [ ] VS Code and OpenCode targets, one at a time, each preceded by checking its format.
+- [x] Reference tests for the existing targets.
+- [x] Skills installed at each implemented tool's location.
 
 ## Milestone 5: finishing
 
-- [ ] Repository README updated (usage, installation).
+- [x] README, LICENSE (MIT), CONTRIBUTING, issue and pull request templates, CI workflow and Dependabot.
+- [x] Guide for reusing the script in other repositories ([reuse.md](reuse.md)).
 - [ ] Security review of `installer`.
 
 ## Out of the roadmap (to reconsider later)

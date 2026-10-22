@@ -41,6 +41,13 @@ For each target, one expected file per catalog agent is stored in `tests/golden/
 
 A test walks the real files in `agents/` and `skills/` and checks that they are valid for all targets. This prevents shipping a malformed agent.
 
+## What runs in CI
+
+`ruff check`, `ruff format --check`, `mypy` (strict) and `pytest` on Python 3.11, 3.12 and 3.13, then a dry-run install of the real sources for every target. The suite has 83 tests, including:
+- a test that every real agent and skill parses and that `models.toml` matches the catalog;
+- a test that the `run` prompt covers every supported shell and its status variable;
+- a test that the engine works unchanged in a copy of the repository ([reuse.md](reuse.md)): the real-sources tests assume nothing about which agents exist.
+
 ## Quality
 
 - Target coverage: ≥ 90 % on `parser`, `installer` and `targets`.

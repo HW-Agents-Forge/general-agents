@@ -85,4 +85,4 @@ Rules:
 
 ## Skills
 
-A skill is a folder `skills/<name>/SKILL.md`, plain Markdown like the agents: the name is the folder name and the description is the first paragraph. Specification of this project's skill: [skill-atomic-tasks.md](skill-atomic-tasks.md).
+A skill is a folder `skills/<name>/SKILL.md`, plain Markdown like the agents: the name is the folder name and the description is the first paragraph. Specification of this project's skills: [skill-atomic-tasks.md](skill-atomic-tasks.md) (which also covers `csh-pro`). Facts stated in a skill must be verified, not recalled.
