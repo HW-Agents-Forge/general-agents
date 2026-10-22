@@ -48,7 +48,7 @@ Delegation has a fixed cost, so an agent earns its place only if it *condenses*.
 
 | Agent | What it does | Tools |
 |---|---|---|
-| [`run`](agents/run.md) | Runs the exact `csh` command you give it, with a mandatory timeout, watches it and reports status, exit code and key lines | `shell`, `read` |
+| [`run`](agents/run.md) | Runs the exact command you give it (any shell: csh, bash, zsh, fish, PowerShell, cmd), with a mandatory timeout, watches it and reports status, exit code and key lines | `shell`, `read` |
 | [`find`](agents/find.md) | Searches the codebase and returns paths, lines and a short answer | `search`, `read` |
 | [`diff`](agents/diff.md) | Summarizes the changes between two files, directories or revisions | `shell`, `read` |
 | [`git`](agents/git.md) | Answers questions about git history and state, read-only | `shell` |

@@ -62,3 +62,12 @@ def test_real_repository_sources_are_valid() -> None:
     catalog = discover(root)
     assert catalog.agents, "the repository has no agent"
     check_agents(load_config(root / "models.toml", TARGETS), catalog.agent_names())
+
+
+def test_run_prompt_is_not_tied_to_one_shell() -> None:
+    """`run` must cover every supported shell, not only the one used where it was written."""
+    prompt = (Path(__file__).resolve().parent.parent / "agents" / "run.md").read_text()
+    for shell in ("csh", "bash", "zsh", "fish", "PowerShell", "cmd"):
+        assert shell in prompt, shell
+    for status_variable in ("$status", "$?", "$LASTEXITCODE", "%ERRORLEVEL%"):
+        assert status_variable in prompt, status_variable

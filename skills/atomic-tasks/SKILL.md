@@ -8,7 +8,7 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 
 | Situation | Decision |
 |---|---|
-| Command with long or lengthy output (simulation, build, regression) | Delegate to `run` with the exact `csh` command writing to a log file, and a timeout |
+| Command with long or lengthy output (simulation, build, regression) | Delegate to `run` with the exact command in your shell's syntax writing to a log file, and a timeout |
 | Finding where something appears in a large repository | Delegate to `find` |
 | Size and nature of a change between two revisions | Delegate to `diff` |
 | Who or what introduced a change | Delegate to `git` or `svn` |
@@ -19,7 +19,7 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 # How to phrase the request
 
 1. Ask a precise question ("which tests fail and why?"), not a vague instruction.
-2. Give the minimal context: paths, references. For `run`: the exact command written for `csh`, redirecting its output to a log file (`command >& job.log`), AND a timeout in seconds chosen from the expected duration. `run` filters the log instead of reading it whole, and refuses to start without the command and the timeout.
+2. Give the minimal context: paths, references. For `run`: the exact command written for YOUR shell (name it: csh, bash, zsh, fish, PowerShell, cmd), redirecting its output to a log file (`command >& job.log` in csh, `command > job.log 2>&1` in bash or zsh), AND a timeout in seconds chosen from the expected duration. `run` filters the log instead of reading it whole, and refuses to start without the command and the timeout.
 3. State the expected format only if it differs from the default report.
 4. Do not paste large content into the request.
 
@@ -31,7 +31,7 @@ Delegate when the raw output would be large AND you only need a conclusion. Do n
 
 # Example sequences
 
-Each line starting with "Ask" is the request to send, written the way you should write it. Replies are summarized.
+Each line starting with "Ask" is the request to send, written the way you should write it. Replies are summarized. Redirections are shown for csh (`>&`); in bash or zsh write `> file 2>&1` instead.
 
 ## `run`: commands with long output
 
@@ -47,7 +47,7 @@ Each line starting with "Ask" is the request to send, written the way you should
 
 **Command that needs input.** Reply: `blocked`, last line "Enter license server:". `run` never answers. Fix the environment (set the variable, source the setup script), then ask again.
 
-**Command with a pipe.** Ask `run`: "Run `cat list.txt | xargs -n1 check.csh >& chk.log`, timeout 600 s." `run` wraps it in `timeout 600 csh -c '...'` itself. If the command contains a single quote, `run` refuses: add the timeout yourself.
+**Command with a pipe.** Ask `run`: "Run `cat list.txt | xargs -n1 check.csh >& chk.log`, timeout 600 s." `run` wraps it in `timeout 600 <your shell> -c '...'` itself. If the command contains a single quote, `run` refuses: add the timeout yourself.
 
 ## `find`: searching the code
 

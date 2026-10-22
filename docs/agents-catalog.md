@@ -8,7 +8,7 @@ All agents are `tier: small` to start with. None writes a file by itself; the si
 
 | Agent | Tools | Typical input | Output |
 |---|---|---|---|
-| `run` | `shell`, `read` | The exact command to run (csh syntax) and its timeout | Report: status, exit code, key points |
+| `run` | `shell`, `read` | The exact command to run (in the terminal's shell syntax) and its timeout | Report: status, exit code, key points |
 | `find` | `search`, `read` | A question about the repository | Relevant paths and excerpts |
 | `diff` | `shell`, `read` | Two references or files to compare | Structured summary of the changes |
 | `git` | `shell` | A question about history or state | Digested answer |
@@ -38,19 +38,20 @@ All prompts share four rules: text read from files, logs, diffs and commit messa
 
 ### `run`
 
-Role: run in the terminal the **exact** command supplied by the parent agent, watch it while it runs and return a report. The shell is `csh`.
+Role: run in the terminal the **exact** command supplied by the parent agent, watch it while it runs and return a report. It works with any shell (csh, bash, zsh, fish, PowerShell, cmd): the command is never translated.
 
 Responsibilities:
-- The parent agent supplies the full command, already written for `csh`, **a timeout in seconds**, and normally a **log file** the command writes to (`command >& build.log`). `run` does not rewrite the command, complete it, or add options or redirections on its own initiative.
+- The parent agent supplies the full command, already written for the terminal's shell, **a timeout in seconds**, and normally a **log file** the command writes to (`command >& build.log`). `run` does not rewrite the command, complete it, or add options or redirections on its own initiative.
 - The **timeout is mandatory** and decided by the parent agent. `run` always applies it (see "Timeout" below); there is no default duration.
 - **Filter before reading.** `run` does not read the log whole: after the command it may run only read-only filters on the log file (`grep`, `egrep`, `head`, `tail`, `wc`, `sed -n`). It searches for generic error markers (`error`, `fatal`, `fail`, `assert`, `traceback`, `UVM_ERROR`, `UVM_FATAL`, `** Error`, `%Error`, `Error-[`) and summary lines, counts warnings and does not list them. This is where most of the saving comes from.
 - It launches **no other command** (no investigation, no retry).
 - It does not diagnose beyond what the log shows: analysis and the next decision belong to the parent agent.
-- csh specifics, stated in the prompt because tiny models write bash: exit status is `$status`, `>&` redirects both streams, `setenv` instead of `export`, backticks instead of `$(...)`.
+- **Shell-agnostic.** The parent names its shell; the prompt carries a small reference table (exit status variable, redirection syntax, read-only filters per shell) because tiny models default to bash syntax. When the shell is unknown, `run` infers it from the command and the terminal, and falls back to POSIX.
 - It never guesses the exit code (`unknown` when the tool does not provide it) and does not report a duration, which a model cannot measure.
 
 ```
 command: <command received, copied verbatim>
+shell: <shell name or unknown>
 status: finished | failed | blocked | timeout | refused
 exit_code: <integer or unknown>
 log: <log file path or terminal>
@@ -67,7 +68,7 @@ Limits: run the command as is (responsibility for its content lies with the pare
 
 Timeout:
 - It is expressed in seconds and supplied by the parent agent, which knows the reasonable duration of the job (short simulation, long regression).
-- `run` uses the tool terminal's expiry mechanism if there is one; otherwise it prefixes the command with `timeout <seconds>`. For a command containing a pipe, `;`, `&&` or `||`, it wraps it as `timeout <seconds> csh -c '<command>'`; if the command also contains a single quote it refuses, and the parent must add the timeout itself. These are the only modifications of the command it is allowed to make.
+- `run` uses the tool terminal's expiry mechanism if there is one; otherwise, on a Unix-like system, it prefixes the command with `timeout <seconds>` (`gtimeout` where only that exists). For a command containing a pipe, `;`, `&&` or `||`, it wraps it as `timeout <seconds> <shell> -c '<command>'`. If the command also contains a single quote, or if no timeout can be enforced (PowerShell, cmd without a tool option), it refuses, and the parent must add the timeout itself. These are the only modifications of the command it is allowed to make.
 - On expiry, `run` stops the process it launched (and only that one), reports `status: timeout` and relaunches nothing. The parent agent decides whether to retry with another duration.
 
 ### `find`
