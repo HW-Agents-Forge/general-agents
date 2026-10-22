@@ -4,11 +4,11 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Status: early development](https://img.shields.io/badge/status-early%20development-orange)
 
-**A marketplace of small sub-agents that take the token-expensive chores off your primary coding agent.**
+**A catalog of small sub-agents that take the token-expensive chores off your primary coding agent.**
 
 Reading a 20,000-line simulation log, sweeping a repository for every usage of a signal, digesting a long `svn log`: your primary agent only needs the *conclusion*. Each agent here does the heavy reading on the **smallest model** (Haiku) and hands back a short, structured report.
 
-There is no installer and no generator. This repository is a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces): you pick the plugins you need, each one ships an agent together with the skill that teaches your primary agent when and how to delegate to it, and the files are plain Markdown you can read, edit or copy wherever you like.
+This repository is a plain catalog for Claude Code, VS Code (GitHub Copilot) and Copilot CLI. Each agent comes with the skill that teaches your primary agent when and how to delegate to it. No installer, no generator: the files are Markdown you can read, edit and copy wherever you like.
 
 ## Use it
 
