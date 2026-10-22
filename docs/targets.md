@@ -19,7 +19,7 @@ Claude Code is filled in from the official documentation excerpts (2026-10-21); 
 
 | Information | Claude Code | VS Code | Copilot CLI | OpenCode |
 |---|---|---|---|---|
-| Agent location (user level) | `~/.claude/agents/` | To verify | To verify | To verify |
+| Agent location | `~/.claude/agents/`, or `<project>/.claude/agents/` | To verify | To verify | To verify |
 | File extension and name | `<name>.md` | To verify | To verify | To verify |
 | Frontmatter keys | `name`, `description`, `tools`, `model`; unknown keys ignored | To verify | To verify | To verify |
 | Identifier of the smallest model (`small`) | Alias (`haiku`) or full ID (`claude-haiku-5-5`) | To verify | To verify | To verify |

@@ -28,7 +28,7 @@ Do not copy this repository's `agents/`, `agents.toml` or `skills/` blindly: the
 1. Copy the files above.
 2. In `models.toml`, set a **different `name`**. It is written in the origin mark (`managed-by: <name>`) of every generated file; two repositories with the same name would be allowed to overwrite each other's files, and two with different names refuse to.
 3. Avoid agent names that already exist in the home from another repository. A same-named file with another repository's mark is refused, never overwritten.
-4. Run `./install --target <tool> --dry-run`, read the plan, then run it for real.
+4. Run `./install --target <tool> --dry-run`, read the plan, then run it for real. Use `--scope project --project <dir>` to install inside a project instead of the home.
 5. Optionally run `python -m pytest` in the copy to check the engine still works there.
 
 ## Keeping the engine in sync

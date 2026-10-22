@@ -54,7 +54,7 @@ ruff check . && ruff format --check . && mypy && pytest
 ### Add a target tool
 
 1. Fill in the tool's column in [docs/targets.md](docs/targets.md) from its **official documentation**, and note the verification date.
-2. Implement `Target` in `src/shuttle/targets/<tool>.py` and register it in `targets/__init__.py`.
+2. Implement `Target` in `src/shuttle/targets/<tool>.py` and register it in `targets/__init__.py`. Give the paths for both scopes (user and project).
 3. Add golden files in `tests/golden/<tool>/` and a CLI test.
 4. Record what you learned in [docs/tool-differences.md](docs/tool-differences.md).
 

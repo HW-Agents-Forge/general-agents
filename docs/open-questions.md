@@ -37,6 +37,7 @@ Partial findings and conflicts are listed in [tool-differences.md](tool-differen
 - Does Copilot CLI honor the `model` property? (Otherwise agents silently run on the primary model.)
 - Exact model identifier format of Haiku 5.5 in each tool; for OpenCode run `opencode models github-copilot` (guess: `github-copilot/claude-haiku-5.5`).
 - Installed OpenCode version: `permission` map (stable) or `permissions` list (v2).
+- Project-level paths of Copilot CLI (`.github/agents/`, `.github/skills/`) on a real CLI.
 - Whether the VS Code sub-agent settings are still required, and which user-level agent path applies to the installed VS Code version (`~/.copilot/agents` or the profile folder).
 - Shell command timeout behavior in Copilot CLI and VS Code.
 - Token usage reporting for sub-agents in VS Code and OpenCode.
